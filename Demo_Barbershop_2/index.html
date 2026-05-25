@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLADE &amp; GLORY — The Art of the Modern Gentleman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{--black:#000;--gold:#C9A84C;--gold2:#D4AF37;--red:#8B0000;--white:#fff}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;cursor:none}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+#cur2{position:fixed;width:34px;height:34px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+body.hov #cur{width:22px;height:22px}
+body.hov #cur2{width:52px;height:52px;border-color:var(--gold)}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--black);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px}
+#loader-line{stroke:var(--gold);stroke-width:1;fill:none;stroke-dasharray:700;stroke-dashoffset:700;animation:drawL 1.2s ease forwards .3s}
+@keyframes drawL{to{stroke-dashoffset:0}}
+.loader-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:8px;color:rgba(201,168,76,.4);opacity:0;animation:fadeInUp .6s ease forwards 1s}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 60px;display:flex;align-items:center;justify-content:space-between}
+nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.75) 0%,transparent 100%);pointer-events:none;z-index:-1}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.6);text-decoration:none;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--black);background:var(--gold);padding:10px 24px;text-decoration:none;text-transform:uppercase;transition:background .3s}
+.nav-cta:hover{background:var(--gold2)}
+
+/* HERO */
+#hero{position:relative;width:100vw;height:100vh;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80') center/cover no-repeat}
+.hero-ov{position:absolute;inset:0;background:rgba(0,0,0,.87)}
+#hcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:none;text-align:center;padding:0 20px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,9vw,130px);letter-spacing:10px;color:var(--gold);opacity:0;text-shadow:0 0 80px rgba(201,168,76,.4);margin-bottom:16px;line-height:1}
+.hero-sub{font-family:'Cinzel',serif;font-size:clamp(11px,1.4vw,17px);letter-spacing:6px;color:rgba(255,255,255,.65);opacity:0;margin-bottom:50px;text-transform:uppercase}
+.hero-sub span{display:inline-block;opacity:0;transform:translateY(18px)}
+.hero-btns{display:flex;gap:20px;opacity:0;pointer-events:all;flex-wrap:wrap;justify-content:center}
+.btn-g{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:15px 38px;border:none;cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 10px 40px rgba(201,168,76,.3)}
+.btn-o{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:transparent;padding:15px 38px;border:1px solid var(--gold);cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block}
+.btn-o:hover{background:rgba(201,168,76,.08)}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;z-index:10}
+.hero-scroll span{font-family:'Cinzel',serif;font-size:8px;letter-spacing:5px;color:rgba(255,255,255,.35);text-transform:uppercase}
+.scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--gold),transparent);animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(10px);opacity:.3}}
+
+/* STORY SECTION */
+#story{position:relative;height:400vh}
+.story-sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.story-panel{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0}
+.spbg{position:absolute;inset:0;background-size:cover;background-position:center;will-change:transform}
+.spov{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.sptxt{position:relative;z-index:2;text-align:center;padding:0 40px}
+.sp-intro{font-family:'Cinzel',serif;font-size:clamp(28px,5vw,68px);color:var(--gold);letter-spacing:8px;line-height:1.5}
+.sp-quote{font-family:'Cinzel',serif;font-size:clamp(16px,2.5vw,34px);color:var(--white);letter-spacing:4px;text-shadow:0 2px 20px rgba(0,0,0,.8)}
+.story-thumbs{display:flex;gap:16px;justify-content:center;margin-bottom:36px}
+.sthumb{width:190px;height:120px;background-size:cover;background-position:center;border:1px solid var(--gold);opacity:0;transform:translateY(24px)}
+.sgline{width:100px;height:1px;background:var(--gold);margin:0 auto 28px;transform:scaleX(0);transform-origin:left}
+.sftext{font-family:'Cinzel',serif;font-size:clamp(14px,2vw,22px);color:var(--white);letter-spacing:4px;margin-bottom:28px;opacity:0}
+.scta{opacity:0}
+
+/* CRAFT */
+#craft{padding:130px 60px;background:var(--black);position:relative}
+#craft::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.craft-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,10vw,140px);color:var(--white);letter-spacing:10px;text-align:center;margin-bottom:70px;line-height:1}
+.craft-letter{display:inline-block;opacity:0;transform:translateY(-90px)}
+.craft-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;max-width:1080px;margin:0 auto;perspective:1200px}
+.craft-card{background:#080808;border:1px solid rgba(201,168,76,.18);padding:56px 36px;text-align:center;cursor:default;transition:border-color .4s,box-shadow .4s;opacity:0;position:relative;overflow:hidden}
+.craft-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.04) 0%,transparent 70%);pointer-events:none}
+.craft-card:hover{border-color:rgba(201,168,76,.7);box-shadow:0 0 50px rgba(201,168,76,.12)}
+.craft-svg{width:72px;height:72px;margin:0 auto 28px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block}
+.craft-card:hover .sc-top{transform:rotate(-28deg);transform-origin:38px 25px}
+.sc-top{transition:transform .4s ease}
+.craft-card:hover .rz-blade{transform:rotate(-40deg);transform-origin:48px 60px}
+.rz-blade{transition:transform .4s ease}
+.craft-card:hover .cm-icon{animation:cwig .5s ease}
+@keyframes cwig{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
+.craft-ctitle{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:var(--gold);margin-bottom:14px}
+.craft-ctext{font-family:'Inter',sans-serif;font-size:13px;line-height:1.85;color:rgba(255,255,255,.45);letter-spacing:.3px}
+
+/* MASTERS */
+#masters{padding:130px 60px;background:#040404;position:relative}
+#masters::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.25),transparent)}
+.masters-title-wrap{text-align:center;margin-bottom:74px}
+.masters-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,8vw,116px);color:var(--white);letter-spacing:10px;display:inline-block;clip-path:inset(0 100% 0 0)}
+.masters-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;max-width:1080px;margin:0 auto}
+.mcard{position:relative;overflow:hidden;aspect-ratio:3/4;opacity:0}
+.mcard img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:filter .5s}
+.mcard:hover img{filter:brightness(1.15)}
+.mcard::before,.mcard::after,.mcard .cbl,.mcard .cbr{content:'';position:absolute;width:22px;height:22px;border-color:var(--gold);border-style:solid;z-index:3}
+.mcard::before{top:12px;left:12px;border-width:1px 0 0 1px}
+.mcard::after{top:12px;right:12px;border-width:1px 1px 0 0}
+.mcard .cbl{bottom:12px;left:12px;border-width:0 0 1px 1px}
+.mcard .cbr{bottom:12px;right:12px;border-width:0 1px 1px 0}
+.mov{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.96) 0%,transparent 100%);padding:48px 24px 22px;transform:translateY(100%);transition:transform .5s cubic-bezier(.4,0,.2,1);z-index:2}
+.mcard:hover .mov{transform:translateY(0)}
+.mname{font-family:'Cinzel',serif;font-size:19px;color:var(--gold);letter-spacing:2px;margin-bottom:3px}
+.mrole{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.45);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.mbtn{display:inline-block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--black);background:var(--gold);padding:7px 18px;text-decoration:none;text-transform:uppercase;transition:background .3s}
+.mbtn:hover{background:var(--gold2)}
+
+/* LEGACY */
+#legacy{position:relative;padding:130px 60px;background:url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=80') center/cover fixed no-repeat}
+#legacy::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.84)}
+.legacy-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;max-width:1100px;margin:0 auto}
+.lstat{flex:1;text-align:center;padding:40px 20px;position:relative}
+.lstat+.lstat::before{content:'';position:absolute;left:0;top:20%;height:60%;width:1px;background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
+.lnum{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,8vw,108px);color:var(--gold);letter-spacing:3px;line-height:1;display:block;transition:text-shadow .8s}
+.lnum.glow{text-shadow:0 0 40px rgba(201,168,76,.65),0 0 80px rgba(201,168,76,.2)}
+.llabel{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.45);text-transform:uppercase;margin-top:8px}
+
+/* GALLERY */
+#galerie{padding:130px 60px;background:var(--black)}
+.gal-hdr{text-align:center;margin-bottom:70px}
+.gal-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,10vw,140px);color:var(--white);letter-spacing:10px;display:block}
+.gul{display:block;margin:8px auto 0;overflow:visible}
+.gul path{stroke:var(--gold);stroke-width:1;fill:none;stroke-dasharray:300;stroke-dashoffset:300}
+.masonry{columns:3;column-gap:16px;max-width:1200px;margin:0 auto}
+.mitem{break-inside:avoid;margin-bottom:16px;overflow:hidden;position:relative;cursor:pointer;opacity:0}
+.mitem img{width:100%;display:block;transition:transform .5s ease,filter .5s ease;filter:brightness(.8) saturate(.75)}
+.mitem:hover img{transform:scale(1.06);filter:brightness(1) saturate(1)}
+.mov2{position:absolute;inset:0;background:rgba(139,0,0,.72);opacity:0;transition:opacity .4s;display:flex;align-items:center;justify-content:center}
+.mitem:hover .mov2{opacity:1}
+.mov2-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:4px;color:var(--gold);text-align:center;text-transform:uppercase}
+
+/* CONTACT */
+#kontakt{padding:130px 0;background:#040404;position:relative}
+#kontakt::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent)}
+.kt-inner{display:grid;grid-template-columns:1fr 1fr;max-width:1200px;margin:0 auto}
+.kt-info{padding:70px 70px 70px 60px;border-right:1px solid rgba(201,168,76,.18)}
+.kt-form{padding:70px 60px 70px 70px}
+.slabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;display:block}
+.kt-title{font-family:'Bebas Neue',sans-serif;font-size:58px;color:var(--white);letter-spacing:5px;margin-bottom:48px;line-height:1}
+.iblock{margin-bottom:28px}
+.ilabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.ival{font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,.65);line-height:1.7}
+.otable{width:100%;border-collapse:collapse;margin-top:6px}
+.otable tr{border-bottom:1px solid rgba(201,168,76,.1)}
+.otable td{font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.55);padding:8px 0}
+.otable td:last-child{text-align:right;color:rgba(255,255,255,.35)}
+.cform{display:flex;flex-direction:column;gap:18px}
+.fg{position:relative}
+.fg label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:rgba(201,168,76,.65);text-transform:uppercase;display:block;margin-bottom:7px}
+.fg input,.fg select,.fg textarea{width:100%;background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.18);color:var(--white);font-family:'Inter',sans-serif;font-size:13px;padding:13px 15px;outline:none;transition:border-color .3s;appearance:none;-webkit-appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold)}
+.fg input.err,.fg select.err,.fg textarea.err{border-color:var(--red)}
+.fg input.ok,.fg select.ok,.fg textarea.ok{border-color:#2a7a2a}
+.fg select option{background:#111;color:var(--white)}
+.fg textarea{resize:vertical;min-height:90px}
+.ferr{font-family:'Inter',sans-serif;font-size:10px;color:var(--red);margin-top:3px;display:none}
+.ferr.show{display:block}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.btn-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:16px 40px;border:none;cursor:pointer;transition:all .3s;width:100%;margin-top:8px}
+.btn-sub:hover{background:var(--gold2);box-shadow:0 10px 40px rgba(201,168,76,.3)}
+.fsubtitle{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;margin-bottom:28px;color:var(--white)}
+
+/* FOOTER */
+footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,168,76,.25)}
+.ft-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
+.ft-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;color:var(--gold)}
+.ft-nav{display:flex;gap:28px;list-style:none}
+.ft-nav a{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.35);text-decoration:none;text-transform:uppercase;transition:color .3s}
+.ft-nav a:hover{color:var(--gold)}
+.ft-social{display:flex;gap:12px}
+.sico{width:34px;height:34px;border:1px solid rgba(201,168,76,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
+.sico:hover{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.sico svg{width:13px;height:13px;fill:var(--gold)}
+.ft-line{height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.25),transparent);margin-bottom:28px}
+.ft-bot{display:flex;align-items:center;justify-content:space-between}
+.ft-copy{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.2)}
+.ft-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:rgba(201,168,76,.28);font-style:italic}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:18px 28px}
+  .nav-links{display:none}
+  #craft,#masters,#galerie,#legacy{padding-left:28px;padding-right:28px}
+  .craft-cards,.masters-grid{grid-template-columns:1fr;gap:20px}
+  .kt-inner{grid-template-columns:1fr}
+  .kt-info{padding:40px 28px;border-right:none;border-bottom:1px solid rgba(201,168,76,.18)}
+  .kt-form{padding:40px 28px}
+  .masonry{columns:2}
+  .legacy-inner{flex-direction:column}
+  .lstat+.lstat::before{display:none}
+  .ft-top{flex-direction:column;gap:24px;text-align:center}
+  .ft-nav{flex-wrap:wrap;justify-content:center}
+  .story-thumbs{flex-direction:column;align-items:center}
+}
+@media(max-width:580px){
+  .masonry{columns:1}
+  .hero-btns{flex-direction:column;align-items:center}
+  .frow{grid-template-columns:1fr}
+  .ft-bot{flex-direction:column;gap:12px;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <svg width="680" height="2" viewBox="0 0 680 2"><line id="loader-line" x1="0" y1="1" x2="680" y2="1"/></svg>
+  <div class="loader-logo">BLADE &amp; GLORY</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">B&amp;G</a>
+  <ul class="nav-links">
+    <li><a href="#craft">The Craft</a></li>
+    <li><a href="#masters">Meister</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="#kontakt" class="nav-cta">Termin buchen</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <canvas id="hcanvas"></canvas>
+  <div class="hero-content">
+    <h1 class="hero-title" id="hTitle">BLADE &amp; GLORY</h1>
+    <p class="hero-sub" id="hSub">
+      <span>The</span>&nbsp;<span>Art</span>&nbsp;<span>of</span>&nbsp;<span>the</span>&nbsp;<span>Modern</span>&nbsp;<span>Gentleman</span>
+    </p>
+    <div class="hero-btns" id="hBtns">
+      <a href="#kontakt" class="btn-g">Termin buchen</a>
+      <a href="#craft" class="btn-o">Unsere Kunst</a>
+    </div>
+  </div>
+  <div class="hero-scroll" id="hScroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story">
+  <div class="story-sticky">
+    <div class="story-panel" id="sp0">
+      <div class="sptxt">
+        <div class="sp-intro">1987.</div>
+        <div class="sp-intro">Berlin.</div>
+        <div class="sp-intro">Kurfürstendamm.</div>
+      </div>
+    </div>
+    <div class="story-panel" id="sp1">
+      <div class="spbg" id="sbg1" style="background-image:url('https://images.unsplash.com/photo-1521490683712-35a1cb235d1c?w=1920&q=80')"></div>
+      <div class="spov"></div>
+      <div class="sptxt"><div class="sp-quote">Wo Legenden ihren Schnitt bekommen.</div></div>
+    </div>
+    <div class="story-panel" id="sp2">
+      <div class="spbg" id="sbg2" style="background-image:url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1920&q=80')"></div>
+      <div class="spov"></div>
+      <div class="sptxt"><div class="sp-quote">Handwerk das überdauert.</div></div>
+    </div>
+    <div class="story-panel" id="sp3">
+      <div class="spbg" id="sbg3" style="background-image:url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=1920&q=80')"></div>
+      <div class="spov"></div>
+      <div class="sptxt"><div class="sp-quote">Präzision. Stil. Leidenschaft.</div></div>
+    </div>
+    <div class="story-panel" id="sp4">
+      <div class="sptxt">
+        <div class="story-thumbs" id="sthumbs">
+          <div class="sthumb" style="background-image:url('https://images.unsplash.com/photo-1521490683712-35a1cb235d1c?w=400&q=80')"></div>
+          <div class="sthumb" style="background-image:url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400&q=80')"></div>
+          <div class="sthumb" style="background-image:url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400&q=80')"></div>
+        </div>
+        <div class="sgline" id="sgline"></div>
+        <div class="sftext" id="sftext">Deine Geschichte beginnt hier.</div>
+        <div class="scta" id="scta"><a href="#kontakt" class="btn-g">Termin buchen</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRAFT -->
+<section id="craft">
+  <div class="craft-title" id="cTitle">THE CRAFT</div>
+  <div class="craft-cards">
+    <div class="craft-card">
+      <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <g class="sc-top">
+          <circle cx="18" cy="18" r="7"/>
+          <line x1="24" y1="23" x2="62" y2="60"/>
+        </g>
+        <g>
+          <circle cx="18" cy="36" r="7"/>
+          <line x1="24" y1="31" x2="62" y2="18"/>
+        </g>
+        <line x1="18" y1="25" x2="18" y2="29" stroke-width=".5"/>
+      </svg>
+      <div class="craft-ctitle">Der Schnitt</div>
+      <div class="craft-ctext">Jede Schere führen wir mit Jahrzehnten Erfahrung. Der perfekte Schnitt ist unsere Signatur — unvergesslich, präzise, zeitlos.</div>
+    </div>
+    <div class="craft-card">
+      <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <rect x="8" y="52" width="28" height="8" rx="2"/>
+          <line x1="34" y1="56" x2="40" y2="52"/>
+        </g>
+        <g class="rz-blade">
+          <path d="M40 52 L66 18 L70 22 L44 56 Z"/>
+          <line x1="42" y1="50" x2="68" y2="16" stroke-width=".6"/>
+        </g>
+      </svg>
+      <div class="craft-ctitle">Die Rasur</div>
+      <div class="craft-ctext">Das rituelle Rasieren mit dem heißen Handtuch — ein Erlebnis für die Sinne. Weich, glatt, nah. Die Kunst des klassischen Barbers.</div>
+    </div>
+    <div class="craft-card">
+      <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <g class="cm-icon">
+          <rect x="8" y="28" width="60" height="10" rx="2"/>
+          <line x1="14" y1="38" x2="14" y2="54"/>
+          <line x1="20" y1="38" x2="20" y2="50"/>
+          <line x1="26" y1="38" x2="26" y2="54"/>
+          <line x1="32" y1="38" x2="32" y2="50"/>
+          <line x1="38" y1="38" x2="38" y2="54"/>
+          <line x1="44" y1="38" x2="44" y2="50"/>
+          <line x1="50" y1="38" x2="50" y2="54"/>
+          <line x1="56" y1="38" x2="56" y2="50"/>
+          <line x1="62" y1="38" x2="62" y2="54"/>
+        </g>
+      </svg>
+      <div class="craft-ctitle">Die Behandlung</div>
+      <div class="craft-ctext">Haarpflege als Ritual. Hochwertige Produkte, Kopfmassage, Styling — eine vollständige Pflegeroutine für den anspruchsvollen Gentleman.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MASTERS -->
+<section id="masters">
+  <div class="masters-title-wrap">
+    <div class="masters-title" id="mTitle">UNSERE MEISTER</div>
+  </div>
+  <div class="masters-grid">
+    <div class="mcard" id="mc1">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Viktor Aleksandrov" loading="lazy">
+      <div class="cbl"></div><div class="cbr"></div>
+      <div class="mov">
+        <div class="mname">Viktor Aleksandrov</div>
+        <div class="mrole">Head Barber · 18 Jahre</div>
+        <a href="#kontakt" class="mbtn">Termin buchen</a>
+      </div>
+    </div>
+    <div class="mcard" id="mc2">
+      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80" alt="Marco Ferretti" loading="lazy">
+      <div class="cbl"></div><div class="cbr"></div>
+      <div class="mov">
+        <div class="mname">Marco Ferretti</div>
+        <div class="mrole">Blade Specialist · 12 Jahre</div>
+        <a href="#kontakt" class="mbtn">Termin buchen</a>
+      </div>
+    </div>
+    <div class="mcard" id="mc3">
+      <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80" alt="Elias Brenner" loading="lazy">
+      <div class="cbl"></div><div class="cbr"></div>
+      <div class="mov">
+        <div class="mname">Elias Brenner</div>
+        <div class="mrole">Style Director · 9 Jahre</div>
+        <a href="#kontakt" class="mbtn">Termin buchen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGACY -->
+<section id="legacy">
+  <div class="legacy-inner">
+    <div class="lstat">
+      <span class="lnum" data-target="12000" data-suffix="+">0</span>
+      <div class="llabel">Schnitte</div>
+    </div>
+    <div class="lstat">
+      <span class="lnum" data-target="35" data-suffix="">0</span>
+      <div class="llabel">Jahre</div>
+    </div>
+    <div class="lstat">
+      <span class="lnum" data-target="49" data-suffix="★" data-dec="1">0</span>
+      <div class="llabel">Bewertung</div>
+    </div>
+    <div class="lstat">
+      <span class="lnum" data-target="3" data-suffix="">0</span>
+      <div class="llabel">Meister</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="galerie">
+  <div class="gal-hdr">
+    <span class="gal-title">GALERIE</span>
+    <svg class="gul" width="280" height="10" viewBox="0 0 280 10">
+      <path d="M0,5 Q70,2 140,5 Q210,8 280,5"/>
+    </svg>
+  </div>
+  <div class="masonry">
+    <div class="mitem" data-from="left">
+      <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Barbershop" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Chair</div></div>
+    </div>
+    <div class="mitem" data-from="up">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80" alt="The Cut" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Cut</div></div>
+    </div>
+    <div class="mitem" data-from="right">
+      <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&q=80" alt="The Craft" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Craft</div></div>
+    </div>
+    <div class="mitem" data-from="right">
+      <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80" alt="The Blade" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Blade</div></div>
+    </div>
+    <div class="mitem" data-from="down">
+      <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&q=80" alt="The Space" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Space</div></div>
+    </div>
+    <div class="mitem" data-from="left">
+      <img src="https://images.unsplash.com/photo-1521490683712-35a1cb235d1c?w=600&q=80" alt="The Legend" loading="lazy">
+      <div class="mov2"><div class="mov2-title">The Legend</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+  <div class="kt-inner">
+    <div class="kt-info">
+      <span class="slabel">Finde uns</span>
+      <h2 class="kt-title">DEIN<br>TERMIN</h2>
+      <div class="iblock">
+        <div class="ilabel">Adresse</div>
+        <div class="ival">Kurfürstendamm 187<br>10707 Berlin</div>
+      </div>
+      <div class="iblock">
+        <div class="ilabel">Telefon</div>
+        <div class="ival">+49 30 88 77 66 55</div>
+      </div>
+      <div class="iblock">
+        <div class="ilabel">E-Mail</div>
+        <div class="ival">hallo@blade-glory.de</div>
+      </div>
+      <div class="iblock">
+        <div class="ilabel">Öffnungszeiten</div>
+        <table class="otable">
+          <tr><td>Montag – Freitag</td><td>09:00 – 20:00</td></tr>
+          <tr><td>Samstag</td><td>09:00 – 18:00</td></tr>
+          <tr><td>Sonntag</td><td>Geschlossen</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="kt-form">
+      <span class="slabel">Termin vereinbaren</span>
+      <div class="fsubtitle">JETZT BUCHEN</div>
+      <form class="cform" id="cForm" novalidate>
+        <div class="frow">
+          <div class="fg">
+            <label for="fname">Name</label>
+            <input type="text" id="fname" placeholder="Ihr Name">
+            <div class="ferr" id="fnameErr">Bitte geben Sie Ihren Namen ein.</div>
+          </div>
+          <div class="fg">
+            <label for="femail">E-Mail</label>
+            <input type="email" id="femail" placeholder="ihre@email.de">
+            <div class="ferr" id="femailErr">Bitte eine gültige E-Mail eingeben.</div>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label for="fdate">Datum</label>
+            <input type="date" id="fdate">
+            <div class="ferr" id="fdateErr">Bitte wählen Sie ein Datum.</div>
+          </div>
+          <div class="fg">
+            <label for="fbarber">Barber</label>
+            <select id="fbarber">
+              <option value="">Barber wählen</option>
+              <option value="viktor">Viktor Aleksandrov</option>
+              <option value="marco">Marco Ferretti</option>
+              <option value="elias">Elias Brenner</option>
+            </select>
+            <div class="ferr" id="fbarberErr">Bitte wählen Sie einen Barber.</div>
+          </div>
+        </div>
+        <div class="fg">
+          <label for="fmsg">Nachricht</label>
+          <textarea id="fmsg" placeholder="Ihre Wünsche oder besondere Anlässe..."></textarea>
+        </div>
+        <button type="submit" class="btn-sub" id="fsubmit">Termin anfragen</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div class="ft-logo">BLADE &amp; GLORY</div>
+    <ul class="ft-nav">
+      <li><a href="#craft">The Craft</a></li>
+      <li><a href="#masters">Meister</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <div class="ft-social">
+      <div class="sico"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+      <div class="sico"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+      <div class="sico"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z"/></svg></div>
+    </div>
+  </div>
+  <div class="ft-line"></div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2024 BLADE &amp; GLORY Barbershop Berlin. Alle Rechte vorbehalten.</div>
+    <div class="ft-tag">The Art of the Modern Gentleman</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+// Register immediately — before any scroll code runs
+gsap.registerPlugin(ScrollTrigger);
+
+// --- REDUCED MOTION CHECK ---
+const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// --- CURSOR ---
+const cur = document.getElementById('cur');
+const cur2 = document.getElementById('cur2');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function loop(){
+  fx+=(mx-fx)*.11; fy+=(my-fy)*.11;
+  cur2.style.left=fx+'px'; cur2.style.top=fy+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.craft-card,.mcard,.sico,.mitem').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+// --- LOADER ---
+const loader = document.getElementById('loader');
+if(noMotion){
+  loader.style.display='none';
+  startAfterLoad();
+} else {
+  setTimeout(()=>{
+    gsap.to(loader,{opacity:0,duration:.55,ease:'power2.inOut',onComplete:()=>{
+      loader.style.display='none';
+      startAfterLoad();
+    }});
+  },1650);
+}
+
+function startAfterLoad(){
+  // Always boot scroll animations immediately so story section works from first scroll
+  initScrollAnimations();
+  if(noMotion){
+    document.getElementById('hTitle').style.opacity=1;
+    document.getElementById('hSub').style.opacity=1;
+    document.querySelectorAll('#hSub span').forEach(s=>{s.style.opacity=1;s.style.transform='none';});
+    document.getElementById('hBtns').style.opacity=1;
+    document.getElementById('hScroll').style.opacity=1;
+    return;
+  }
+  initParticles();
+}
+
+// --- PARTICLE HERO ---
+function initParticles(){
+  const canvas = document.getElementById('hcanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const isMobile = window.innerWidth < 768;
+  const N = isMobile ? 1500 : 3000;
+  let particles=[], targets=[];
+  let raf, startT=null, p3done=false, p4done=false;
+
+  function sampleTargets(){
+    const off = document.createElement('canvas');
+    off.width = canvas.width; off.height = canvas.height;
+    const oc = off.getContext('2d');
+    const fs = Math.min(canvas.width * .115, 132);
+    oc.fillStyle = '#fff';
+    oc.font = `${fs}px "Bebas Neue",sans-serif`;
+    oc.textAlign = 'center';
+    oc.textBaseline = 'middle';
+    oc.fillText('BLADE & GLORY', canvas.width / 2, canvas.height / 2 - 48);
+    const id = oc.getImageData(0, 0, canvas.width, canvas.height);
+    const d = id.data;
+    const pts = [];
+    const step = isMobile ? 5 : 4;
+    for(let y = 0; y < canvas.height; y += step)
+      for(let x = 0; x < canvas.width; x += step)
+        if(d[(y * canvas.width + x) * 4 + 3] > 100) pts.push({x, y});
+    // Fisher-Yates shuffle
+    for(let i = pts.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [pts[i], pts[j]] = [pts[j], pts[i]];
+    }
+    return pts.slice(0, N);
+  }
+
+  async function init(){
+    try { await document.fonts.load('120px "Bebas Neue"'); } catch(e){}
+    targets = sampleTargets();
+    for(let i = 0; i < N; i++){
+      const t = targets[i] || {x: Math.random() * canvas.width, y: Math.random() * canvas.height};
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        tx: t.x, ty: t.y,
+        vx: (Math.random() - .5) * 7,
+        vy: (Math.random() - .5) * 7,
+        sz: Math.random() * 1.6 + .5,
+        alpha: 0
+      });
+    }
+    raf = requestAnimationFrame(draw);
+  }
+
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+
+  function draw(ts){
+    if(!startT) startT = ts;
+    const el = (ts - startT) / 1000;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if(el < 0.5){
+      // Phase 1: Chaos — random drift with damping
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= .95; p.vy *= .95;
+        p.alpha = Math.min(p.alpha + .06, .8);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
+        ctx.fill();
+      });
+
+    } else if(el < 2.8){
+      // Phase 2: Converge — spring physics for smooth, natural flow
+      const t = easeOut(Math.min((el - .5) / 2.3, 1));
+      const spring = 0.028 + t * 0.038;   // grows over time
+      const damp   = 0.72 - t * 0.08;     // damping decreases → snappier at end
+      particles.forEach(p => {
+        const dx = p.tx - p.x;
+        const dy = p.ty - p.y;
+        p.vx = p.vx * damp + dx * spring;
+        p.vy = p.vy * damp + dy * spring;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha = Math.min(p.alpha + .011, 1);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
+        ctx.fill();
+      });
+
+    } else if(el < 3.8){
+      // Phase 3: Settled — breathe + gold pulse + fade to HTML title
+      const age = el - 2.8;
+      // quick settle — snap remaining gap
+      particles.forEach(p => { p.x += (p.tx - p.x) * .1; p.y += (p.ty - p.y) * .1; });
+
+      const pulse = age < .5 ? 1 + Math.sin(age * Math.PI * 7) * .35 : 1;
+      const fade  = age > .9 ? Math.max(0, 1 - (age - .9) / .55) : 1;
+      const r = Math.min(255, Math.floor(201 * pulse));
+      const g = Math.min(255, Math.floor(168 * pulse));
+
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.sz * Math.min(pulse, 1.5), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},76,${p.alpha * fade})`;
+        ctx.fill();
+      });
+
+      if(!p3done && age > .35){
+        p3done = true;
+        gsap.to('#hTitle', {opacity: 1, duration: 1.0, ease: 'power2.out'});
+      }
+
+    } else {
+      if(!p4done){
+        p4done = true;
+        cancelAnimationFrame(raf);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        gsap.set('#hSub', {opacity: 1});
+        gsap.to('#hSub span', {opacity: 1, y: 0, duration: .55, stagger: .12, ease: 'power2.out', delay: .1});
+        gsap.to('#hBtns',  {opacity: 1, duration: .6, delay: .9});
+        gsap.to('#hScroll',{opacity: 1, duration: .6, delay: 1.25});
+        return;
+      }
+    }
+    raf = requestAnimationFrame(draw);
+  }
+
+  init();
+
+  window.addEventListener('resize',()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+  });
+}
+
+// --- SCROLL ANIMATIONS ---
+function initScrollAnimations(){
+  // STORY — fix: use string IDs so getElementById receives a string, not an HTMLElement
+  const panels = ['sp0','sp1','sp2','sp3','sp4'].map(id => document.getElementById(id));
+  let p4anim = false;
+
+  ScrollTrigger.create({
+    trigger: '#story', start: 'top top', end: 'bottom bottom',
+    scrub: true,
+    onUpdate(self){
+      const p = self.progress;
+      const cl = (a, b, v) => Math.min(b, Math.max(a, v));
+
+      // Panel 0: immediately visible, fades out at 18-26%
+      panels[0].style.opacity = p < .18 ? 1 : cl(0, 1, 1 - (p - .18) / .08);
+
+      // Panel 1: 0.14 – 0.46
+      if(p >= .14 && p <= .46){
+        const op = p <= .21 ? cl(0,1,(p-.14)/.07) : (p >= .38 ? cl(0,1,1-(p-.38)/.08) : 1);
+        panels[1].style.opacity = op;
+        const lp = cl(0, 1, (p - .14) / .32);
+        document.getElementById('sbg1').style.backgroundPosition = `${lp * 30}% center`;
+      } else {
+        panels[1].style.opacity = 0;
+      }
+
+      // Panel 2: 0.36 – 0.66
+      if(p >= .36 && p <= .66){
+        const op = p <= .43 ? cl(0,1,(p-.36)/.07) : (p >= .58 ? cl(0,1,1-(p-.58)/.08) : 1);
+        panels[2].style.opacity = op;
+        const lp = cl(0, 1, (p - .36) / .30);
+        document.getElementById('sbg2').style.backgroundPosition = `center ${lp * 30}%`;
+      } else {
+        panels[2].style.opacity = 0;
+      }
+
+      // Panel 3: 0.56 – 0.86
+      if(p >= .56 && p <= .86){
+        const op = p <= .63 ? cl(0,1,(p-.56)/.07) : (p >= .78 ? cl(0,1,1-(p-.78)/.08) : 1);
+        panels[3].style.opacity = op;
+        const lp = cl(0, 1, (p - .56) / .30);
+        document.getElementById('sbg3').style.transform = `scale(${1 + lp * .08})`;
+      } else {
+        panels[3].style.opacity = 0;
+      }
+
+      // Panel 4: 0.76 – 1.0
+      if(p >= .76){
+        const op = cl(0, 1, (p - .76) / .10);
+        panels[4].style.opacity = op;
+        if(op > .6 && !p4anim){
+          p4anim = true;
+          gsap.to('.sthumb',  {opacity:1, y:0,     duration:.5,  stagger:.13, ease:'power2.out'});
+          gsap.to('#sgline',  {scaleX:1,           duration:.7,               ease:'power3.out',  delay:.18});
+          gsap.to('#sftext',  {opacity:1,           duration:.55,              ease:'power2.out',  delay:.44});
+          gsap.to('#scta',    {opacity:1,           duration:.55,              ease:'power2.out',  delay:.65});
+        }
+      } else {
+        panels[4].style.opacity = 0;
+      }
+    }
+  });
+
+  // CRAFT title letters
+  const ct=document.getElementById('cTitle');
+  ct.innerHTML='THE CRAFT'.split('').map(c=>c===' '?'&nbsp;':`<span class="craft-letter">${c}</span>`).join('');
+  ScrollTrigger.create({
+    trigger:'#craft', start:'top 78%',
+    onEnter(){
+      gsap.to('.craft-letter',{opacity:1,y:0,duration:.55,stagger:.05,ease:'back.out(1.5)'});
+    }
+  });
+
+  // Craft cards flip
+  gsap.utils.toArray('.craft-card').forEach((c,i)=>{
+    gsap.set(c,{rotationY:90,transformOrigin:'left center'});
+    ScrollTrigger.create({
+      trigger:c, start:'top 86%',
+      onEnter(){
+        gsap.to(c,{opacity:1,rotationY:0,duration:.8,delay:i*.28,ease:'power3.out'});
+      }
+    });
+  });
+
+  // Masters title clip
+  ScrollTrigger.create({
+    trigger:'#masters', start:'top 72%',
+    onEnter(){
+      gsap.to('#mTitle',{clipPath:'inset(0 0% 0 0)',duration:1.15,ease:'power3.inOut'});
+    }
+  });
+
+  // Master cards slide
+  [['mc1',-70],['mc2',70],['mc3',-70]].forEach(([id,dx],i)=>{
+    const el=document.getElementById(id);
+    gsap.set(el,{x:dx});
+    ScrollTrigger.create({
+      trigger:el, start:'top 86%',
+      onEnter(){
+        gsap.to(el,{opacity:1,x:0,duration:.85,delay:i*.18,ease:'power3.out'});
+      }
+    });
+  });
+
+  // Legacy countup
+  function countUp(el){
+    const target=parseInt(el.dataset.target);
+    const sfx=el.dataset.suffix||'';
+    const dec=el.dataset.dec==='1';
+    const dur=1800, t0=performance.now();
+    el.classList.add('glow');
+    (function tick(now){
+      const prog=Math.min((now-t0)/dur,1);
+      const ease=1-Math.pow(1-prog,3);
+      const val=Math.floor(ease*target);
+      el.textContent=dec?(val/10).toFixed(1)+sfx:val.toLocaleString('de-DE')+sfx;
+      if(prog<1) requestAnimationFrame(tick);
+    })(t0);
+  }
+  ScrollTrigger.create({
+    trigger:'#legacy', start:'top 72%',
+    onEnter(){document.querySelectorAll('.lnum').forEach(countUp);}
+  });
+
+  // Gallery underline
+  ScrollTrigger.create({
+    trigger:'#galerie', start:'top 78%',
+    onEnter(){gsap.to('.gul path',{strokeDashoffset:0,duration:1.1,ease:'power3.inOut'});}
+  });
+
+  // Gallery items
+  gsap.utils.toArray('.mitem').forEach((el,i)=>{
+    const dir=el.dataset.from;
+    const ox=dir==='left'?-55:dir==='right'?55:0;
+    const oy=dir==='up'?-55:dir==='down'?55:0;
+    gsap.set(el,{x:ox,y:oy});
+    ScrollTrigger.create({
+      trigger:el, start:'top 92%',
+      onEnter(){
+        gsap.to(el,{opacity:1,x:0,y:0,duration:.75,delay:(i%3)*.14,ease:'power3.out'});
+      }
+    });
+  });
+}
+
+// --- FORM VALIDATION ---
+const validators={
+  fname:v=>v.trim().length>=2,
+  femail:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+  fdate:v=>!!v,
+  fbarber:v=>!!v
+};
+function validate(id){
+  const el=document.getElementById(id);
+  const err=document.getElementById(id+'Err');
+  const ok=validators[id]?validators[id](el.value):true;
+  el.classList.toggle('err',!ok);
+  el.classList.toggle('ok',ok);
+  if(err){err.classList.toggle('show',!ok);}
+  return ok;
+}
+['fname','femail','fdate','fbarber'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('blur',()=>validate(id));
+  el.addEventListener('input',()=>{if(el.classList.contains('err')||el.classList.contains('ok')) validate(id);});
+});
+document.getElementById('cForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const all=['fname','femail','fdate','fbarber'].every(validate);
+  if(all){
+    const btn=document.getElementById('fsubmit');
+    btn.textContent='Anfrage gesendet ✓';
+    btn.style.background='#2a6a2a';
+    setTimeout(()=>{
+      btn.textContent='Termin anfragen';
+      btn.style.background='';
+      document.getElementById('cForm').reset();
+      ['fname','femail','fdate','fbarber'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.classList.remove('ok','err');
+        const er=document.getElementById(id+'Err');
+        if(er) er.classList.remove('show');
+      });
+    },3200);
+  }
+});
+
+})();
+</script>
+</body>
+</html>

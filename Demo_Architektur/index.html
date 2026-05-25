@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Müller Architekten – Architektur mit Haltung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:        #FAF5EE;
+    --cream-deep:   #F2E8D8;
+    --cream-dark:   #EAD9C2;
+    --charcoal:     #1C1008;
+    --charcoal-mid: #4A3020;
+    --gold:         #C99040;
+    --gold-light:   #E8AE58;
+    --terra:        #A85C40;
+    --terra-light:  #C47055;
+    --border:       #DDD0BA;
+    --muted:        #9C7E6C;
+    --font-head:    'Cormorant Garamond', Georgia, serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--charcoal);
+    background: var(--cream);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--charcoal);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s ease, height 0.25s ease, background 0.25s ease;
+    mix-blend-mode: multiply;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease, border-color 0.3s ease, opacity 0.3s ease;
+    opacity: 0.7;
+  }
+  body.cursor-hover #cursor { width: 14px; height: 14px; background: var(--gold); }
+  body.cursor-hover #cursor-ring { width: 58px; height: 58px; opacity: 1; }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 32px 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: padding 0.4s ease, background 0.4s ease;
+  }
+  nav.scrolled {
+    padding: 18px 64px;
+    background: rgba(250,245,238,0.96);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+  }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 1.45rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.25s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cream) !important;
+    background: var(--charcoal);
+    padding: 11px 26px;
+    text-decoration: none;
+    transition: background 0.3s ease !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; }
+  .nav-cta::after { display: none !important; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+  .nav-hamburger span { display: block; width: 24px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
+
+  /* ── Hero ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Left panel */
+  .hero-left {
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 140px 72px 80px 64px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-left::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+    opacity: 0.6;
+  }
+
+  /* Decorative large background letter */
+  .hero-bg-letter {
+    position: absolute;
+    font-family: var(--font-head);
+    font-size: 28vw;
+    font-weight: 600;
+    color: var(--cream-deep);
+    top: 50%; left: -5vw;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-content-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: flex; align-items: center; gap: 14px;
+    opacity: 0;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 36px; height: 1px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .hero-headline {
+    font-family: var(--font-head);
+    font-size: clamp(3.2rem, 5.5vw, 5.8rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+  }
+  .hero-headline em { font-style: italic; color: var(--terra); }
+  .line-wrap { display: block; overflow: hidden; }
+  .line { display: block; }
+
+  .hero-sub {
+    font-size: 0.93rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--muted);
+    max-width: 400px;
+    margin-bottom: 48px;
+    opacity: 0;
+  }
+
+  .hero-actions {
+    display: flex; gap: 20px; align-items: center;
+    margin-bottom: 64px;
+    opacity: 0;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 15px 40px;
+    background: var(--charcoal);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 0;
+  }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--charcoal);
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .btn-outline svg { transition: transform 0.3s; }
+  .btn-outline:hover { color: var(--terra); }
+  .btn-outline:hover svg { transform: translateX(6px); }
+
+  .hero-stats {
+    display: flex; gap: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+  }
+  .hero-stat strong {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1;
+  }
+  .hero-stat strong em { font-style: normal; color: var(--gold); }
+  .hero-stat span {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Right panel – image */
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-clip {
+    position: absolute; inset: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  .hero-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform-origin: center center;
+  }
+  .hero-img-shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      105deg,
+      rgba(28,16,8,0.22) 0%,
+      rgba(201,144,64,0.08) 100%
+    );
+  }
+  .hero-img-badge {
+    position: absolute;
+    bottom: 48px; left: 40px;
+    background: rgba(250,245,238,0.92);
+    backdrop-filter: blur(12px);
+    padding: 20px 28px;
+    border-left: 3px solid var(--gold);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .hero-img-badge .badge-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .hero-img-badge .badge-value {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--charcoal);
+  }
+
+  .hero-scroll-hint {
+    position: absolute; bottom: 36px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    z-index: 3;
+    opacity: 0;
+  }
+  .hero-scroll-hint span {
+    font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-line {
+    width: 1px; height: 52px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.5; }
+    50% { transform: scaleY(0.6) translateY(8px); opacity: 1; }
+  }
+
+  /* ── Marquee Band ── */
+  .marquee-band {
+    background: var(--gold);
+    padding: 18px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex; align-items: center;
+    white-space: nowrap;
+    animation: marqueeScroll 28s linear infinite;
+    width: max-content;
+  }
+  .marquee-track span {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream);
+    padding: 0 36px;
+  }
+  .marquee-track .dot {
+    color: rgba(250,245,238,0.5);
+    padding: 0 4px;
+    letter-spacing: 0;
+  }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── Section Shared ── */
+  section { position: relative; }
+  .section-inner { max-width: 1360px; margin: 0 auto; padding: 0 64px; }
+  .section-label {
+    font-size: 0.67rem;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-label::before {
+    content: '';
+    display: block; width: 28px; height: 1px;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+    font-weight: 300;
+    line-height: 1.12;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--terra); }
+
+  /* ── Philosophie ── */
+  #philosophie {
+    padding: 148px 0;
+    background: var(--cream-deep);
+  }
+  .philosophie-quote-wrap {
+    text-align: center;
+    max-width: 860px; margin: 0 auto 108px;
+    padding: 0 64px;
+  }
+  .philosophie-quote {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 3vw, 3.1rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.42;
+    color: var(--charcoal);
+    position: relative;
+  }
+  .philosophie-quote::before {
+    content: '\201C';
+    font-size: 9rem;
+    color: var(--terra);
+    opacity: 0.15;
+    position: absolute;
+    top: -44px; left: -24px;
+    font-family: var(--font-head);
+    line-height: 1;
+  }
+  .philosophie-author {
+    margin-top: 32px;
+    font-size: 0.76rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .philosophie-werte {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: var(--cream-dark);
+    border: 2px solid var(--cream-dark);
+    max-width: 1232px; margin: 0 auto;
+  }
+  .wert-card {
+    background: var(--cream-deep);
+    padding: 60px 52px;
+    text-align: left;
+    transition: background 0.35s;
+  }
+  .wert-card:hover { background: var(--cream); }
+  .wert-icon {
+    width: 40px; height: 40px; margin-bottom: 30px;
+    color: var(--terra);
+  }
+  .wert-title {
+    font-family: var(--font-head);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 14px;
+    color: var(--charcoal);
+  }
+  .wert-text {
+    font-size: 0.875rem;
+    line-height: 1.85;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── Leistungen ── */
+  #leistungen {
+    padding: 148px 0;
+    background: var(--cream);
+  }
+  .leistungen-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 72px;
+  }
+  .leistungen-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: var(--cream-dark);
+    border: 2px solid var(--cream-dark);
+  }
+  .leistung-card {
+    background: var(--cream);
+    padding: 52px 44px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.35s ease;
+  }
+  .leistung-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 3px;
+    background: var(--terra);
+    transition: width 0.45s ease;
+  }
+  .leistung-card:hover { background: var(--cream-deep); }
+  .leistung-card:hover::before { width: 100%; }
+  .leistung-num {
+    font-family: var(--font-head);
+    font-size: 3.8rem;
+    font-weight: 300;
+    color: var(--cream-dark);
+    line-height: 1;
+    margin-bottom: 20px;
+    transition: color 0.35s;
+  }
+  .leistung-card:hover .leistung-num { color: var(--terra); opacity: 0.5; }
+  .leistung-title {
+    font-family: var(--font-head);
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 14px;
+  }
+  .leistung-text {
+    font-size: 0.845rem;
+    line-height: 1.85;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── Projekte ── */
+  #projekte {
+    padding: 148px 0;
+    background: var(--cream-deep);
+  }
+  .projekte-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 64px;
+  }
+  .projekte-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 20px;
+  }
+  .projekt-card {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .projekt-card:first-child { aspect-ratio: 3/4; }
+  .projekt-card:not(:first-child) { aspect-ratio: 3/4; }
+  .projekt-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
+  }
+  .projekt-card:hover .projekt-img { transform: scale(1.08); }
+  .projekt-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(28,16,8,0.85) 0%, rgba(28,16,8,0.1) 55%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 40px 36px;
+  }
+  .projekt-card:hover .projekt-overlay { opacity: 1; }
+  .projekt-tag {
+    font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 8px;
+  }
+  .projekt-name {
+    font-family: var(--font-head);
+    font-size: 1.8rem; font-weight: 300;
+    color: var(--cream); line-height: 1.2;
+    transform: translateY(18px);
+    transition: transform 0.45s ease 0.06s;
+  }
+  .projekt-card:hover .projekt-name { transform: translateY(0); }
+  .projekt-year {
+    font-size: 0.74rem; color: rgba(250,245,238,0.6);
+    margin-top: 6px;
+    transform: translateY(18px);
+    transition: transform 0.45s ease 0.12s;
+  }
+  .projekt-card:hover .projekt-year { transform: translateY(0); }
+
+  /* ── Zahlen ── */
+  #zahlen {
+    padding: 120px 0;
+    background: var(--charcoal);
+    overflow: hidden;
+    position: relative;
+  }
+  #zahlen::before {
+    content: 'RAUM';
+    position: absolute;
+    font-family: var(--font-head);
+    font-size: 28vw; font-weight: 600;
+    color: rgba(201,144,64,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: 0.05em;
+  }
+  .zahlen-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: rgba(201,144,64,0.12);
+    border: 2px solid rgba(201,144,64,0.12);
+    position: relative; z-index: 1;
+  }
+  .zahl-item {
+    padding: 80px 60px;
+    text-align: center;
+  }
+  .zahl-value {
+    font-family: var(--font-head);
+    font-size: clamp(3.8rem, 6vw, 6.5rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+  .zahl-value span.gold { color: var(--gold); }
+  .zahl-label {
+    font-size: 0.76rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(250,245,238,0.4);
+  }
+
+  /* ── Team ── */
+  #team {
+    padding: 148px 0;
+    background: var(--cream);
+  }
+  .team-header { margin-bottom: 72px; }
+  .team-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 52px;
+  }
+  .team-img-wrap {
+    position: relative; overflow: hidden;
+    aspect-ratio: 3/4; margin-bottom: 30px;
+  }
+  .team-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(201,144,64,0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .team-card:hover .team-img-wrap::after { opacity: 1; }
+  .team-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: saturate(0.75) sepia(0.12);
+    transition: filter 0.6s ease, transform 0.65s ease;
+    display: block;
+  }
+  .team-card:hover .team-img { filter: saturate(1) sepia(0); transform: scale(1.04); }
+  .team-line {
+    width: 36px; height: 2px;
+    background: var(--gold);
+    margin-bottom: 16px;
+  }
+  .team-name {
+    font-family: var(--font-head);
+    font-size: 1.55rem; font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 7px;
+  }
+  .team-role {
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── Kontakt ── */
+  #kontakt {
+    padding: 148px 0;
+    background: var(--cream-deep);
+  }
+  .kontakt-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 108px; align-items: start;
+  }
+  .kontakt-info .section-title { margin-bottom: 44px; }
+  .info-item {
+    display: flex; gap: 20px; align-items: flex-start;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-item:last-child { border-bottom: none; }
+  .info-icon { width: 18px; height: 18px; color: var(--terra); flex-shrink: 0; margin-top: 2px; }
+  .info-label {
+    font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 5px;
+  }
+  .info-value {
+    font-size: 0.9rem; line-height: 1.75;
+    color: var(--charcoal);
+  }
+  .form-group { margin-bottom: 28px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--terra); }
+  .form-group textarea { resize: vertical; min-height: 130px; }
+  .form-error { font-size: 0.72rem; color: #b5390f; margin-top: 5px; display: none; }
+  .form-group.error input,
+  .form-group.error textarea { border-color: #b5390f; }
+  .form-group.error .form-error { display: block; }
+  .form-submit {
+    width: 100%;
+    padding: 17px 32px;
+    background: var(--charcoal);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: none; cursor: none;
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .form-submit::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--terra);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 0;
+  }
+  .form-submit span { position: relative; z-index: 1; }
+  .form-submit:hover::after { transform: translateX(0); }
+  .form-success {
+    display: none;
+    text-align: center; padding: 48px 20px;
+    border: 1px solid var(--gold);
+    background: rgba(201,144,64,0.06);
+  }
+  .form-success p {
+    font-family: var(--font-head);
+    font-size: 1.4rem; font-weight: 300;
+    color: var(--charcoal);
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--charcoal);
+    padding: 64px;
+    display: flex;
+    justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .footer-logo {
+    font-family: var(--font-head);
+    font-size: 1.25rem; font-weight: 400;
+    color: var(--cream);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.74rem;
+    color: rgba(250,245,238,0.3);
+    letter-spacing: 0.06em;
+  }
+  .footer-socials { display: flex; gap: 20px; }
+  .footer-socials a {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(250,245,238,0.12);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(250,245,238,0.45);
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .footer-socials a:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── Mobile ── */
+  @media (max-width: 1100px) {
+    nav { padding: 22px 36px; }
+    nav.scrolled { padding: 16px 36px; }
+    .nav-links { gap: 28px; }
+    #hero { grid-template-columns: 1fr 1fr; }
+    .hero-left { padding: 120px 40px 80px 36px; }
+    .section-inner { padding: 0 36px; }
+    .philosophie-quote-wrap { padding: 0 36px; }
+    .philosophie-werte { margin: 0 36px; }
+    .leistungen-grid { grid-template-columns: repeat(2, 1fr); }
+    .projekte-grid { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .kontakt-inner { gap: 60px; }
+    footer { padding: 48px 36px; }
+  }
+  @media (max-width: 768px) {
+    #cursor, #cursor-ring { display: none; }
+    body { cursor: auto; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 16px 24px; }
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 110px 24px 60px; }
+    .hero-left::after { display: none; }
+    .hero-bg-letter { display: none; }
+    .hero-right { height: 56vw; min-height: 280px; }
+    .hero-stats { gap: 24px; }
+    .section-inner { padding: 0 24px; }
+    #philosophie, #leistungen, #projekte, #team, #kontakt { padding: 80px 0; }
+    .philosophie-quote-wrap { padding: 0 24px; margin-bottom: 60px; }
+    .philosophie-werte { margin: 0; grid-template-columns: 1fr; gap: 2px; }
+    .leistungen-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .leistungen-grid { grid-template-columns: 1fr; }
+    .projekte-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .projekte-grid { grid-template-columns: 1fr; }
+    .zahlen-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr; gap: 40px; }
+    .kontakt-inner { grid-template-columns: 1fr; gap: 52px; }
+    footer { flex-direction: column; align-items: flex-start; padding: 44px 24px; }
+    .zahl-item { padding: 52px 32px; }
+    .hero-scroll-hint { display: none; }
+  }
+
+  /* Mobile Nav Overlay */
+  .mobile-nav {
+    position: fixed; inset: 0;
+    background: var(--cream);
+    z-index: 999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 32px;
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav a {
+    font-family: var(--font-head);
+    font-size: 2.4rem; font-weight: 300;
+    color: var(--charcoal);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--terra); }
+  .mobile-nav-close {
+    position: absolute; top: 24px; right: 24px;
+    background: none; border: none;
+    cursor: pointer; font-size: 1.5rem;
+    color: var(--charcoal);
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <a href="#philosophie" onclick="closeMobileNav()">Philosophie</a>
+  <a href="#leistungen" onclick="closeMobileNav()">Leistungen</a>
+  <a href="#projekte" onclick="closeMobileNav()">Projekte</a>
+  <a href="#team" onclick="closeMobileNav()">Team</a>
+  <a href="#kontakt" onclick="closeMobileNav()">Kontakt</a>
+</div>
+
+<!-- Navigation -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">Müller <span>Architekten</span></a>
+  <ul class="nav-links">
+    <li><a href="#philosophie">Philosophie</a></li>
+    <li><a href="#leistungen">Leistungen</a></li>
+    <li><a href="#projekte">Projekte</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="openMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero">
+
+  <!-- Left: Text -->
+  <div class="hero-left">
+    <span class="hero-bg-letter" aria-hidden="true">M</span>
+    <div class="hero-content-inner">
+      <p class="hero-eyebrow" id="heroEyebrow">Seit 1996 · München</p>
+      <h1 class="hero-headline" id="heroHeadline">
+        <span class="line-wrap"><span class="line">Architektur,</span></span>
+        <span class="line-wrap"><span class="line">die <em>bleibt</em>.</span></span>
+      </h1>
+      <p class="hero-sub" id="heroSub">
+        Wir planen und bauen Räume, die nicht nur funktionieren — sondern berühren. Jedes Projekt ist ein Versprechen an die Zeit.
+      </p>
+      <div class="hero-actions" id="heroActions">
+        <a href="#projekte" class="btn-primary"><span>Unsere Projekte</span></a>
+        <a href="#kontakt" class="btn-outline">
+          Gespräch anfragen
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+            <path d="M1 7H17M11 1L17 7L11 13" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div class="hero-stat">
+          <strong>28<em> J.</em></strong>
+          <span>Erfahrung</span>
+        </div>
+        <div class="hero-stat">
+          <strong>180<em>+</em></strong>
+          <span>Projekte</span>
+        </div>
+        <div class="hero-stat">
+          <strong>12</strong>
+          <span>Auszeichnungen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Image -->
+  <div class="hero-right">
+    <div class="hero-img-clip" id="heroImgClip">
+      <img
+        class="hero-img"
+        id="heroImg"
+        src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=85&fit=crop"
+        alt="Moderne Architektur – Müller Architekten"
+      >
+      <div class="hero-img-shade"></div>
+    </div>
+    <div class="hero-img-badge" id="heroImgBadge">
+      <p class="badge-label">Auszeichnung 2023</p>
+      <p class="badge-value">Architekturpreis Bayern</p>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="hero-scroll-hint" id="scrollHint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Marquee Band -->
+<div class="marquee-band" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Zeitlosigkeit</span><span class="dot">·</span>
+    <span>Präzision</span><span class="dot">·</span>
+    <span>Nachhaltigkeit</span><span class="dot">·</span>
+    <span>Handwerk</span><span class="dot">·</span>
+    <span>Architekturpreis Bayern</span><span class="dot">·</span>
+    <span>DAM Preis 2022</span><span class="dot">·</span>
+    <span>Menschliche Wärme</span><span class="dot">·</span>
+    <span>Seit 1996</span><span class="dot">·</span>
+    <!-- Repeat for seamless loop -->
+    <span>Zeitlosigkeit</span><span class="dot">·</span>
+    <span>Präzision</span><span class="dot">·</span>
+    <span>Nachhaltigkeit</span><span class="dot">·</span>
+    <span>Handwerk</span><span class="dot">·</span>
+    <span>Architekturpreis Bayern</span><span class="dot">·</span>
+    <span>DAM Preis 2022</span><span class="dot">·</span>
+    <span>Menschliche Wärme</span><span class="dot">·</span>
+    <span>Seit 1996</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- Philosophie -->
+<section id="philosophie">
+  <div class="philosophie-quote-wrap">
+    <p class="philosophie-quote" id="philQuote">
+      Gute Architektur entsteht dort, wo technische Präzision auf menschliche Wärme trifft — und beide eine gemeinsame Sprache finden.
+    </p>
+    <p class="philosophie-author">— Thomas Müller, Gründer &amp; Chefarchitekt</p>
+  </div>
+  <div class="philosophie-werte">
+    <div class="wert-card">
+      <svg class="wert-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2">
+        <circle cx="20" cy="20" r="16"/>
+        <path d="M20 8 L20 20 L28 28"/>
+        <circle cx="20" cy="20" r="2" fill="currentColor"/>
+      </svg>
+      <h3 class="wert-title">Zeitlosigkeit</h3>
+      <p class="wert-text">Wir entwerfen keine Trends — wir schaffen Haltung. Unsere Gebäude sind in zwanzig Jahren genauso relevant wie heute.</p>
+    </div>
+    <div class="wert-card">
+      <svg class="wert-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2">
+        <polygon points="20,4 36,32 4,32"/>
+        <line x1="20" y1="16" x2="20" y2="24"/>
+        <circle cx="20" cy="27" r="1.5" fill="currentColor"/>
+      </svg>
+      <h3 class="wert-title">Präzision</h3>
+      <p class="wert-text">Jedes Detail ist eine Entscheidung. Vom Grundriss bis zum Türgriff arbeiten wir mit höchster handwerklicher und planerischer Sorgfalt.</p>
+    </div>
+    <div class="wert-card">
+      <svg class="wert-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M8 32 Q20 8 32 32"/>
+        <path d="M12 26 Q20 14 28 26"/>
+        <line x1="8" y1="32" x2="32" y2="32"/>
+      </svg>
+      <h3 class="wert-title">Nachhaltigkeit</h3>
+      <p class="wert-text">Verantwortung gegenüber Umwelt und Gemeinschaft ist kein Kompromiss, sondern Grundlage unseres Schaffens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Leistungen -->
+<section id="leistungen">
+  <div class="section-inner">
+    <div class="leistungen-header">
+      <div>
+        <p class="section-label">Was wir tun</p>
+        <h2 class="section-title">Unsere <em>Leistungen</em></h2>
+      </div>
+      <a href="#kontakt" class="btn-outline">
+        Alle Leistungen
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+          <path d="M1 7H17M11 1L17 7L11 13" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </a>
+    </div>
+    <div class="leistungen-grid" id="leistungenGrid">
+      <div class="leistung-card">
+        <div class="leistung-num">01</div>
+        <h3 class="leistung-title">Neubau</h3>
+        <p class="leistung-text">Von der ersten Idee bis zur Schlüsselübergabe. Wir begleiten Ihr Bauprojekt ganzheitlich — mit Vision, Erfahrung und Weitblick.</p>
+      </div>
+      <div class="leistung-card">
+        <div class="leistung-num">02</div>
+        <h3 class="leistung-title">Umbau &amp; Sanierung</h3>
+        <p class="leistung-text">Bestand mit Zukunft denken. Wir entwickeln sensitive Konzepte, die den Charakter des Bestehenden wahren und zeitgemäß weiterentwickeln.</p>
+      </div>
+      <div class="leistung-card">
+        <div class="leistung-num">03</div>
+        <h3 class="leistung-title">Innenarchitektur</h3>
+        <p class="leistung-text">Räume, die atmen. Unsere Interior-Konzepte schaffen Atmosphären, die Wohlbefinden, Funktionalität und Ästhetik vereinen.</p>
+      </div>
+      <div class="leistung-card">
+        <div class="leistung-num">04</div>
+        <h3 class="leistung-title">Stadtplanung</h3>
+        <p class="leistung-text">Quartiere mit Seele. Wir denken Architektur im urbanen Kontext — als sozialen, kulturellen und ökologischen Beitrag zur Stadt.</p>
+      </div>
+      <div class="leistung-card">
+        <div class="leistung-num">05</div>
+        <h3 class="leistung-title">Beratung</h3>
+        <p class="leistung-text">Wissen, das schützt. Ob Machbarkeitsstudie, Baugutachten oder strategische Entwicklungsberatung — wir sind Ihr verlässlicher Partner.</p>
+      </div>
+      <div class="leistung-card">
+        <div class="leistung-num">06</div>
+        <h3 class="leistung-title">Visualisierung</h3>
+        <p class="leistung-text">Sehen, bevor es steht. Hochwertige Renderings und Animationen machen Ihre Vision greifbar — für Investoren, Kunden und Genehmigungen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projekte -->
+<section id="projekte">
+  <div class="section-inner">
+    <div class="projekte-header">
+      <div>
+        <p class="section-label">Ausgewählte Arbeiten</p>
+        <h2 class="section-title">Unsere <em>Projekte</em></h2>
+      </div>
+      <a href="#kontakt" class="btn-outline">
+        Alle Projekte
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+          <path d="M1 7H17M11 1L17 7L11 13" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </a>
+    </div>
+    <div class="projekte-grid">
+      <div class="projekt-card">
+        <img class="projekt-img" src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=900&q=82&fit=crop" alt="Villa Bergblick" loading="lazy">
+        <div class="projekt-overlay">
+          <p class="projekt-tag">Privatresidenz · 2023</p>
+          <h3 class="projekt-name">Villa Bergblick</h3>
+          <p class="projekt-year">Starnberg, Bayern</p>
+        </div>
+      </div>
+      <div class="projekt-card">
+        <img class="projekt-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=82&fit=crop" alt="Haus am Park" loading="lazy">
+        <div class="projekt-overlay">
+          <p class="projekt-tag">Wohnbau · 2022</p>
+          <h3 class="projekt-name">Haus am Park</h3>
+          <p class="projekt-year">Grünwald, München</p>
+        </div>
+      </div>
+      <div class="projekt-card">
+        <img class="projekt-img" src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=82&fit=crop" alt="Loft Central" loading="lazy">
+        <div class="projekt-overlay">
+          <p class="projekt-tag">Gewerbebau · 2021</p>
+          <h3 class="projekt-name">Loft Central</h3>
+          <p class="projekt-year">Schwabing, München</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Zahlen -->
+<section id="zahlen">
+  <div class="section-inner">
+    <div class="zahlen-grid">
+      <div class="zahl-item">
+        <div class="zahl-value"><span class="count" data-target="28">0</span><span class="gold"> Jahre</span></div>
+        <p class="zahl-label">Erfahrung</p>
+      </div>
+      <div class="zahl-item">
+        <div class="zahl-value"><span class="count" data-target="180">0</span><span class="gold">+</span></div>
+        <p class="zahl-label">Projekte realisiert</p>
+      </div>
+      <div class="zahl-item">
+        <div class="zahl-value"><span class="count" data-target="12">0</span></div>
+        <p class="zahl-label">Auszeichnungen</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section id="team">
+  <div class="section-inner">
+    <div class="team-header">
+      <p class="section-label">Die Menschen dahinter</p>
+      <h2 class="section-title">Unser <em>Team</em></h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-img-wrap">
+          <img class="team-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80&fit=crop&crop=face" alt="Thomas Müller" loading="lazy">
+        </div>
+        <div class="team-line"></div>
+        <h3 class="team-name">Thomas Müller</h3>
+        <p class="team-role">Gründer &amp; Chefarchitekt</p>
+      </div>
+      <div class="team-card">
+        <div class="team-img-wrap">
+          <img class="team-img" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80&fit=crop&crop=face" alt="Julia Hartmann" loading="lazy">
+        </div>
+        <div class="team-line"></div>
+        <h3 class="team-name">Julia Hartmann</h3>
+        <p class="team-role">Leitende Architektin</p>
+      </div>
+      <div class="team-card">
+        <div class="team-img-wrap">
+          <img class="team-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop&crop=face" alt="Marcus Berger" loading="lazy">
+        </div>
+        <div class="team-line"></div>
+        <h3 class="team-name">Marcus Berger</h3>
+        <p class="team-role">Projektleitung &amp; Bauleitung</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Kontakt -->
+<section id="kontakt">
+  <div class="section-inner">
+    <div class="kontakt-inner">
+      <div class="kontakt-info">
+        <p class="section-label">Sprechen wir</p>
+        <h2 class="section-title">Ihr Projekt<br>beginnt mit einem <em>Gespräch</em></h2>
+        <div class="info-item">
+          <svg class="info-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 1C6.24 1 4 3.24 4 6c0 4.25 5 11 5 11s5-6.75 5-11c0-2.76-2.24-5-5-5Z"/>
+            <circle cx="9" cy="6" r="1.5"/>
+          </svg>
+          <div>
+            <p class="info-label">Adresse</p>
+            <p class="info-value">Maximilianstraße 12<br>80539 München</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <svg class="info-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 4a1 1 0 011-1h12a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V4z"/>
+            <path d="M2 4l7 6 7-6"/>
+          </svg>
+          <div>
+            <p class="info-label">E-Mail</p>
+            <p class="info-value">kontakt@mueller-architekten.de</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <svg class="info-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 3h3l1.5 4-2 1.5a11 11 0 005 5L12 11l4 1.5V15a1 1 0 01-1 1A13 13 0 012 4a1 1 0 011-1z"/>
+          </svg>
+          <div>
+            <p class="info-label">Telefon</p>
+            <p class="info-value">+49 89 123 456 78</p>
+          </div>
+        </div>
+      </div>
+      <div class="kontakt-form">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group" id="fg-name">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" placeholder="Ihr vollständiger Name">
+              <span class="form-error">Bitte geben Sie Ihren Namen an.</span>
+            </div>
+            <div class="form-group" id="fg-email">
+              <label for="email">E-Mail *</label>
+              <input type="email" id="email" name="email" placeholder="ihre@email.de">
+              <span class="form-error">Bitte geben Sie eine gültige E-Mail an.</span>
+            </div>
+          </div>
+          <div class="form-group" id="fg-interest">
+            <label for="interest">Interesse</label>
+            <select id="interest" name="interest">
+              <option value="">Bitte wählen…</option>
+              <option>Neubau</option>
+              <option>Umbau &amp; Sanierung</option>
+              <option>Innenarchitektur</option>
+              <option>Stadtplanung</option>
+              <option>Beratung</option>
+              <option>Visualisierung</option>
+            </select>
+          </div>
+          <div class="form-group" id="fg-message">
+            <label for="message">Nachricht *</label>
+            <textarea id="message" name="message" placeholder="Beschreiben Sie kurz Ihr Vorhaben…"></textarea>
+            <span class="form-error">Bitte geben Sie eine Nachricht ein.</span>
+          </div>
+          <button type="submit" class="form-submit"><span>Nachricht senden</span></button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <p>Vielen Dank — wir melden uns innerhalb von 24 Stunden.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">Müller <span>Architekten</span></div>
+  <p class="footer-copy">© 2024 Müller Architekten GmbH · München · Alle Rechte vorbehalten</p>
+  <div class="footer-socials">
+    <a href="#" aria-label="Instagram">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="2" width="20" height="20" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <a href="#" aria-label="LinkedIn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="2" width="20" height="20" rx="3"/>
+        <path d="M7 10v7M7 7v.5M12 17v-4a2 2 0 014 0v4M12 10v7"/>
+      </svg>
+    </a>
+    <a href="#" aria-label="Pinterest">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.27-5.38 1.27-5.38s-.32-.65-.32-1.61c0-1.51.88-2.64 1.96-2.64.93 0 1.38.7 1.38 1.53 0 .93-.59 2.33-.9 3.62-.26 1.08.54 1.96 1.6 1.96 1.92 0 3.2-2.46 3.2-5.37 0-2.21-1.49-3.76-3.62-3.76-2.47 0-3.92 1.85-3.92 3.77 0 .75.29 1.55.64 1.99"/>
+      </svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── Custom Cursor ──
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let cursorX = 0, cursorY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  cursorX = e.clientX;
+  cursorY = e.clientY;
+  gsap.set(cursor, { x: cursorX, y: cursorY });
+});
+
+(function animateRing() {
+  ringX += (cursorX - ringX) * 0.1;
+  ringY += (cursorY - ringY) * 0.1;
+  gsap.set(cursorRing, { x: ringX, y: ringY });
+  requestAnimationFrame(animateRing);
+})();
+
+document.querySelectorAll('a, button, .leistung-card, .projekt-card, .team-card, input, textarea, select').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ── Navigation ──
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+// ── Mobile Nav ──
+function openMobileNav() {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Hero Animation – Cinematic Reveal ──
+(function initHero() {
+  // Initial states
+  gsap.set('.hero-headline .line', { y: '108%' });
+  gsap.set('#heroEyebrow', { opacity: 0, x: -20 });
+  gsap.set('#heroSub', { opacity: 0, y: 24 });
+  gsap.set('#heroActions', { opacity: 0, y: 20 });
+  gsap.set('#heroStats', { opacity: 0, y: 16 });
+  gsap.set('#scrollHint', { opacity: 0 });
+  gsap.set('#heroImgBadge', { opacity: 0, y: 20 });
+
+  const tl = gsap.timeline({ delay: 0.15 });
+
+  // 1. Eyebrow slides in
+  tl.to('#heroEyebrow', { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' })
+
+  // 2. Headline lines reveal from bottom (line-wrap clips overflow)
+  .to('.hero-headline .line', {
+    y: '0%',
+    duration: 0.95,
+    stagger: 0.13,
+    ease: 'power3.out'
+  }, '-=0.3')
+
+  // 3. Image clips in from right – the cinematic reveal
+  .to('#heroImgClip', {
+    clipPath: 'inset(0 0% 0 0)',
+    duration: 1.15,
+    ease: 'power3.inOut'
+  }, '-=0.7')
+
+  // 4. Sub text
+  .to('#heroSub', { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.5')
+
+  // 5. CTAs
+  .to('#heroActions', { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.35')
+
+  // 6. Stats
+  .to('#heroStats', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+
+  // 7. Badge card on image
+  .to('#heroImgBadge', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+
+  // 8. Scroll hint
+  .to('#scrollHint', { opacity: 1, duration: 0.5 }, '+=0.2');
+
+  // Ken Burns effect on hero image after reveal
+  gsap.to('#heroImg', {
+    scale: 1.07,
+    duration: 9,
+    ease: 'none',
+    delay: 1.2
+  });
+})();
+
+// ── Philosophie Quote – Word by word ──
+(function() {
+  const quoteEl = document.querySelector('.philosophie-quote');
+  const text = quoteEl.textContent.trim();
+  const words = text.split(' ');
+  quoteEl.innerHTML = words.map(w => `<span class="word" style="display:inline-block;opacity:0;transform:translateY(14px);">${w}&nbsp;</span>`).join('');
+
+  ScrollTrigger.create({
+    trigger: '#philosophie',
+    start: 'top 72%',
+    onEnter: () => gsap.to('.philosophie-quote .word', {
+      opacity: 1, y: 0,
+      stagger: 0.038, duration: 0.55, ease: 'power2.out'
+    })
+  });
+})();
+
+// ── Scroll Reveal Helper ──
+function revealOnScroll(selector, extras = {}) {
+  gsap.utils.toArray(selector).forEach(el => {
+    gsap.set(el, { opacity: 0, y: 44 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 84%',
+      onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.85, ease: 'power2.out', ...extras })
+    });
+  });
+}
+
+revealOnScroll('.section-label');
+revealOnScroll('.section-title');
+revealOnScroll('.philosophie-author', { delay: 0.5 });
+revealOnScroll('.team-card');
+revealOnScroll('.kontakt-info > *');
+
+// ── Wert Cards ──
+gsap.utils.toArray('.wert-card').forEach((card, i) => {
+  gsap.set(card, { opacity: 0, y: 52 });
+  ScrollTrigger.create({
+    trigger: card,
+    start: 'top 86%',
+    onEnter: () => gsap.to(card, { opacity: 1, y: 0, duration: 0.75, delay: i * 0.14, ease: 'power2.out' })
+  });
+});
+
+// ── Leistung Cards ──
+(function() {
+  const cards = gsap.utils.toArray('#leistungenGrid .leistung-card');
+  cards.forEach(c => gsap.set(c, { opacity: 0, y: 50 }));
+  ScrollTrigger.create({
+    trigger: '#leistungenGrid',
+    start: 'top 76%',
+    onEnter: () => gsap.to(cards, { opacity: 1, y: 0, stagger: 0.1, duration: 0.75, ease: 'power2.out' })
+  });
+})();
+
+// ── Projekt Cards – staggered clip-path reveal ──
+gsap.utils.toArray('.projekt-card').forEach((card, i) => {
+  gsap.set(card, { opacity: 0, y: 64, clipPath: 'inset(0 0 20% 0)' });
+  ScrollTrigger.create({
+    trigger: card,
+    start: 'top 87%',
+    onEnter: () => gsap.to(card, {
+      opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)',
+      duration: 0.9, delay: i * 0.14, ease: 'power2.out'
+    })
+  });
+});
+
+// ── Parallax on Project Images ──
+gsap.utils.toArray('.projekt-card').forEach(card => {
+  const img = card.querySelector('.projekt-img');
+  gsap.to(img, {
+    yPercent: -10, ease: 'none',
+    scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true }
+  });
+});
+
+// ── Number Counter ──
+(function() {
+  gsap.utils.toArray('.count').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    gsap.set(el, { innerText: 0 });
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 82%',
+      onEnter: () => gsap.to(el, {
+        innerText: target,
+        duration: 2.4,
+        ease: 'power2.out',
+        snap: { innerText: 1 },
+        onUpdate() { el.textContent = Math.round(+el.innerHTML); }
+      })
+    });
+  });
+})();
+
+// ── Zahlen Items ──
+gsap.utils.toArray('.zahl-item').forEach((item, i) => {
+  gsap.set(item, { opacity: 0, y: 40 });
+  ScrollTrigger.create({
+    trigger: '#zahlen',
+    start: 'top 76%',
+    onEnter: () => gsap.to(item, { opacity: 1, y: 0, duration: 0.75, delay: i * 0.18, ease: 'power2.out' })
+  });
+});
+
+// ── Team Cards ──
+gsap.utils.toArray('.team-card').forEach((card, i) => {
+  gsap.set(card, { opacity: 0, y: 52 });
+  ScrollTrigger.create({
+    trigger: '#team',
+    start: 'top 72%',
+    onEnter: () => gsap.to(card, { opacity: 1, y: 0, duration: 0.8, delay: i * 0.18, ease: 'power2.out' })
+  });
+});
+
+// ── Kontakt ──
+(function() {
+  gsap.set('.kontakt-info, .kontakt-form', { opacity: 0, y: 52 });
+  ScrollTrigger.create({
+    trigger: '#kontakt',
+    start: 'top 72%',
+    onEnter: () => {
+      gsap.to('.kontakt-info', { opacity: 1, y: 0, duration: 0.85, ease: 'power2.out' });
+      gsap.to('.kontakt-form', { opacity: 1, y: 0, duration: 0.85, delay: 0.2, ease: 'power2.out' });
+    }
+  });
+})();
+
+// ── Footer ──
+gsap.set('footer', { opacity: 0, y: 30 });
+ScrollTrigger.create({
+  trigger: 'footer',
+  start: 'top 92%',
+  onEnter: () => gsap.to('footer', { opacity: 1, y: 0, duration: 0.8 })
+});
+
+// ── Form ──
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let valid = true;
+  const name = document.getElementById('name');
+  const email = document.getElementById('email');
+  const message = document.getElementById('message');
+
+  function validate(el, groupId, test) {
+    const group = document.getElementById(groupId);
+    if (!test(el.value)) { group.classList.add('error'); valid = false; }
+    else group.classList.remove('error');
+  }
+
+  validate(name, 'fg-name', v => v.trim().length >= 2);
+  validate(email, 'fg-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()));
+  validate(message, 'fg-message', v => v.trim().length >= 10);
+
+  if (valid) {
+    gsap.to(this, { opacity: 0, duration: 0.3, onComplete: () => {
+      this.style.display = 'none';
+      const success = document.getElementById('formSuccess');
+      success.style.display = 'block';
+      gsap.from(success, { opacity: 0, y: 20, duration: 0.55 });
+    }});
+  }
+});
+</script>
+</body>
+</html>

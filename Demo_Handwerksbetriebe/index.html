@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mustermann Bau GmbH – Ihr zuverlässiger Baupartner für Rohbau, Umbau und Sanierung. 25 Jahre Erfahrung im Rhein-Main-Gebiet.">
+<title>Mustermann Bau GmbH – Ihr Baupartner vor Ort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#D4621A;--primary-d:#B54E15;--primary-l:#F07B35;
+  --dark:#1A1A1A;--g900:#222;--g800:#2C2C2C;--g700:#3D3D3D;
+  --g500:#666;--g400:#888;--g300:#AAA;--g200:#CCC;--g100:#F0F0F0;
+  --beige:#F8EEE0;--beige-d:#EDD9C0;--wood:#6B3A1F;--white:#FFF;
+  --sh:0 4px 20px rgba(0,0,0,.14);--sh-lg:0 10px 40px rgba(0,0,0,.22);
+  --r:4px;--r-lg:10px;--ease:.3s ease;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Open Sans',sans-serif;color:var(--g700);background:var(--white);overflow-x:hidden;line-height:1.6}
+img{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit}
+h1,h2,h3,h4{font-family:'Oswald',sans-serif;font-weight:600;line-height:1.2;color:var(--dark)}
+
+/* --- UTILS --- */
+.container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+.section{padding:5rem 0}
+.section-label{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--primary);display:block;margin-bottom:.6rem}
+.section-title{font-size:clamp(1.9rem,4vw,2.9rem);margin-bottom:1.1rem}
+.section-sub{font-size:1rem;color:var(--g500);max-width:580px;line-height:1.75}
+.section-hd{margin-bottom:3.5rem}
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.85rem 1.9rem;font-family:'Oswald',sans-serif;font-size:.95rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;border:none;cursor:pointer;border-radius:var(--r);transition:all .3s ease}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-d);transform:translateY(-2px);box-shadow:0 6px 22px rgba(212,98,26,.38)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.75)}
+.btn-outline:hover{background:#fff;color:var(--dark);border-color:#fff}
+
+/* --- NAV --- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.2rem 0;transition:all .4s ease}
+.nav.scrolled{background:rgba(22,22,22,.97);padding:.7rem 0;box-shadow:0 2px 24px rgba(0,0,0,.35)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Oswald',sans-serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1.1}
+.nav-logo span{display:block;font-size:.62rem;font-weight:400;letter-spacing:.14em;color:var(--primary);text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:1.8rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.82);font-size:.82rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color var(--ease);position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--primary);transition:width var(--ease)}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:var(--primary)!important;color:#fff!important;padding:.48rem 1.2rem!important;border-radius:var(--r)!important}
+.nav-cta:hover{background:var(--primary-d)!important}
+.nav-cta::after{display:none!important}
+.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:.5rem}
+.nav-toggle span{width:24px;height:2px;background:#fff;display:block;transition:all .3s}
+.nav-mob{display:flex;flex-direction:column;background:rgba(22,22,22,.98);max-height:0;overflow:hidden;transition:max-height .4s ease}
+.nav-mob.open{max-height:360px}
+.nav-mob a{color:rgba(255,255,255,.8);padding:.75rem 1.5rem;font-size:.88rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.05);display:block;transition:color .2s,background .2s}
+.nav-mob a:hover{color:var(--primary);background:rgba(255,255,255,.04)}
+
+/* --- HERO --- */
+.hero{height:100vh;min-height:640px;position:relative;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&auto=format&fit=crop&q=80') center/cover;z-index:0}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(20,10,5,.9) 0%,rgba(50,25,8,.72) 55%,rgba(20,20,20,.6) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(212,98,26,.18);border:1px solid rgba(212,98,26,.45);color:var(--primary-l);padding:.38rem 1rem;border-radius:2rem;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.4rem}
+.hero-title{font-size:clamp(2.8rem,7.5vw,5.5rem);color:#fff;font-weight:700;line-height:1.04;margin-bottom:1.4rem;text-transform:uppercase}
+.hero-title em{font-style:normal;color:var(--primary)}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,.78);margin-bottom:2.4rem;max-width:480px;line-height:1.75}
+.hero-btns{display:flex;gap:.9rem;flex-wrap:wrap}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.4rem;color:rgba(255,255,255,.5);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase}
+.scroll-line{width:1px;height:46px;background:linear-gradient(to bottom,rgba(255,255,255,.55),transparent);animation:sp 2.2s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:.55;transform:scaleY(1)}50%{opacity:.22;transform:scaleY(.65)}}
+
+/* --- ABOUT --- */
+.about{background:var(--beige)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-img-wrap{position:relative;border-radius:var(--r-lg);overflow:hidden}
+.about-img-wrap img{width:100%;height:480px;object-fit:cover}
+.about-badge{position:absolute;bottom:1.5rem;right:1.5rem;background:var(--primary);color:#fff;padding:.9rem 1.1rem;border-radius:var(--r);text-align:center;font-family:'Oswald',sans-serif}
+.about-badge strong{display:block;font-size:2rem;font-weight:700;line-height:1}
+.about-badge span{font-size:.78rem;opacity:.9}
+.about-text p{color:var(--g500);margin-bottom:1.4rem;font-size:1.02rem;line-height:1.8}
+.strengths{display:flex;flex-direction:column;gap:1.1rem;margin-top:2rem}
+.str-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;background:#fff;border-radius:var(--r-lg);border-left:4px solid var(--primary);box-shadow:0 2px 10px rgba(0,0,0,.05);transition:transform var(--ease),box-shadow var(--ease)}
+.str-item:hover{transform:translateX(4px);box-shadow:0 4px 18px rgba(0,0,0,.1)}
+.str-ic{width:46px;height:46px;background:rgba(212,98,26,.1);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--primary)}
+.str-ic svg{width:22px;height:22px}
+.str-txt h4{font-size:.97rem;margin-bottom:.22rem;color:var(--dark)}
+.str-txt p{font-size:.85rem;color:var(--g500);margin:0;line-height:1.55}
+
+/* --- SERVICES --- */
+.services{background:#fff}
+.sv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.sv-card{background:#fff;border:1px solid var(--beige-d);border-radius:var(--r-lg);padding:1.9rem;transition:all .4s ease;position:relative;overflow:hidden}
+.sv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--primary);transform:scaleX(0);transition:transform .4s ease;transform-origin:left}
+.sv-card:hover{border-color:transparent;box-shadow:var(--sh-lg);transform:translateY(-6px)}
+.sv-card:hover::before{transform:scaleX(1)}
+.sv-ic{width:58px;height:58px;background:rgba(212,98,26,.09);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;color:var(--primary);transition:background .4s}
+.sv-card:hover .sv-ic{background:rgba(212,98,26,.18)}
+.sv-ic svg{width:26px;height:26px}
+.sv-card h3{font-size:1.2rem;margin-bottom:.65rem;color:var(--dark)}
+.sv-card p{font-size:.88rem;color:var(--g500);line-height:1.7}
+
+/* --- PROJECTS --- */
+.projects{background:var(--g800)}
+.projects .section-title{color:#fff}
+.projects .section-sub{color:var(--g300)}
+.pr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.pr-card{border-radius:var(--r-lg);overflow:hidden;position:relative;height:380px;cursor:pointer}
+.pr-img-w{position:absolute;inset:0;overflow:hidden}
+.pr-img{width:100%;height:120%;object-fit:cover;transition:transform .6s ease}
+.pr-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(18,18,18,.95) 0%,rgba(18,18,18,.25) 55%,transparent 100%);transition:background .4s ease;z-index:1}
+.pr-card:hover .pr-ov{background:linear-gradient(to top,rgba(18,18,18,.98) 0%,rgba(18,18,18,.6) 70%,rgba(18,18,18,.15) 100%)}
+.pr-card:hover .pr-img{transform:scale(1.06)}
+.pr-cnt{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;z-index:2}
+.pr-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .7rem;border-radius:2rem;margin-bottom:.7rem}
+.pr-card h3{font-size:1.35rem;color:#fff;margin-bottom:.45rem}
+.pr-card p{font-size:.85rem;color:rgba(255,255,255,.72);line-height:1.55;opacity:0;transform:translateY(10px);transition:all .4s ease;margin-bottom:.9rem}
+.pr-card:hover p{opacity:1;transform:translateY(0)}
+.pr-link{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;font-weight:700;color:var(--primary-l);opacity:0;transform:translateY(8px);transition:all .4s ease .05s}
+.pr-card:hover .pr-link{opacity:1;transform:translateY(0)}
+
+/* --- STATS --- */
+.stats{background:var(--dark);padding:5rem 0;position:relative;overflow:hidden}
+.stats::before{content:'';position:absolute;top:-40%;left:-5%;width:550px;height:550px;background:radial-gradient(circle,rgba(212,98,26,.1) 0%,transparent 68%);pointer-events:none}
+.st-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center}
+.st-item{padding:2rem 1.2rem;border-right:1px solid rgba(255,255,255,.07)}
+.st-item:last-child{border-right:none}
+.st-num{font-family:'Oswald',sans-serif;font-size:clamp(2.4rem,5vw,3.9rem);font-weight:700;color:var(--primary);line-height:1;margin-bottom:.45rem;display:flex;align-items:baseline;justify-content:center;gap:.08em}
+.st-sfx{font-size:.58em;color:var(--primary-l)}
+.st-lbl{font-size:.82rem;color:var(--g300);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.st-dsc{font-size:.75rem;color:var(--g500);margin-top:.2rem}
+
+/* --- TESTIMONIALS --- */
+.testimonials{background:var(--beige)}
+.tm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.tm-card{background:#fff;border-radius:var(--r-lg);padding:1.9rem;box-shadow:0 2px 14px rgba(0,0,0,.06);transition:all .4s ease;position:relative}
+.tm-card::before{content:'"';position:absolute;top:-.4rem;left:1.4rem;font-size:5.5rem;font-family:'Oswald',sans-serif;color:var(--primary);opacity:.13;line-height:1}
+.tm-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.stars{color:#F59E0B;font-size:.95rem;margin-bottom:.9rem;letter-spacing:.1em}
+.tm-txt{font-size:.93rem;color:var(--g500);line-height:1.78;margin-bottom:1.4rem;font-style:italic}
+.tm-author{display:flex;align-items:center;gap:.7rem;border-top:1px solid var(--beige-d);padding-top:.95rem}
+.tm-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--wood));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:.95rem;flex-shrink:0}
+.tm-name{font-weight:600;font-size:.88rem;color:var(--dark)}
+.tm-loc{font-size:.75rem;color:var(--g400);margin-top:.08rem}
+
+/* --- CONTACT --- */
+.contact{background:#fff}
+.ct-grid{display:grid;grid-template-columns:1fr 1.55fr;gap:4rem;align-items:start}
+.ct-info{padding:2.4rem;background:var(--dark);border-radius:var(--r-lg);color:#fff}
+.ct-info h3{font-size:1.45rem;color:#fff;margin-bottom:.45rem}
+.ct-info>p{font-size:.88rem;color:var(--g300);margin-bottom:1.9rem;line-height:1.65}
+.ct-details{display:flex;flex-direction:column;gap:1.2rem;margin-bottom:1.9rem}
+.ct-det{display:flex;gap:.9rem;align-items:flex-start}
+.ct-det-ic{width:38px;height:38px;background:rgba(212,98,26,.14);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--primary-l);flex-shrink:0}
+.ct-det-ic svg{width:17px;height:17px}
+.ct-det-tx span{display:block;font-size:.68rem;color:var(--g400);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.18rem}
+.ct-det-tx a,.ct-det-tx p{font-size:.92rem;color:rgba(255,255,255,.88);font-weight:500}
+.ct-det-tx a:hover{color:var(--primary-l)}
+.ct-oh{border-top:1px solid rgba(255,255,255,.09);padding-top:1.2rem}
+.ct-oh h4{font-size:.8rem;color:var(--primary-l);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.65rem;font-weight:700}
+.ct-oh p{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.85}
+.cf-title{font-size:1.55rem;margin-bottom:.4rem}
+.cf-sub{color:var(--g500);margin-bottom:1.9rem;font-size:.93rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0}
+.fg{display:flex;flex-direction:column;gap:.38rem;margin-bottom:.95rem}
+.fg label{font-size:.78rem;font-weight:700;color:var(--g700);text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg select,.fg textarea{padding:.78rem .95rem;border:1.5px solid var(--g200);border-radius:var(--r);font-family:'Open Sans',sans-serif;font-size:.93rem;color:var(--g700);background:#fff;transition:border-color .3s,box-shadow .3s;outline:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(212,98,26,.11)}
+.fg input.err,.fg textarea.err{border-color:#E53E3E}
+.fg .emsg{font-size:.75rem;color:#E53E3E;display:none}
+.fg textarea{resize:vertical;min-height:115px}
+.form-ok{display:none;background:#F0FFF4;border:1.5px solid #68D391;border-radius:var(--r-lg);padding:1.7rem;text-align:center}
+
+/* --- FOOTER --- */
+footer{background:var(--dark);color:rgba(255,255,255,.65);padding:3.5rem 0 2rem}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.ft-brand .nav-logo{margin-bottom:.9rem;display:block}
+.ft-brand>p{font-size:.85rem;line-height:1.72;color:rgba(255,255,255,.5);margin-bottom:1.2rem}
+.ft-social{display:flex;gap:.65rem}
+.soc-a{width:34px;height:34px;background:rgba(255,255,255,.08);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);transition:all .3s}
+.soc-a:hover{background:var(--primary);color:#fff}
+.soc-a svg{width:15px;height:15px}
+.ft-col h4{font-size:.8rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#fff;margin-bottom:1.1rem}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.ft-col ul a{font-size:.85rem;color:rgba(255,255,255,.5);transition:color .3s;display:flex;align-items:center;gap:.38rem}
+.ft-col ul a::before{content:'›';color:var(--primary);font-size:1rem}
+.ft-col ul a:hover{color:var(--primary-l)}
+.ft-bot{border-top:1px solid rgba(255,255,255,.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.9rem}
+.ft-bot p{font-size:.8rem;color:rgba(255,255,255,.35)}
+.ft-bot-lnk{display:flex;gap:1.4rem}
+.ft-bot-lnk a{font-size:.8rem;color:rgba(255,255,255,.35);transition:color .3s}
+.ft-bot-lnk a:hover{color:rgba(255,255,255,.7)}
+
+/* --- RESPONSIVE --- */
+@media(max-width:1024px){
+  .sv-grid{grid-template-columns:repeat(2,1fr)}
+  .pr-grid{grid-template-columns:repeat(2,1fr)}
+  .st-grid{grid-template-columns:repeat(2,1fr)}
+  .ft-grid{grid-template-columns:1fr 1fr}
+  .about-grid{gap:2.5rem}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .about-grid{grid-template-columns:1fr}
+  .about-img-wrap{display:none}
+  .sv-grid{grid-template-columns:1fr}
+  .pr-grid{grid-template-columns:1fr}
+  .pr-card{height:300px}
+  .st-grid{grid-template-columns:1fr 1fr;gap:0}
+  .st-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
+  .st-item:nth-child(2n-1){border-right:1px solid rgba(255,255,255,.07)}
+  .tm-grid{grid-template-columns:1fr}
+  .ct-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .ft-bot{flex-direction:column;text-align:center}
+  .ft-bot-lnk{flex-wrap:wrap;justify-content:center}
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn{width:fit-content}
+}
+@media(max-width:480px){
+  .st-grid{grid-template-columns:1fr}
+  .st-item:nth-child(2n-1){border-right:none}
+  .ft-grid{grid-template-columns:1fr}
+  .section{padding:3.5rem 0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Mustermann Bau<span>GmbH · Seit 1999</span></a>
+      <ul class="nav-links">
+        <li><a href="#about">Über uns</a></li>
+        <li><a href="#services">Leistungen</a></li>
+        <li><a href="#projects">Projekte</a></li>
+        <li><a href="#testimonials">Referenzen</a></li>
+        <li><a href="#contact" class="nav-cta">Anfrage</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="nav-mob" id="navMob">
+    <a href="#about">Über uns</a>
+    <a href="#services">Leistungen</a>
+    <a href="#projects">Projekte</a>
+    <a href="#testimonials">Referenzen</a>
+    <a href="#contact">Kontakt & Anfrage</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-ov"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge" id="heroBadge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Ihr Baupartner seit 1999
+      </div>
+      <h1 class="hero-title" id="heroTitle">Wir bauen<br><em>Ihre</em> Zukunft.</h1>
+      <p class="hero-sub" id="heroSub">Von der Planung bis zur Schlüsselübergabe – professioneller Hochbau, Sanierung und Umbau mit 25 Jahren Erfahrung im Rhein-Main-Gebiet.</p>
+      <div class="hero-btns" id="heroBtns">
+        <a href="#contact" class="btn btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.86 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.77 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l.91-.91a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 17z"/></svg>
+          Jetzt anfragen
+        </a>
+        <a href="#services" class="btn btn-outline">Leistungen ansehen</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scrollen</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap" id="aboutImg">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&auto=format&fit=crop&q=80" alt="Mustermann Bau Team" loading="lazy">
+        <div class="about-badge"><strong>25</strong><span>Jahre<br>Erfahrung</span></div>
+      </div>
+      <div class="about-text" id="aboutTxt">
+        <span class="section-label">Über uns</span>
+        <h2 class="section-title">Handwerk mit Leidenschaft &amp; Präzision</h2>
+        <p>Seit 1999 realisieren wir im Rhein-Main-Gebiet Bauprojekte aller Größenordnungen – von der sorgfältigen Sanierung eines Einfamilienhauses bis zum anspruchsvollen Neubau gewerblicher Objekte.</p>
+        <p>Unser Team aus erfahrenen Fachkräften vereint traditionelles Handwerk mit modernen Bautechniken. Dabei stehen Qualität, Termintreue und offene Kommunikation für uns an erster Stelle.</p>
+        <div class="strengths">
+          <div class="str-item">
+            <div class="str-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="str-txt"><h4>Geprüfte Qualität</h4><p>Zertifizierter Meisterbetrieb mit strengsten Qualitätsstandards und lückenloser Dokumentation.</p></div>
+          </div>
+          <div class="str-item">
+            <div class="str-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="str-txt"><h4>Termintreue &amp; Verlässlichkeit</h4><p>Ihre Deadlines sind unsere Deadlines. Transparente Kommunikation vom ersten Tag bis zur Abnahme.</p></div>
+          </div>
+          <div class="str-item">
+            <div class="str-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="str-txt"><h4>Erfahrenes Team</h4><p>Über 80 Fachkräfte mit umfangreicher Ausbildung und jahrelanger Projekterfahrung.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section-hd">
+      <span class="section-label">Was wir bieten</span>
+      <h2 class="section-title">Unsere Leistungen</h2>
+      <p class="section-sub">Von Rohbau bis zur schlüsselfertigen Übergabe – wir begleiten Ihr Projekt durch alle Phasen mit einem festen Ansprechpartner.</p>
+    </div>
+    <div class="sv-grid">
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/></svg></div>
+        <h3>Rohbau</h3>
+        <p>Solide Fundamente und tragfähige Konstruktionen bilden das Herzstück jedes Bauprojekts. Wir realisieren Rohbauten für Ein- und Mehrfamilienhäuser sowie gewerbliche Bauten.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3>Umbau</h3>
+        <p>Ihre Räume sollen neu gestaltet werden? Wir planen und realisieren Umbauten aller Art – von der Grundrissänderung bis zum komplett neuen Raumkonzept.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+        <h3>Sanierung</h3>
+        <p>Energetische Sanierungen, Fassadenerneuerungen oder die Modernisierung von Altbauten – wir bringen Ihre Immobilie auf den neuesten Stand der Technik.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="16" y2="21"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+        <h3>Trockenbau</h3>
+        <p>Schnelle und flexible Raumgestaltung durch moderne Trockenbautechniken. Wände, Decken und Böden – präzise für optimale Akustik und Wärmedämmung.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <h3>Außenanlagen</h3>
+        <p>Terrassen, Einfahrten, Stützmauern und Gartenanlagen – wir gestalten Ihr Außengelände funktional und ansprechend als würdigen Rahmen Ihres Gebäudes.</p>
+      </div>
+      <div class="sv-card">
+        <div class="sv-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <h3>Beratung</h3>
+        <p>Kostenlose Erstberatung und detaillierte Angebotserstellung. Unsere Experten begleiten Sie von der ersten Idee über die Planung bis zur erfolgreichen Umsetzung.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section projects" id="projects">
+  <div class="container">
+    <div class="section-hd">
+      <span class="section-label" style="color:var(--primary-l)">Unsere Arbeiten</span>
+      <h2 class="section-title">Ausgewählte Projekte</h2>
+      <p class="section-sub">Ein Blick auf ausgewählte Referenzen aus unserem Portfolio – von anspruchsvollem Neubau bis denkmalgerechter Sanierung.</p>
+    </div>
+    <div class="pr-grid">
+      <div class="pr-card">
+        <div class="pr-img-w"><img class="pr-img" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=80" alt="Neubau Frankfurt" loading="lazy"></div>
+        <div class="pr-ov"></div>
+        <div class="pr-cnt">
+          <span class="pr-tag">Neubau</span>
+          <h3>Wohnhaus Frankfurt-Sachsenhausen</h3>
+          <p>Modernes Einfamilienhaus auf 320 m² – von der Bodenplatte bis zum Dachstuhl in 14 Monaten Bauzeit fertiggestellt.</p>
+          <span class="pr-link">Mehr erfahren →</span>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-img-w"><img class="pr-img" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&auto=format&fit=crop&q=80" alt="Gewerbekomplex Darmstadt" loading="lazy"></div>
+        <div class="pr-ov"></div>
+        <div class="pr-cnt">
+          <span class="pr-tag">Gewerbe</span>
+          <h3>Bürokomplex Darmstadt Nord</h3>
+          <p>4.200 m² Bürofläche auf 5 Etagen. Schlüsselfertige Übergabe – pünktlich und im vereinbarten Budget.</p>
+          <span class="pr-link">Mehr erfahren →</span>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-img-w"><img class="pr-img" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80" alt="Altbausanierung Mainz" loading="lazy"></div>
+        <div class="pr-ov"></div>
+        <div class="pr-cnt">
+          <span class="pr-tag">Sanierung</span>
+          <h3>Altbausanierung Mainz-Altstadt</h3>
+          <p>Denkmalgerechte Sanierung eines Gründerzeithauses von 1902 – energetisch auf KfW-55-Standard optimiert.</p>
+          <span class="pr-link">Mehr erfahren →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats" id="stats">
+  <div class="container">
+    <div class="st-grid">
+      <div class="st-item">
+        <div class="st-num"><span class="counter" data-target="25">0</span><span class="st-sfx">+</span></div>
+        <div class="st-lbl">Jahre Erfahrung</div>
+        <div class="st-dsc">Gegründet 1999 in Frankfurt</div>
+      </div>
+      <div class="st-item">
+        <div class="st-num"><span class="counter" data-target="500">0</span><span class="st-sfx">+</span></div>
+        <div class="st-lbl">Projekte abgeschlossen</div>
+        <div class="st-dsc">Von Neubau bis Sanierung</div>
+      </div>
+      <div class="st-item">
+        <div class="st-num"><span class="counter-dec" data-target="4.9">0.0</span><span class="st-sfx">★</span></div>
+        <div class="st-lbl">Kundenbewertung</div>
+        <div class="st-dsc">Aus 127 Google-Bewertungen</div>
+      </div>
+      <div class="st-item">
+        <div class="st-num"><span class="counter" data-target="85">0</span><span class="st-sfx">+</span></div>
+        <div class="st-lbl">Mitarbeiter</div>
+        <div class="st-dsc">Festangestellt &amp; zertifiziert</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-hd">
+      <span class="section-label">Das sagen Kunden</span>
+      <h2 class="section-title">Kundenstimmen</h2>
+      <p class="section-sub">Über 500 realisierte Projekte – hier sind drei Stimmen zufriedener Bauherren aus dem Rhein-Main-Gebiet.</p>
+    </div>
+    <div class="tm-grid">
+      <div class="tm-card">
+        <div class="stars">★★★★★</div>
+        <p class="tm-txt">"Wir haben unser Traumhaus mit Mustermann Bau gebaut – absolut professionelle Abwicklung. Das Team war immer ansprechbar, Termine wurden eingehalten und die Qualität überzeugt uns täglich aufs Neue."</p>
+        <div class="tm-author"><div class="tm-av">TK</div><div><div class="tm-name">Thomas &amp; Katrin Berger</div><div class="tm-loc">Frankfurt am Main · Neubau 2023</div></div></div>
+      </div>
+      <div class="tm-card">
+        <div class="stars">★★★★★</div>
+        <p class="tm-txt">"Unsere Büroräume wurden komplett umgebaut – trotz laufendem Betrieb! Mustermann Bau hat die Arbeiten so koordiniert, dass wir kaum gestört wurden. Das Ergebnis ist fantastisch."</p>
+        <div class="tm-author"><div class="tm-av">MH</div><div><div class="tm-name">Monika Hartmann</div><div class="tm-loc">Darmstadt · Gewerblicher Umbau 2024</div></div></div>
+      </div>
+      <div class="tm-card">
+        <div class="stars">★★★★★</div>
+        <p class="tm-txt">"Die Altbausanierung war technisch sehr anspruchsvoll. Herr Mustermann hat das Projekt persönlich begleitet und immer pragmatische Lösungen gefunden. Klare Empfehlung!"</p>
+        <div class="tm-author"><div class="tm-av">PS</div><div><div class="tm-name">Peter Schäfer</div><div class="tm-loc">Mainz · Sanierung 2022</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-hd">
+      <span class="section-label">Kontakt aufnehmen</span>
+      <h2 class="section-title">Ihr Projekt beginnt hier</h2>
+      <p class="section-sub">Wir sind montags bis freitags für Sie erreichbar. Anfragen werden innerhalb von 24 Stunden beantwortet.</p>
+    </div>
+    <div class="ct-grid">
+      <div class="ct-info">
+        <h3>Mustermann Bau GmbH</h3>
+        <p>Ihr kompetenter Ansprechpartner für alle Bauprojekte im Rhein-Main-Gebiet – von der ersten Skizze bis zur Schlüsselübergabe.</p>
+        <div class="ct-details">
+          <div class="ct-det">
+            <div class="ct-det-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div class="ct-det-tx"><span>Adresse</span><p>Baustraße 42<br>60311 Frankfurt am Main</p></div>
+          </div>
+          <div class="ct-det">
+            <div class="ct-det-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.86 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.77 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l.91-.91a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 17z"/></svg></div>
+            <div class="ct-det-tx"><span>Telefon</span><a href="tel:+4969123456789">+49 69 123 456-789</a></div>
+          </div>
+          <div class="ct-det">
+            <div class="ct-det-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div class="ct-det-tx"><span>E-Mail</span><a href="mailto:info@mustermann-bau.de">info@mustermann-bau.de</a></div>
+          </div>
+        </div>
+        <div class="ct-oh">
+          <h4>Öffnungszeiten</h4>
+          <p>Mo – Fr: 07:30 – 17:00 Uhr<br>Sa: 08:00 – 12:00 Uhr<br>So: Geschlossen</p>
+        </div>
+      </div>
+      <div>
+        <h3 class="cf-title">Kostenlose Anfrage stellen</h3>
+        <p class="cf-sub">Beschreiben Sie kurz Ihr Projekt – wir melden uns schnellstmöglich bei Ihnen.</p>
+        <form id="ctForm" novalidate>
+          <div class="form-row">
+            <div class="fg"><label for="fn">Vorname *</label><input type="text" id="fn" placeholder="Max" required><span class="emsg">Bitte Vornamen eingeben.</span></div>
+            <div class="fg"><label for="ln">Nachname *</label><input type="text" id="ln" placeholder="Mustermann" required><span class="emsg">Bitte Nachnamen eingeben.</span></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label for="em">E-Mail *</label><input type="email" id="em" placeholder="max@beispiel.de" required><span class="emsg">Bitte gültige E-Mail eingeben.</span></div>
+            <div class="fg"><label for="ph">Telefon</label><input type="tel" id="ph" placeholder="+49 69 …"></div>
+          </div>
+          <div class="fg">
+            <label for="sv">Gewünschte Leistung</label>
+            <select id="sv"><option value="">Bitte auswählen…</option><option>Rohbau</option><option>Umbau</option><option>Sanierung</option><option>Trockenbau</option><option>Außenanlagen</option><option>Beratungsgespräch</option><option>Sonstiges</option></select>
+          </div>
+          <div class="fg">
+            <label for="msg">Ihre Nachricht *</label>
+            <textarea id="msg" placeholder="Beschreiben Sie kurz Ihr Vorhaben, den gewünschten Zeitrahmen und eventuelle Besonderheiten…" required></textarea>
+            <span class="emsg">Bitte schildern Sie kurz Ihr Anliegen.</span>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Anfrage absenden
+          </button>
+        </form>
+        <div class="form-ok" id="formOk">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#38A169" stroke-width="2" style="display:block;margin:0 auto .9rem"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <h4 style="font-size:1.2rem;color:#276749;margin-bottom:.4rem;font-family:'Oswald',sans-serif">Anfrage gesendet!</h4>
+          <p style="font-size:.9rem;color:#2F855A">Vielen Dank – wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="nav-logo">Mustermann Bau<span>GmbH · Seit 1999</span></div>
+        <p>Ihr zuverlässiger Baupartner im Rhein-Main-Gebiet. Wir realisieren Ihre Bauprojekte mit Leidenschaft, Präzision und 25 Jahren Erfahrung.</p>
+        <div class="ft-social">
+          <a href="#" class="soc-a" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" class="soc-a" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="soc-a" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Leistungen</h4>
+        <ul>
+          <li><a href="#services">Rohbau</a></li>
+          <li><a href="#services">Umbau</a></li>
+          <li><a href="#services">Sanierung</a></li>
+          <li><a href="#services">Trockenbau</a></li>
+          <li><a href="#services">Außenanlagen</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Unternehmen</h4>
+        <ul>
+          <li><a href="#about">Über uns</a></li>
+          <li><a href="#projects">Projekte</a></li>
+          <li><a href="#testimonials">Referenzen</a></li>
+          <li><a href="#contact">Karriere</a></li>
+          <li><a href="#contact">Presse</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="tel:+4969123456789">+49 69 123 456-789</a></li>
+          <li><a href="mailto:info@mustermann-bau.de">E-Mail schreiben</a></li>
+          <li><a href="#">Baustraße 42, Frankfurt</a></li>
+          <li><a href="#contact">Kostenlose Beratung</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>© 2025 Mustermann Bau GmbH. Alle Rechte vorbehalten.</p>
+      <div class="ft-bot-lnk">
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">AGB</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile nav
+const navToggle = document.getElementById('navToggle');
+const navMob = document.getElementById('navMob');
+let mobOpen = false;
+navToggle.addEventListener('click', () => {
+  mobOpen = !mobOpen;
+  navMob.classList.toggle('open', mobOpen);
+  const spans = navToggle.querySelectorAll('span');
+  if (typeof gsap !== 'undefined') {
+    if (mobOpen) {
+      gsap.to(spans[0], {rotation:45, y:7, duration:.28});
+      gsap.to(spans[1], {opacity:0, duration:.28});
+      gsap.to(spans[2], {rotation:-45, y:-7, duration:.28});
+    } else {
+      gsap.to(spans[0], {rotation:0, y:0, duration:.28});
+      gsap.to(spans[1], {opacity:1, duration:.28});
+      gsap.to(spans[2], {rotation:0, y:0, duration:.28});
+    }
+  }
+});
+navMob.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobOpen = false;
+    navMob.classList.remove('open');
+    if (typeof gsap !== 'undefined') {
+      const spans = navToggle.querySelectorAll('span');
+      gsap.to(spans[0], {rotation:0, y:0, duration:.28});
+      gsap.to(spans[1], {opacity:1, duration:.28});
+      gsap.to(spans[2], {rotation:0, y:0, duration:.28});
+    }
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (!href || href === '#') return;
+    const target = document.querySelector(href);
+    if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+});
+
+// GSAP animations
+window.addEventListener('load', () => {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Nav scroll
+  ScrollTrigger.create({
+    start: 'top -70',
+    end: 99999,
+    toggleClass: {className:'scrolled', targets:'#nav'}
+  });
+
+  // Hero timeline
+  const htl = gsap.timeline({delay:.25});
+  htl
+    .from('#heroBadge', {y:-55, opacity:0, duration:.9, ease:'power3.out'})
+    .from('#heroTitle', {y:-75, opacity:0, duration:.95, ease:'power3.out'}, '-=.6')
+    .from('#heroSub',   {y:-40, opacity:0, duration:.85, ease:'power3.out'}, '-=.65')
+    .from('#heroBtns',  {y:55,  opacity:0, duration:.8,  ease:'back.out(1.4)'}, '-=.55')
+    .from('.hero-scroll', {opacity:0, duration:.6}, '-=.3');
+
+  // Hero BG parallax
+  gsap.to('#heroBg', {
+    yPercent:28, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}
+  });
+
+  // About
+  gsap.from('#aboutImg', {
+    scrollTrigger:{trigger:'.about-grid', start:'top 82%'},
+    x:-55, opacity:0, duration:1, ease:'power3.out'
+  });
+  gsap.from('#aboutTxt > *', {
+    scrollTrigger:{trigger:'#aboutTxt', start:'top 82%'},
+    y:38, opacity:0, duration:.8, stagger:.13, ease:'power3.out'
+  });
+  gsap.from('.str-item', {
+    scrollTrigger:{trigger:'.strengths', start:'top 87%'},
+    x:35, opacity:0, duration:.7, stagger:.14, ease:'power3.out'
+  });
+
+  // Services stagger
+  gsap.from('.sv-card', {
+    scrollTrigger:{trigger:'.sv-grid', start:'top 80%'},
+    y:70, opacity:0, duration:.75,
+    stagger:{amount:.65, grid:[2,3], from:'start'},
+    ease:'power3.out'
+  });
+
+  // Projects
+  gsap.from('.pr-card', {
+    scrollTrigger:{trigger:'.pr-grid', start:'top 80%'},
+    y:55, opacity:0, duration:.8, stagger:.18, ease:'power3.out'
+  });
+  document.querySelectorAll('.pr-img').forEach(img => {
+    gsap.to(img, {
+      yPercent:-14, ease:'none',
+      scrollTrigger:{
+        trigger: img.closest('.pr-card'),
+        start:'top bottom', end:'bottom top', scrub:true
+      }
+    });
+  });
+
+  // Stats
+  gsap.from('.st-item', {
+    scrollTrigger:{trigger:'.st-grid', start:'top 82%'},
+    y:45, opacity:0, duration:.7, stagger:.14, ease:'power3.out'
+  });
+
+  // Counters
+  function runCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const isDec = el.classList.contains('counter-dec');
+    const obj = {val: 0};
+    gsap.to(obj, {
+      val: target, duration:2.4, ease:'power2.out',
+      onUpdate: () => {
+        el.textContent = isDec ? obj.val.toFixed(1) : Math.ceil(obj.val);
+      }
+    });
+  }
+  document.querySelectorAll('.counter, .counter-dec').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el, start:'top 88%', once:true,
+      onEnter: () => runCounter(el)
+    });
+  });
+
+  // Testimonials
+  gsap.from('.tm-card', {
+    scrollTrigger:{trigger:'.tm-grid', start:'top 80%'},
+    y:55, opacity:0, duration:.75, stagger:.18, ease:'power3.out'
+  });
+
+  // Contact
+  gsap.from('.ct-info', {
+    scrollTrigger:{trigger:'.ct-grid', start:'top 80%'},
+    x:-45, opacity:0, duration:.9, ease:'power3.out'
+  });
+  gsap.from('.ct-grid > div:last-child', {
+    scrollTrigger:{trigger:'.ct-grid', start:'top 80%'},
+    x:45, opacity:0, duration:.9, ease:'power3.out'
+  });
+});
+
+// Contact form validation
+const form = document.getElementById('ctForm');
+const formOk = document.getElementById('formOk');
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  let ok = true;
+  const checks = [
+    {id:'fn',  valid: v => v.trim().length >= 2},
+    {id:'ln',  valid: v => v.trim().length >= 2},
+    {id:'em',  valid: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},
+    {id:'msg', valid: v => v.trim().length >= 10}
+  ];
+  checks.forEach(({id, valid}) => {
+    const inp = document.getElementById(id);
+    const err = inp.parentElement.querySelector('.emsg');
+    if (!valid(inp.value)) {
+      inp.classList.add('err');
+      if (err) err.style.display = 'block';
+      ok = false;
+    } else {
+      inp.classList.remove('err');
+      if (err) err.style.display = 'none';
+    }
+  });
+  if (ok) {
+    form.style.display = 'none';
+    formOk.style.display = 'block';
+    if (typeof gsap !== 'undefined') gsap.from(formOk, {y:18, opacity:0, duration:.6, ease:'power3.out'});
+  }
+});
+
+['fn','ln','em','msg'].forEach(id => {
+  const inp = document.getElementById(id);
+  inp.addEventListener('input', function() {
+    this.classList.remove('err');
+    const err = this.parentElement.querySelector('.emsg');
+    if (err) err.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>

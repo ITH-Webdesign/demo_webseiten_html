@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schwarzer Stern Automobile — Keine Kompromisse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #050505;
+  --red: #FF0022;
+  --silver: #C0C0C0;
+  --silver-light: #E8E8E8;
+  --gold: #C9A84C;
+  --white: #FFFFFF;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) var(--black);
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+::selection { background: var(--red); color: #fff; }
+body {
+  background: var(--black);
+  color: var(--silver-light);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,.012) 2px, rgba(255,255,255,.012) 4px),
+    repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(255,255,255,.012) 2px, rgba(255,255,255,.012) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* CURSOR */
+#cur-dot {
+  width: 8px; height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s;
+}
+#cur-ring {
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(255,0,34,.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s, border-color .3s;
+}
+#cur-ring.hovered { width: 64px; height: 64px; border-color: var(--red); }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 26px 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .4s, padding .4s, border-bottom .4s;
+}
+nav.scrolled {
+  background: rgba(5,5,5,.97);
+  padding: 16px 64px;
+  border-bottom: 1px solid var(--red);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px; font-weight: 900;
+  letter-spacing: 4px;
+  color: #fff; text-decoration: none;
+  position: relative;
+}
+.nav-logo span { color: var(--red); }
+.nav-logo:hover { animation: logoGlitch .45s steps(1) forwards; }
+@keyframes logoGlitch {
+  0%   { transform: translate(0); color: #fff; }
+  15%  { transform: translate(-3px,1px); color: var(--red); }
+  30%  { transform: translate(3px,-1px); color: #fff; }
+  45%  { transform: translate(-2px,2px); color: var(--red); }
+  60%  { transform: translate(2px,-1px); color: #fff; }
+  75%  { transform: translate(-1px,1px); color: var(--red); }
+  100% { transform: translate(0); color: #fff; }
+}
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  color: var(--silver);
+  text-decoration: none;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  position: relative; transition: color .3s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--red);
+  transition: width .3s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-links a:hover::after { width: 100%; }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: none; padding: 6px;
+}
+.hamburger span { display: block; width: 28px; height: 2px; background: var(--silver-light); transition: all .35s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transform: translateX(100%);
+  transition: transform .55s cubic-bezier(.77,0,.175,1);
+  border-left: 3px solid var(--red);
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu ul { list-style: none; text-align: center; }
+.mobile-menu ul li { margin: 24px 0; }
+.mobile-menu ul a {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--silver-light);
+  text-decoration: none;
+  letter-spacing: 4px; text-transform: uppercase;
+  transition: color .3s;
+}
+.mobile-menu ul a:hover { color: var(--red); }
+
+/* HERO */
+#hero {
+  position: relative; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; background: var(--black);
+}
+#hero-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 1; pointer-events: none;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80') center/cover no-repeat;
+  opacity: 0; z-index: 0;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(5,5,5,.6) 0%, rgba(5,5,5,.35) 50%, rgba(5,5,5,.9) 100%);
+}
+#intro-overlay {
+  position: absolute; inset: 0; background: var(--black); z-index: 10;
+}
+.light-line {
+  position: absolute; top: 50%; height: 2px;
+  transform: translateY(-50%); width: 0; z-index: 11;
+}
+#ll { left: 0; background: linear-gradient(to right, transparent, var(--red)); }
+#lr { right: 0; background: linear-gradient(to left, transparent, var(--red)); }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 12; }
+#hero-car {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) translateX(300px) scale(.28);
+  width: 85%; max-width: 960px;
+  z-index: 3; opacity: 0; filter: blur(22px);
+  will-change: transform, opacity, filter;
+}
+#hero-car img { width: 100%; object-fit: contain; display: block; }
+#pcanvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 5; pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 6;
+  text-align: center; opacity: 0;
+  will-change: opacity;
+}
+#hero-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(36px,7.5vw,96px);
+  font-weight: 900; letter-spacing: 8px;
+  color: #fff; text-transform: uppercase;
+  margin-bottom: 18px; line-height: 1.05;
+}
+#hero-logo .ch { display: inline-block; opacity: 0; transform: translateY(28px); }
+#hero-logo .red-ch {
+  color: var(--red);
+  text-shadow: 0 0 20px rgba(255,0,34,.8), 0 0 60px rgba(255,0,34,.35);
+}
+#hero-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(16px,2.5vw,26px);
+  font-weight: 300; letter-spacing: 8px;
+  color: var(--silver); text-transform: uppercase;
+  margin-bottom: 64px; opacity: 0;
+}
+#hero-btns { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; opacity: 0; }
+.btn-solid {
+  background: var(--red); color: #fff;
+  padding: 17px 52px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; text-decoration: none;
+  border: 2px solid var(--red);
+  position: relative; overflow: hidden; display: inline-block;
+  transition: background .3s;
+}
+.btn-solid:hover { background: #cc0018; }
+.btn-outline {
+  background: transparent; color: #fff;
+  padding: 17px 52px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; text-decoration: none;
+  border: 2px solid var(--red);
+  position: relative; overflow: hidden; display: inline-block;
+  transition: background .3s;
+}
+.btn-outline:hover { background: rgba(255,0,34,.12); }
+.ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.35);
+  transform: scale(0); animation: rip .6s linear forwards;
+  pointer-events: none;
+}
+@keyframes rip { to { transform: scale(4); opacity: 0; } }
+#scroll-ind {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 7; display: flex; flex-direction: column;
+  align-items: center; gap: 8px; opacity: 0;
+}
+#scroll-ind span {
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--silver); text-transform: uppercase;
+}
+.scroll-arr {
+  width: 18px; height: 18px;
+  border-right: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
+  transform: rotate(45deg);
+  animation: bounce 1.6s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: rotate(45deg) translateY(0); opacity: .5; }
+  50%      { transform: rotate(45deg) translateY(9px); opacity: 1; }
+}
+
+/* SECTIONS SHARED */
+.sec-label {
+  font-size: 12px; letter-spacing: 6px;
+  color: var(--red); text-transform: uppercase;
+  display: block; margin-bottom: 14px;
+}
+.sec-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(28px,4.5vw,60px);
+  font-weight: 800; color: #fff;
+  letter-spacing: 4px; text-transform: uppercase;
+  display: inline-block; position: relative;
+}
+.sec-line {
+  display: block; width: 0; height: 2px;
+  background: var(--red); margin: 14px auto 0;
+  transition: width 1s ease;
+}
+.sec-line.on { width: 100%; }
+.sec-head { text-align: center; margin-bottom: 80px; }
+
+/* MODELS */
+#models { padding: 140px 60px; background: var(--black); }
+.models-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 28px; max-width: 1400px; margin: 0 auto;
+}
+.model-card {
+  position: relative; overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,.06);
+  opacity: 0; transform: translateY(60px) rotateY(5deg);
+  will-change: transform, opacity;
+  transition: border-color .35s, box-shadow .35s;
+}
+.model-card:hover {
+  border-color: var(--red);
+  box-shadow: 0 0 40px rgba(255,0,34,.2), 0 0 80px rgba(255,0,34,.06);
+}
+.model-card img {
+  width: 100%; height: 260px; object-fit: cover; display: block;
+  filter: saturate(.85) contrast(1.1);
+  transition: transform .6s ease;
+}
+.model-card:hover img { transform: scale(1.06); }
+.card-overlay {
+  position: absolute; inset: 0;
+  background: rgba(5,5,5,.93);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .4s; padding: 30px; text-align: center;
+}
+.model-card:hover .card-overlay { opacity: 1; }
+.cstat-label { font-size: 10px; letter-spacing: 3px; color: var(--silver); text-transform: uppercase; display: block; }
+.cstat-val { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 700; color: var(--red); margin-bottom: 16px; }
+.card-info { padding: 22px 24px; }
+.card-name { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 2px; margin-bottom: 6px; }
+.card-desc { font-size: 14px; color: var(--silver); line-height: 1.6; }
+
+/* BRANDS MARQUEE */
+#brands { padding: 80px 0; background: #080808; overflow: hidden; border-top: 1px solid rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.04); }
+.brands-lbl { text-align: center; font-size: 11px; letter-spacing: 6px; color: rgba(255,255,255,.18); text-transform: uppercase; margin-bottom: 46px; }
+.marquee-wrap { display: flex; overflow: hidden; }
+.marquee-track {
+  display: flex; gap: 0; white-space: nowrap; flex-shrink: 0;
+  animation: marquee 22s linear infinite;
+}
+.marquee-track:nth-child(2) { animation-delay: -11s; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+.b-item {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px; font-weight: 700; letter-spacing: 4px;
+  color: rgba(255,255,255,.13); text-transform: uppercase;
+  padding: 0 40px; flex-shrink: 0;
+  transition: color .3s;
+}
+.b-item:hover { color: var(--red); }
+.b-sep { color: var(--red); opacity: .3; padding: 0 10px; }
+
+/* EXPERIENCE */
+#experience { padding: 140px 60px; background: var(--black); }
+.exp-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; max-width: 1400px; margin: 0 auto; align-items: center;
+}
+.exp-img { position: relative; overflow: hidden; }
+.exp-img img {
+  width: 100%; height: 580px; object-fit: cover;
+  filter: saturate(.72) contrast(1.1);
+  transition: transform .6s;
+}
+.exp-img:hover img { transform: scale(1.04); }
+.exp-img::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--red); z-index: 2;
+}
+.exp-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,0,34,.08) 0%, transparent 100%);
+  pointer-events: none;
+}
+.exp-content h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(26px,3.5vw,46px); font-weight: 800;
+  color: #fff; letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 22px; line-height: 1.25;
+}
+.exp-content h2 span { color: var(--red); }
+.exp-content p { font-size: 17px; color: var(--silver); line-height: 1.85; margin-bottom: 56px; }
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 38px; }
+.feat-item { opacity: 0; transform: translateY(28px); }
+.feat-icon { width: 54px; height: 54px; margin-bottom: 14px; }
+.feat-icon svg { width: 100%; height: 100%; }
+.feat-title {
+  font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700;
+  color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 7px;
+}
+.feat-desc { font-size: 14px; color: var(--silver); line-height: 1.65; }
+
+/* STATS */
+#stats {
+  position: relative; padding: 160px 60px;
+  background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80') center/cover no-repeat;
+  background-attachment: fixed;
+}
+#stats::before { content: ''; position: absolute; inset: 0; background: rgba(5,5,5,.89); }
+.stats-grid {
+  position: relative;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 2px; max-width: 1200px; margin: 0 auto;
+}
+.stat-item {
+  text-align: center; padding: 60px 32px;
+  border: 1px solid rgba(255,255,255,.06); position: relative;
+}
+.stat-item::before {
+  content: ''; position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%); width: 1px; height: 36px;
+  background: var(--gold);
+}
+.stat-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(38px,5vw,72px); font-weight: 900;
+  color: var(--red); text-shadow: 0 0 30px rgba(255,0,34,.5);
+  display: block; margin-bottom: 12px; line-height: 1;
+}
+.stat-lbl { font-size: 13px; letter-spacing: 3px; color: var(--silver); text-transform: uppercase; }
+
+/* TESTIMONIALS */
+#testimonials { padding: 140px 60px; background: #060606; }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; max-width: 1400px; margin: 0 auto; }
+.tcard {
+  background: #0a0a0a; border: 1px solid rgba(255,255,255,.05);
+  padding: 46px 38px; position: relative;
+  opacity: 0;
+  transition: border-color .35s, box-shadow .35s;
+}
+.tcard:hover { border-color: rgba(255,0,34,.28); box-shadow: 0 0 40px rgba(255,0,34,.07); }
+.tcard:nth-child(1) { transform: translateX(-40px); }
+.tcard:nth-child(2) { transform: translateY(30px); }
+.tcard:nth-child(3) { transform: translateX(40px); }
+.q-mark { font-family: 'Orbitron', sans-serif; font-size: 72px; color: var(--red); line-height: .5; margin-bottom: 26px; display: block; opacity: .65; }
+.stars { display: flex; gap: 4px; margin-bottom: 18px; }
+.star { color: var(--gold); font-size: 15px; }
+.ttext { font-size: 15px; color: var(--silver); line-height: 1.85; margin-bottom: 28px; font-style: italic; }
+.tauthor { display: flex; align-items: center; gap: 14px; }
+.tauthor img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
+.aname { font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 2px; display: block; }
+.atitle { font-size: 12px; color: var(--silver); }
+
+/* VIDEO */
+#video { padding: 140px 60px; background: var(--black); text-align: center; }
+.vid-thumb {
+  position: relative; max-width: 1020px; margin: 60px auto 0;
+  overflow: hidden; cursor: none;
+}
+.vid-thumb img {
+  width: 100%; height: 560px; object-fit: cover;
+  filter: saturate(.65) contrast(1.15); display: block;
+  transition: transform .6s;
+}
+.vid-thumb:hover img { transform: scale(1.03); }
+.vid-overlay {
+  position: absolute; inset: 0; background: rgba(5,5,5,.48);
+  display: flex; align-items: center; justify-content: center;
+}
+.play-btn {
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  animation: pulse-play 2.2s ease-in-out infinite;
+  transition: transform .3s; cursor: none;
+}
+.play-btn:hover { transform: scale(1.14); }
+@keyframes pulse-play {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,0,34,.45); }
+  50%      { box-shadow: 0 0 0 28px rgba(255,0,34,0); }
+}
+.play-btn svg { width: 30px; height: 30px; fill: #fff; margin-left: 5px; }
+
+/* MODAL */
+#modal {
+  position: fixed; inset: 0; background: rgba(5,5,5,.97);
+  z-index: 10000; display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .4s;
+}
+#modal.on { opacity: 1; pointer-events: all; }
+.modal-inner {
+  text-align: center; position: relative;
+  transform: scale(.82); transition: transform .4s;
+}
+#modal.on .modal-inner { transform: scale(1); }
+.m-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(22px,5vw,60px); font-weight: 900;
+  color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 16px;
+}
+.m-sub { font-size: 16px; letter-spacing: 5px; color: var(--silver); text-transform: uppercase; margin-bottom: 40px; }
+.m-year {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(80px,14vw,160px); font-weight: 900;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,0,34,.3);
+  line-height: 1; animation: yr-pulse 2.5s ease-in-out infinite;
+}
+@keyframes yr-pulse {
+  0%,100% { -webkit-text-stroke-color: rgba(255,0,34,.28); }
+  50%      { -webkit-text-stroke-color: rgba(255,0,34,.85); }
+}
+#modal-close {
+  position: absolute; top: -72px; right: -10px;
+  background: none; border: 2px solid rgba(255,255,255,.2);
+  color: #fff; width: 48px; height: 48px; font-size: 22px;
+  cursor: none; display: flex; align-items: center; justify-content: center;
+  transition: border-color .3s, color .3s;
+}
+#modal-close:hover { border-color: var(--red); color: var(--red); }
+
+/* CONTACT */
+#contact { padding: 140px 60px; background: #060606; }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; max-width: 1400px; margin: 0 auto;
+}
+.ci h3 {
+  font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700;
+  color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px;
+}
+.cd { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 28px; }
+.cd-icon {
+  width: 40px; height: 40px; border: 1px solid var(--red); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.cd-icon svg { width: 18px; height: 18px; stroke: var(--red); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.cd-lbl { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 3px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: 4px; }
+.cd-txt { font-size: 15px; color: var(--silver); line-height: 1.65; }
+.map-ph {
+  margin-top: 38px; height: 200px; background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.map-ph::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(rgba(255,0,34,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,34,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.map-ph span { font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: 3px; color: var(--silver); text-transform: uppercase; position: relative; }
+.cf { display: flex; flex-direction: column; gap: 22px; }
+.fg label { display: block; font-size: 10px; letter-spacing: 3px; color: var(--silver); text-transform: uppercase; margin-bottom: 7px; }
+.fg input, .fg select, .fg textarea {
+  width: 100%; background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #fff; padding: 15px 18px;
+  font-family: 'Rajdhani', sans-serif; font-size: 16px;
+  outline: none; transition: border-color .3s; appearance: none;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--red); }
+.fg textarea { resize: vertical; min-height: 116px; }
+.fg select option { background: #0a0a0a; }
+.ferr { font-size: 12px; color: var(--red); margin-top: 5px; display: none; letter-spacing: 1px; }
+.fg.err .ferr { display: block; }
+.fg.err input, .fg.err select, .fg.err textarea { border-color: var(--red); }
+.fg.ok input, .fg.ok select, .fg.ok textarea { border-color: #00cc66; }
+.btn-submit {
+  background: var(--red); color: #fff; border: none;
+  padding: 19px 60px;
+  font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  cursor: none; position: relative; overflow: hidden;
+  transition: background .3s; align-self: flex-start;
+}
+.btn-submit:hover { background: #cc0018; }
+
+/* FOOTER */
+footer { background: var(--black); border-top: 3px solid var(--red); padding: 80px 64px 40px; }
+.foot-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px; max-width: 1400px; margin: 0 auto 60px;
+}
+.foot-brand-logo {
+  font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900;
+  letter-spacing: 4px; color: #fff; text-decoration: none; display: block; margin-bottom: 18px;
+}
+.foot-brand-logo span { color: var(--red); }
+.foot-brand p { font-size: 14px; color: var(--silver); line-height: 1.8; margin-bottom: 28px; }
+.soc { display: flex; gap: 14px; }
+.soc a {
+  width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; transition: border-color .3s, background .3s;
+}
+.soc a:hover { border-color: var(--red); background: rgba(255,0,34,.1); }
+.soc a svg { width: 17px; height: 17px; fill: var(--silver); transition: fill .3s; }
+.soc a:hover svg { fill: var(--red); }
+.foot-col h4 {
+  font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 3px; color: #fff; text-transform: uppercase; margin-bottom: 22px;
+}
+.foot-col ul { list-style: none; }
+.foot-col ul li { margin-bottom: 11px; }
+.foot-col ul a { font-size: 14px; color: var(--silver); text-decoration: none; transition: color .3s; }
+.foot-col ul a:hover { color: var(--red); }
+.foot-bottom {
+  border-top: 1px solid rgba(255,255,255,.06); padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1400px; margin: 0 auto;
+}
+.foot-copy { font-size: 12px; color: rgba(255,255,255,.28); letter-spacing: 1px; }
+.foot-legal { display: flex; gap: 28px; }
+.foot-legal a { font-size: 12px; color: rgba(255,255,255,.28); text-decoration: none; transition: color .3s; }
+.foot-legal a:hover { color: var(--red); }
+
+/* RESPONSIVE */
+@media(max-width:1100px) {
+  nav { padding: 20px 30px; }
+  nav.scrolled { padding: 14px 30px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  #models, #experience, #stats, #testimonials, #video, #contact { padding: 100px 28px; }
+  footer { padding: 60px 28px 32px; }
+  .models-grid { grid-template-columns: 1fr 1fr; }
+  .exp-grid { grid-template-columns: 1fr; gap: 52px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .testi-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 60px; }
+  .foot-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .foot-bottom { flex-direction: column; gap: 18px; text-align: center; }
+}
+@media(max-width:640px) {
+  .models-grid { grid-template-columns: 1fr; }
+  #hero-logo { font-size: 32px; letter-spacing: 4px; }
+  #hero-btns { flex-direction: column; align-items: center; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .foot-grid { grid-template-columns: 1fr; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- Nav -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">SCHWARZER <span>STERN</span></a>
+  <ul class="nav-links">
+    <li><a href="#models">Modelle</a></li>
+    <li><a href="#experience">Erlebnis</a></li>
+    <li><a href="#stats">Zahlen</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <button class="hamburger" id="ham" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mob-menu">
+  <ul>
+    <li><a href="#models" class="ml">Modelle</a></li>
+    <li><a href="#experience" class="ml">Erlebnis</a></li>
+    <li><a href="#stats" class="ml">Zahlen</a></li>
+    <li><a href="#video" class="ml">Video</a></li>
+    <li><a href="#contact" class="ml">Kontakt</a></li>
+  </ul>
+</div>
+
+<!-- Hero -->
+<section id="hero">
+  <div id="intro-overlay">
+    <div class="light-line" id="ll"></div>
+    <div class="light-line" id="lr"></div>
+    <div id="flash"></div>
+  </div>
+  <div class="hero-bg" id="hero-bg"></div>
+  <canvas id="hero-canvas"></canvas>
+  <canvas id="pcanvas"></canvas>
+  <div id="hero-car"><img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=90" alt="Sportwagen"></div>
+  <div class="hero-content" id="hcontent">
+    <h1 id="hero-logo"></h1>
+    <p id="hero-sub">Keine Kompromisse.</p>
+    <div id="hero-btns">
+      <a href="#models" class="btn-solid">Modelle entdecken</a>
+      <a href="#contact" class="btn-outline">Probefahrt buchen</a>
+    </div>
+  </div>
+  <div id="scroll-ind"><span>Scroll</span><div class="scroll-arr"></div></div>
+</section>
+
+<!-- Models -->
+<section id="models">
+  <div class="sec-head">
+    <span class="sec-label">Unsere Flotte</span>
+    <h2 class="sec-title">Ausgewählte Modelle<span class="sec-line" id="sl1"></span></h2>
+  </div>
+  <div class="models-grid">
+    <div class="model-card">
+      <img src="https://images.unsplash.com/photo-1621135802920-133df287f89c?w=800&q=80" alt="GT Racer S">
+      <div class="card-overlay">
+        <span class="cstat-label">Leistung</span><span class="cstat-val">650 PS</span>
+        <span class="cstat-label">0–100 km/h</span><span class="cstat-val">3.1 s</span>
+        <span class="cstat-label">Ab</span><span class="cstat-val">€ 189.900</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">GT Racer S</div>
+        <div class="card-desc">Der Traum jedes Puristen – pures Fahrerlebnis in Perfektion.</div>
+      </div>
+    </div>
+    <div class="model-card">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Dark Panther">
+      <div class="card-overlay">
+        <span class="cstat-label">Leistung</span><span class="cstat-val">820 PS</span>
+        <span class="cstat-label">0–100 km/h</span><span class="cstat-val">2.7 s</span>
+        <span class="cstat-label">Ab</span><span class="cstat-val">€ 289.000</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Dark Panther</div>
+        <div class="card-desc">Unnahbare Eleganz trifft brutale Performance.</div>
+      </div>
+    </div>
+    <div class="model-card">
+      <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80" alt="Phantom Elite">
+      <div class="card-overlay">
+        <span class="cstat-label">Leistung</span><span class="cstat-val">1.200 PS</span>
+        <span class="cstat-label">0–100 km/h</span><span class="cstat-val">2.1 s</span>
+        <span class="cstat-label">Ab</span><span class="cstat-val">€ 490.000</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Phantom Elite</div>
+        <div class="card-desc">Das Ultimatum der Automobilkunst. Für die wenigen.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brands Marquee -->
+<section id="brands">
+  <div class="brands-lbl">Unsere Marken</div>
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="b-item">BMW</span><span class="b-sep">///</span>
+      <span class="b-item">Mercedes-AMG</span><span class="b-sep">///</span>
+      <span class="b-item">Audi RS</span><span class="b-sep">///</span>
+      <span class="b-item">Porsche</span><span class="b-sep">///</span>
+      <span class="b-item">Ferrari</span><span class="b-sep">///</span>
+      <span class="b-item">Lamborghini</span><span class="b-sep">///</span>
+      <span class="b-item">McLaren</span><span class="b-sep">///</span>
+      <span class="b-item">Bentley</span><span class="b-sep">///</span>
+      <span class="b-item">Bugatti</span><span class="b-sep">///</span>
+    </div>
+    <div class="marquee-track" aria-hidden="true">
+      <span class="b-item">BMW</span><span class="b-sep">///</span>
+      <span class="b-item">Mercedes-AMG</span><span class="b-sep">///</span>
+      <span class="b-item">Audi RS</span><span class="b-sep">///</span>
+      <span class="b-item">Porsche</span><span class="b-sep">///</span>
+      <span class="b-item">Ferrari</span><span class="b-sep">///</span>
+      <span class="b-item">Lamborghini</span><span class="b-sep">///</span>
+      <span class="b-item">McLaren</span><span class="b-sep">///</span>
+      <span class="b-item">Bentley</span><span class="b-sep">///</span>
+      <span class="b-item">Bugatti</span><span class="b-sep">///</span>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="exp-grid">
+    <div class="exp-img" id="exp-img">
+      <img src="https://images.unsplash.com/photo-1547245324-d777c6f05e80?w=900&q=80" alt="Cockpit">
+    </div>
+    <div class="exp-content" id="exp-cnt">
+      <h2>Das Schwarzer Stern<br><span>Erlebnis</span></h2>
+      <p>Wir verkaufen keine Autos. Wir ermöglichen Legenden. Von der ersten Probefahrt bis zur letzten Kurve — Schwarzer Stern steht für kompromisslose Exzellenz in jedem Detail.</p>
+      <div class="feat-grid">
+        <div class="feat-item">
+          <div class="feat-icon">
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="28" cy="28" r="26" stroke="#FF0022" stroke-width="1.5"/>
+              <path d="M16 30 C18 20 24 13 28 13 C32 13 38 20 40 30" stroke="#FF0022" stroke-width="1.5" fill="none"/>
+              <circle cx="28" cy="33" r="4" stroke="#FF0022" stroke-width="1.5" fill="none"/>
+              <line x1="28" y1="37" x2="28" y2="43" stroke="#FF0022" stroke-width="1.5"/>
+              <line x1="24" y1="43" x2="32" y2="43" stroke="#FF0022" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="feat-title">Probefahrt</div>
+          <div class="feat-desc">Erleben Sie jeden Wagen auf unserer privaten Teststrecke. Keine Zeitlimits.</div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="16" width="40" height="28" rx="2" stroke="#FF0022" stroke-width="1.5"/>
+              <line x1="8" y1="24" x2="48" y2="24" stroke="#FF0022" stroke-width="1.5"/>
+              <line x1="16" y1="32" x2="26" y2="32" stroke="#FF0022" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="32" y1="32" x2="40" y2="32" stroke="#FF0022" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16" y1="36" x2="21" y2="36" stroke="#FF0022" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="feat-title">Finanzierung</div>
+          <div class="feat-desc">Maßgeschneiderte Lösungen. Transparent, schnell, fair.</div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20 L28 11 L46 20 L46 42 L28 46 L10 42 Z" stroke="#FF0022" stroke-width="1.5"/>
+              <polyline points="20,29 26,35 36,22" stroke="#FF0022" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="feat-title">Inzahlungnahme</div>
+          <div class="feat-desc">Ihr Fahrzeug zum besten Marktpreis — sofortige Bewertung.</div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M28 7 L49 18 L49 31 C49 42 38 49 28 53 C18 49 7 42 7 31 L7 18 Z" stroke="#FF0022" stroke-width="1.5"/>
+              <polyline points="20,28 26,34 37,21" stroke="#FF0022" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="feat-title">Garantie</div>
+          <div class="feat-desc">Bis zu 5 Jahre Schwarzer Stern Garantie. Ihr Investment ist geschützt.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section id="stats">
+  <div class="stats-grid">
+    <div class="stat-item"><span class="stat-num" data-to="500" data-suf="+">0</span><span class="stat-lbl">Fahrzeuge verfügbar</span></div>
+    <div class="stat-item"><span class="stat-num" data-to="25" data-suf="">0</span><span class="stat-lbl">Jahre Erfahrung</span></div>
+    <div class="stat-item"><span class="stat-num" data-to="4.9" data-suf="★">0</span><span class="stat-lbl">Google Rating</span></div>
+    <div class="stat-item"><span class="stat-num" data-to="10000" data-suf="+">0</span><span class="stat-lbl">Zufriedene Kunden</span></div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+  <div class="sec-head">
+    <span class="sec-label">Was unsere Kunden sagen</span>
+    <h2 class="sec-title">Stimmen der Legende<span class="sec-line" id="sl2"></span></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="tcard">
+      <span class="q-mark">"</span>
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="ttext">Schwarzer Stern hat mir nicht einfach ein Auto verkauft – sie haben mir ein Erlebnis gegeben, das ich nie vergessen werde. Service auf einem völlig anderen Niveau.</p>
+      <div class="tauthor">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Thomas K.">
+        <div><span class="aname">THOMAS K.</span><span class="atitle">Unternehmer, München</span></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <span class="q-mark">"</span>
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="ttext">Mein dritter Kauf bei Schwarzer Stern. Die Probefahrt auf der eigenen Strecke war der Moment, der mich überzeugt hat. Nirgendwo sonst kaufe ich mehr ein Auto.</p>
+      <div class="tauthor">
+        <img src="https://images.unsplash.com/photo-1494790108755-2616b9e43dcd?w=100&q=80" alt="Sandra M.">
+        <div><span class="aname">SANDRA M.</span><span class="atitle">Architektin, Hamburg</span></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <span class="q-mark">"</span>
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="ttext">Als Kenner der Branche war ich skeptisch. Doch Schwarzer Stern übertrifft selbst die anspruchsvollsten Erwartungen. Perfektion in jedem Detail.</p>
+      <div class="tauthor">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Marcus R.">
+        <div><span class="aname">MARCUS R.</span><span class="atitle">Motorsport-Enthusiast, Berlin</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video -->
+<section id="video">
+  <div class="sec-head">
+    <span class="sec-label">Einblick</span>
+    <h2 class="sec-title">Erleben Sie uns<span class="sec-line" id="sl3"></span></h2>
+  </div>
+  <div class="vid-thumb" id="vid-thumb">
+    <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1400&q=80" alt="Rennstrecke">
+    <div class="vid-overlay">
+      <div class="play-btn" id="play-btn">
+        <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div id="modal">
+  <div class="modal-inner">
+    <button id="modal-close">×</button>
+    <div class="m-title">COMING SOON</div>
+    <div class="m-sub">Das Video ist in Produktion</div>
+    <div class="m-year">2025</div>
+  </div>
+</div>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="sec-head">
+    <span class="sec-label">Kontakt & Probefahrt</span>
+    <h2 class="sec-title">Bereit für die Legende?<span class="sec-line" id="sl4"></span></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="ci" id="ci">
+      <h3>Finden Sie uns</h3>
+      <div class="cd">
+        <div class="cd-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><span class="cd-lbl">Adresse</span><span class="cd-txt">Schwarzer Stern Boulevard 1<br>80331 München</span></div>
+      </div>
+      <div class="cd">
+        <div class="cd-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.53 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><span class="cd-lbl">Telefon</span><span class="cd-txt">+49 89 123 456 789</span></div>
+      </div>
+      <div class="cd">
+        <div class="cd-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><span class="cd-lbl">E-Mail</span><span class="cd-txt">kontakt@schwarzer-stern.de</span></div>
+      </div>
+      <div class="map-ph"><span>Google Maps</span></div>
+    </div>
+    <form class="cf" id="cform" novalidate>
+      <div class="fg" id="fg-n"><label>Name *</label><input type="text" id="f-name" placeholder="Ihr vollständiger Name"><div class="ferr">Bitte Namen eingeben.</div></div>
+      <div class="fg" id="fg-e"><label>E-Mail *</label><input type="email" id="f-email" placeholder="ihre@email.de"><div class="ferr">Bitte gültige E-Mail eingeben.</div></div>
+      <div class="fg"><label>Telefon</label><input type="tel" placeholder="+49 ..."></div>
+      <div class="fg"><label>Gewünschtes Modell</label>
+        <select id="f-model">
+          <option value="">Modell auswählen</option>
+          <option>GT Racer S</option><option>Dark Panther</option>
+          <option>Phantom Elite</option><option>Andere / Beratung</option>
+        </select>
+      </div>
+      <div class="fg" id="fg-m"><label>Nachricht *</label><textarea id="f-msg" placeholder="Ihre Nachricht..."></textarea><div class="ferr">Bitte Nachricht eingeben.</div></div>
+      <button type="submit" class="btn-submit">Absenden</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="#hero" class="foot-brand-logo">SCHWARZER <span>STERN</span></a>
+      <p>Keine Kompromisse. Kein Gewöhnliches. Nur das Außergewöhnliche — seit 1999 die Adresse für Automobile der Superlative.</p>
+      <div class="soc">
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-col"><h4>Modelle</h4><ul><li><a href="#">GT Racer S</a></li><li><a href="#">Dark Panther</a></li><li><a href="#">Phantom Elite</a></li><li><a href="#">Alle Fahrzeuge</a></li></ul></div>
+    <div class="foot-col"><h4>Service</h4><ul><li><a href="#">Probefahrt</a></li><li><a href="#">Finanzierung</a></li><li><a href="#">Inzahlungnahme</a></li><li><a href="#">Garantie</a></li></ul></div>
+    <div class="foot-col"><h4>Unternehmen</h4><ul><li><a href="#">Über uns</a></li><li><a href="#">Karriere</a></li><li><a href="#">Presse</a></li><li><a href="#">Kontakt</a></li></ul></div>
+  </div>
+  <div class="foot-bottom">
+    <span class="foot-copy">© 2025 Schwarzer Stern Automobile GmbH. Alle Rechte vorbehalten.</span>
+    <div class="foot-legal"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">AGB</a></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── CURSOR ─────────────────────────────────────────── */
+const dot  = document.getElementById('cur-dot');
+const ring = document.getElementById('cur-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.cssText=`left:${mx}px;top:${my}px`; });
+(function tick(){ rx+=(mx-rx)*.11; ry+=(my-ry)*.11; ring.style.cssText=`left:${rx}px;top:${ry}px`; requestAnimationFrame(tick); })();
+document.querySelectorAll('a,button,.model-card,.vid-thumb,.soc a').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
+});
+
+/* ── HERO BG PARTICLES ──────────────────────────────── */
+const hcan = document.getElementById('hero-canvas');
+const hctx = hcan.getContext('2d');
+let HW,HH,hps=[],hmx=-9999,hmy=-9999;
+function hresize(){ HW=hcan.width=hcan.offsetWidth; HH=hcan.height=hcan.offsetHeight; }
+class HP {
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*HW; this.y=Math.random()*HH;
+    this.vx=(Math.random()-.5)*.55; this.vy=(Math.random()-.5)*.55;
+    this.r=Math.random()*2+.5;
+    const t=Math.random();
+    this.col=t<.38?`rgba(255,0,34,${(.15+Math.random()*.4).toFixed(2)})`
+             :t<.68?`rgba(192,192,192,${(.1+Math.random()*.35).toFixed(2)})`
+             :`rgba(255,255,255,${(.05+Math.random()*.25).toFixed(2)})`;
+    this.line=Math.random()<.28; this.ll=Math.random()*18+6;
+  }
+  step(){
+    const dx=this.x-hmx,dy=this.y-hmy,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<130){const f=(130-d)/130*0.45; this.vx+=dx/d*f; this.vy+=dy/d*f;}
+    this.vx*=.978; this.vy*=.978;
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<-20)this.x=HW+20; if(this.x>HW+20)this.x=-20;
+    if(this.y<-20)this.y=HH+20; if(this.y>HH+20)this.y=-20;
+  }
+  draw(){
+    hctx.fillStyle=hctx.strokeStyle=this.col; hctx.lineWidth=this.r*.5;
+    if(this.line){hctx.beginPath();hctx.moveTo(this.x,this.y);hctx.lineTo(this.x+this.vx*this.ll,this.y+this.vy*this.ll);hctx.stroke();}
+    else{hctx.beginPath();hctx.arc(this.x,this.y,this.r,0,Math.PI*2);hctx.fill();}
+  }
+}
+function initHP(){ hresize(); hps=[]; for(let i=0;i<42;i++)hps.push(new HP()); }
+function loopHP(){ hctx.clearRect(0,0,HW,HH); hps.forEach(p=>{p.step();p.draw();}); requestAnimationFrame(loopHP); }
+document.getElementById('hero').addEventListener('mousemove',e=>{
+  const r=hcan.getBoundingClientRect(); hmx=e.clientX-r.left; hmy=e.clientY-r.top;
+});
+document.getElementById('hero').addEventListener('mouseleave',()=>{hmx=-9999;hmy=-9999;});
+window.addEventListener('resize',initHP);
+
+/* ── EXPLOSION PARTICLES ────────────────────────────── */
+const pc=document.getElementById('pcanvas'), pctx=pc.getContext('2d');
+let eps=[];
+function burst(cx,cy){
+  pc.width=pc.offsetWidth; pc.height=pc.offsetHeight;
+  eps=[];
+  for(let i=0;i<72;i++){
+    const a=Math.random()*Math.PI*2, sp=Math.random()*9+2;
+    eps.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:Math.random()*4+1,al:1,col:Math.random()<.65?'255,0,34':'255,255,255'});
+  }
+  (function boom(){
+    pctx.clearRect(0,0,pc.width,pc.height);
+    let alive=false;
+    eps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.14;p.vx*=.968;p.al-=.022;
+      if(p.al>0){alive=true;pctx.globalAlpha=p.al;pctx.fillStyle=`rgb(${p.col})`;pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();}
+    });
+    pctx.globalAlpha=1;
+    if(alive)requestAnimationFrame(boom);
+  })();
+}
+
+/* ── HERO INTRO TIMELINE ────────────────────────────── */
+function runIntro(){
+  initHP(); loopHP();
+
+  const logoEl = document.getElementById('hero-logo');
+  const words = ['SCHWARZER', 'STERN'];
+  logoEl.innerHTML = words.map((w,wi)=>{
+    const chars = w.split('').map((c,ci)=>{
+      const isRed = wi===1;
+      return `<span class="ch${isRed?' red-ch':''}">${c}</span>`;
+    }).join('');
+    return chars + (wi===0?'<span class="ch" style="display:inline-block;width:.35em"> </span>':'');
+  }).join('');
+
+  const tl = gsap.timeline();
+  const ll=document.getElementById('ll'), lr=document.getElementById('lr');
+  const fl=document.getElementById('flash');
+  const car=document.getElementById('hero-car');
+  const hcont=document.getElementById('hcontent');
+
+  // 1. Light lines
+  tl.to(ll,{width:'51%',duration:.85,ease:'power2.inOut'},0)
+    .to(lr,{width:'51%',duration:.85,ease:'power2.inOut'},0)
+  // 2. Flash
+    .to(fl,{opacity:1,duration:.07,ease:'none'})
+    .to(fl,{opacity:0,duration:.18,ease:'power3.out'})
+  // 3. Car drives in
+    .set(car,{opacity:1})
+    .to(car,{filter:'blur(0px)',scale:1,x:0,duration:1.25,ease:'power3.out',
+      onComplete(){ /* trigger burst once car settles */ }
+    },'-=0.05')
+  // 5. Car shake / brake
+    .to(car,{x:-9,duration:.055,ease:'none',
+      onStart(){
+        setTimeout(()=>{
+          const r=car.getBoundingClientRect(), pr=pc.getBoundingClientRect();
+          burst(r.left+r.width/2-pr.left, r.top+r.height/2-pr.top);
+        },80);
+      }
+    })
+    .to(car,{x:7,duration:.055,ease:'none'})
+    .to(car,{x:-4,duration:.05,ease:'none'})
+    .to(car,{x:0,duration:.05,ease:'none'})
+  // 7. Logo letter-by-letter
+    .set(hcont,{opacity:1})
+    .to('.ch',{opacity:1,y:0,duration:.055,stagger:.048,ease:'power2.out'},'-=.05')
+  // 8. Subline
+    .to('#hero-sub',{opacity:1,y:0,duration:.65,ease:'power3.out'},'-=.15')
+  // 9. Buttons
+    .to('#hero-btns',{opacity:1,y:0,duration:.5,ease:'power3.out'},'-=.3')
+  // Fade out overlay, show BG
+    .to('#intro-overlay',{opacity:0,duration:.85,ease:'power2.inOut'},2.6)
+    .to('#hero-bg',{opacity:1,duration:1.1,ease:'power2.inOut'},3.05)
+    .to(car,{opacity:0,duration:.7,ease:'power2.inOut'},3.2)
+    .to('#scroll-ind',{opacity:1,duration:.6},4.1);
+}
+if(document.fonts){ document.fonts.ready.then(runIntro); } else { setTimeout(runIntro,500); }
+
+/* ── NAV SCROLL ─────────────────────────────────────── */
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>70));
+
+/* ── HAMBURGER ──────────────────────────────────────── */
+const ham=document.getElementById('ham'), mob=document.getElementById('mob-menu');
+ham.addEventListener('click',()=>{ ham.classList.toggle('open'); mob.classList.toggle('open'); });
+document.querySelectorAll('.ml').forEach(a=>a.addEventListener('click',()=>{ ham.classList.remove('open'); mob.classList.remove('open'); }));
+
+/* ── SCROLL ANIMATIONS ──────────────────────────────── */
+// sec-lines
+document.querySelectorAll('.sec-line').forEach(l=>{
+  ScrollTrigger.create({trigger:l,start:'top 88%',onEnter:()=>l.classList.add('on')});
+});
+// section headers
+gsap.utils.toArray('.sec-head').forEach(h=>{
+  gsap.from(h,{opacity:0,y:36,duration:.8,ease:'power3.out',scrollTrigger:{trigger:h,start:'top 88%'}});
+});
+// model cards
+gsap.utils.toArray('.model-card').forEach((c,i)=>{
+  gsap.to(c,{opacity:1,y:0,rotationY:0,duration:.85,delay:i*.14,ease:'power3.out',
+    scrollTrigger:{trigger:'.models-grid',start:'top 82%'}});
+});
+// experience
+gsap.from('#exp-img',{x:-70,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:'.exp-grid',start:'top 80%'}});
+gsap.from('#exp-cnt',{x:70,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:'.exp-grid',start:'top 80%'}});
+// feature items + SVG draw-on
+gsap.utils.toArray('.feat-item').forEach((item,i)=>{
+  gsap.to(item,{opacity:1,y:0,duration:.65,delay:i*.1,ease:'power3.out',
+    scrollTrigger:{trigger:'.feat-grid',start:'top 82%'}});
+  item.querySelectorAll('svg path,svg circle,svg line,svg rect,svg polyline,svg polygon').forEach(el=>{
+    try{
+      const len=el.getTotalLength?el.getTotalLength():80;
+      el.style.strokeDasharray=len; el.style.strokeDashoffset=len;
+      ScrollTrigger.create({trigger:item,start:'top 84%',
+        onEnter:()=>gsap.to(el,{strokeDashoffset:0,duration:1.3,ease:'power2.inOut',delay:.15+i*.08})});
+    }catch(e){}
+  });
+});
+// stats
+gsap.from('.stat-item',{y:44,opacity:0,duration:.65,stagger:.1,ease:'power3.out',
+  scrollTrigger:{trigger:'.stats-grid',start:'top 82%'}});
+// testimonials
+gsap.utils.toArray('.tcard').forEach((c)=>{
+  gsap.to(c,{opacity:1,x:0,y:0,duration:.85,ease:'power3.out',
+    scrollTrigger:{trigger:c,start:'top 86%'}});
+});
+// contact
+gsap.from('#ci',{x:-55,opacity:0,duration:.85,ease:'power3.out',scrollTrigger:{trigger:'.contact-grid',start:'top 80%'}});
+gsap.from('#cform',{x:55,opacity:0,duration:.85,ease:'power3.out',scrollTrigger:{trigger:'.contact-grid',start:'top 80%'}});
+// video
+gsap.from('.vid-thumb',{scale:.94,opacity:0,duration:.85,ease:'power3.out',scrollTrigger:{trigger:'.vid-thumb',start:'top 85%'}});
+// parallax stats bg
+gsap.to('#stats',{backgroundPositionY:'35%',ease:'none',
+  scrollTrigger:{trigger:'#stats',start:'top bottom',end:'bottom top',scrub:true}});
+
+/* ── COUNTUP ────────────────────────────────────────── */
+document.querySelectorAll('.stat-num').forEach(el=>{
+  const raw=el.dataset.to, suf=el.dataset.suf||'';
+  const isFloat=raw.includes('.');
+  const target=parseFloat(raw);
+  ScrollTrigger.create({trigger:el,start:'top 82%',once:true,
+    onEnter(){
+      let cur=0; const dur=1800, step=16, inc=target/(dur/step);
+      const t=setInterval(()=>{
+        cur+=inc; if(cur>=target){cur=target;clearInterval(t);}
+        if(isFloat) el.textContent=cur.toFixed(1)+suf;
+        else if(target>=1000) el.textContent=Math.floor(cur).toLocaleString('de-DE')+suf;
+        else el.textContent=Math.floor(cur)+suf;
+      },step);
+      gsap.to(el,{textShadow:'0 0 44px rgba(255,0,34,.95)',duration:.45,yoyo:true,repeat:5});
+    }
+  });
+});
+
+/* ── VIDEO MODAL ────────────────────────────────────── */
+const modal=document.getElementById('modal');
+document.getElementById('play-btn').addEventListener('click',()=>modal.classList.add('on'));
+document.getElementById('modal-close').addEventListener('click',()=>modal.classList.remove('on'));
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('on'); });
+
+/* ── RIPPLE ─────────────────────────────────────────── */
+document.querySelectorAll('.btn-solid,.btn-outline,.btn-submit').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const rect=this.getBoundingClientRect();
+    const rip=document.createElement('span'); rip.className='ripple';
+    const sz=Math.max(rect.width,rect.height);
+    rip.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+    this.appendChild(rip); setTimeout(()=>rip.remove(),620);
+  });
+});
+
+/* ── FORM VALIDATION ────────────────────────────────── */
+function vfield(inp,wrap){
+  if(!wrap)return true;
+  let ok;
+  if(inp.type==='email') ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
+  else ok=inp.value.trim().length>0;
+  wrap.classList.toggle('err',!ok); wrap.classList.toggle('ok',ok); return ok;
+}
+const fn=document.getElementById('f-name'), fe=document.getElementById('f-email'), fm=document.getElementById('f-msg');
+fn.addEventListener('blur',()=>vfield(fn,document.getElementById('fg-n')));
+fe.addEventListener('blur',()=>vfield(fe,document.getElementById('fg-e')));
+fm.addEventListener('blur',()=>vfield(fm,document.getElementById('fg-m')));
+document.getElementById('cform').addEventListener('submit',e=>{
+  e.preventDefault();
+  const ok=[vfield(fn,document.getElementById('fg-n')),vfield(fe,document.getElementById('fg-e')),vfield(fm,document.getElementById('fg-m'))].every(Boolean);
+  if(ok){
+    const btn=e.target.querySelector('.btn-submit');
+    btn.textContent='Gesendet ✓'; btn.style.background='#00aa55';
+    setTimeout(()=>{btn.textContent='Absenden';btn.style.background='';e.target.reset();
+      document.querySelectorAll('.fg').forEach(g=>g.classList.remove('ok','err'));},3200);
+  }
+});
+</script>
+</body>
+</html>
