@@ -10,14 +10,54 @@
 <meta property="og:locale" content="de_DE">
 <title>Flammerie zum Ochsen — Flammkuchen in Künzelsau</title>
 
+<!-- Preload LCP image -->
+<link rel="preload" as="image" href="bilder/Elsaesser-Flammkuchen.jpg" fetchpriority="high">
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Inter+Tight:wght@300;400;500;600&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- SEO: Open Graph -->
+<meta property="og:url" content="https://flammerie-zum-ochsen.de/">
+<meta property="og:image" content="https://flammerie-zum-ochsen.de/bilder/Elsaesser-Flammkuchen.jpg">
+<meta name="theme-color" content="#1A0F08">
+
+<!-- Strukturierte Daten: Restaurant (Google Rich Results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Flammerie zum Ochsen",
+  "description": "Hauchdünne Flammkuchen aus regionalen Zutaten, frisch aus dem Holzofen. Historisches Gasthaus in Kocherstetten seit 1892.",
+  "url": "https://flammerie-zum-ochsen.de",
+  "telephone": "+491752054900",
+  "email": "info@flammerie-zum-ochsen.de",
+  "image": "https://flammerie-zum-ochsen.de/bilder/Elsaesser-Flammkuchen.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Haller Stra\u00dfe 45",
+    "addressLocality": "K\u00fcnzelsau",
+    "postalCode": "74653",
+    "addressRegion": "Baden-W\u00fcrttemberg",
+    "addressCountry": "DE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 49.2817,
+    "longitude": 9.6839
+  },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "17:30", "closes": "22:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday",   "opens": "11:30", "closes": "14:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday",   "opens": "17:30", "closes": "22:30" }
+  ],
+  "servesCuisine": ["Flammkuchen", "Elsässisch", "Regional"],
+  "priceRange": "\u20ac\u20ac",
+  "foundingDate": "1892",
+  "founder": { "@type": "Person", "name": "Julian Klose" }
+}
+</script>
 
 <style>
 /* ============================================================
@@ -108,6 +148,16 @@ em { font-style: italic; color: var(--ember); }
 .btn--ghost:hover {
   background: var(--wood);
   color: var(--cream);
+  transform: translateY(-2px);
+}
+.btn--ghost-light {
+  background: transparent;
+  color: var(--cream);
+  border: 1.5px solid rgba(244,232,211,0.4);
+}
+.btn--ghost-light:hover {
+  background: rgba(244,232,211,0.1);
+  border-color: var(--cream);
   transform: translateY(-2px);
 }
 .btn--ember {
@@ -588,6 +638,137 @@ em { font-style: italic; color: var(--ember); }
 }
 
 /* ============================================================
+   VOUCHER / GUTSCHEINE
+============================================================ */
+.voucher {
+  padding: 7rem 4%;
+  background: var(--wood-deep);
+  position: relative;
+  overflow: hidden;
+}
+.voucher::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 550px; height: 550px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,134,47,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.voucher__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.voucher__eyebrow { margin-bottom: 1.2rem; }
+.voucher__title { color: var(--cream); margin-bottom: 1.8rem; }
+.voucher__body {
+  font-size: 1.05rem;
+  color: rgba(244,232,211,0.65);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.voucher__note {
+  font-family: var(--hand);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+}
+.voucher__actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* Decorative gift card */
+.voucher__card {
+  position: relative;
+  aspect-ratio: 8 / 5;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--wood) 0%, var(--char) 60%, #0d0703 100%);
+  border: 1px solid rgba(184,134,47,0.25);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 32px 80px rgba(26,15,8,0.6), inset 0 1px 0 rgba(244,232,211,0.06);
+  overflow: hidden;
+}
+.voucher__card::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,134,47,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.voucher__card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.voucher__card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.voucher__card-label {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(184,134,47,0.4);
+  padding: 0.25em 0.8em;
+  border-radius: 999px;
+}
+.voucher__card-icon {
+  width: 40px; height: 40px;
+  color: rgba(184,134,47,0.5);
+}
+.voucher__card-icon svg { width: 100%; height: 100%; }
+.voucher__card-name {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.voucher__card-sub {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: rgba(184,134,47,0.7);
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+.voucher__card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(244,232,211,0.07);
+  padding-top: 1.2rem;
+}
+.voucher__card-value {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+}
+.voucher__card-since {
+  font-family: var(--hand);
+  font-size: 0.95rem;
+  color: rgba(244,232,211,0.3);
+}
+
+@media (max-width: 1023px) {
+  .voucher__inner { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+/* ============================================================
    CTA BAND
 ============================================================ */
 .cta-band {
@@ -1003,6 +1184,7 @@ a:focus-visible, button:focus-visible {
       <li><a href="#tradition">Tradition</a></li>
       <li><a href="#menu">Speisekarte</a></li>
       <li><a href="#story">Unsere Geschichte</a></li>
+      <li><a href="#gutscheine">Gutscheine</a></li>
       <li><a href="#contact">Kontakt</a></li>
     </ul>
   </nav>
@@ -1020,6 +1202,7 @@ a:focus-visible, button:focus-visible {
   <a href="#tradition" class="nav__drawer-link">Tradition</a>
   <a href="#menu" class="nav__drawer-link">Speisekarte</a>
   <a href="#story" class="nav__drawer-link">Unsere Geschichte</a>
+  <a href="#gutscheine" class="nav__drawer-link">Gutscheine</a>
   <a href="#contact" class="nav__drawer-link">Kontakt</a>
   <a href="#contact" class="btn btn--primary" style="margin-top:1rem;justify-content:center;">Tisch reservieren</a>
 </nav>
@@ -1056,6 +1239,7 @@ a:focus-visible, button:focus-visible {
       src="bilder/Elsaesser-Flammkuchen.jpg"
       alt="Klassischer Flammkuchen mit Speck und Zwiebeln, frisch aus dem Holzofen"
       class="hero__photo"
+      fetchpriority="high"
     >
   </div>
 
@@ -1072,6 +1256,7 @@ a:focus-visible, button:focus-visible {
         class="tradition__img"
         src="bilder/Gastst%C3%A4tte%20von%20weiter.webp"
         alt="Gasthaus Flammerie zum Ochsen in Kocherstetten"
+        loading="lazy"
       >
       <div class="tradition__badge" aria-hidden="true">
         <span class="tradition__badge-since">seit</span>
@@ -1185,7 +1370,7 @@ a:focus-visible, button:focus-visible {
     </div>
 
     <div class="menu__cta anim-fade">
-      <a href="#contact" class="btn btn--ember">
+      <a href="speisekarte.html" class="btn btn--ember">
         Vollständige Speisekarte
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
       </a>
@@ -1220,10 +1405,69 @@ a:focus-visible, button:focus-visible {
         class="story__img"
         src="bilder/JulianKlose.jpg"
         alt="Julian Klose, Inhaber der Flammerie zum Ochsen"
+        loading="lazy"
         style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"
       >
       <div class="story__img-overlay" aria-hidden="true"></div>
       <span class="story__img-caption">Julian, Inhaber</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     GUTSCHEINE
+============================================================ -->
+<section class="voucher" id="gutscheine" aria-labelledby="voucher-title">
+  <div class="voucher__inner">
+
+    <div class="voucher__text">
+      <p class="eyebrow voucher__eyebrow anim-up">Das perfekte Geschenk</p>
+      <h2 class="voucher__title anim-up" id="voucher-title">
+        Schenk einen Abend<br>voller <em>Genuss.</em>
+      </h2>
+      <p class="voucher__body anim-up">
+        Für jeden Anlass das passende Geschenk – ob Geburtstag, Jubiläum oder ein kleines Dankeschön. Mit einem Gutschein verschenkst du nicht nur knusprige Flammkuchen, sondern Zeit unter Freunden, Kollegen oder mit der Familie.
+      </p>
+      <p class="voucher__note anim-fade">Erhältlich vor Ort oder bequem per Mail.</p>
+      <div class="voucher__actions anim-up">
+        <a
+          href="mailto:info@flammerie-zum-ochsen.de?subject=Gutscheinbestellung&body=Hiermit%20bestelle%20ich%20einen%20Gutschein%20im%20Wert%20von%20XX%20Euro."
+          class="btn btn--ember"
+        >
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="width:1.1em;height:1.1em;"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+          Per Mail anfordern
+        </a>
+        <a href="#contact" class="btn btn--ghost-light">
+          Öffnungszeiten &amp; Adresse
+        </a>
+      </div>
+    </div>
+
+    <!-- Decorative gift card -->
+    <div class="voucher__card anim-fade" aria-hidden="true">
+      <div class="voucher__card-top">
+        <span class="voucher__card-label">Geschenkgutschein</span>
+        <span class="voucher__card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M20 12v10H4V12"/>
+            <path d="M22 7H2v5h20V7z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+          </svg>
+        </span>
+      </div>
+      <div>
+        <div class="voucher__card-name">Flammerie zum Ochsen</div>
+        <div class="voucher__card-sub">Kocherstetten · seit 1892</div>
+      </div>
+      <div class="voucher__card-bottom">
+        <div>
+          <div class="voucher__card-value">Wunschbetrag</div>
+        </div>
+        <div class="voucher__card-since">nach Wahl</div>
+      </div>
     </div>
 
   </div>
@@ -1342,7 +1586,7 @@ a:focus-visible, button:focus-visible {
       <div class="footer__col-title">Menü</div>
       <ul class="footer__nav">
         <li><a href="#tradition">Tradition</a></li>
-        <li><a href="#menu">Speisekarte</a></li>
+        <li><a href="speisekarte.html">Speisekarte</a></li>
         <li><a href="#story">Unsere Geschichte</a></li>
         <li><a href="#contact">Kontakt</a></li>
       </ul>
@@ -1351,7 +1595,7 @@ a:focus-visible, button:focus-visible {
       <div class="footer__col-title">Service</div>
       <ul class="footer__nav">
         <li><a href="#contact">Reservierung</a></li>
-        <li><a href="#contact">Gutscheine</a></li>
+        <li><a href="#gutscheine">Gutscheine</a></li>
         <li><a href="#contact">Catering</a></li>
       </ul>
     </div>
@@ -1370,6 +1614,10 @@ a:focus-visible, button:focus-visible {
     </div>
   </div>
 </footer>
+
+<!-- GSAP (am Ende des body = kein render-blocking) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
 /* ============================================================
@@ -1506,10 +1754,34 @@ gsap.registerPlugin(ScrollTrigger);
    HERO ENTRANCE — CINEMATIC CURTAIN REVEAL
 ============================================================ */
 (function initHeroEntrance() {
+  const INTRO_KEY = 'flammerie_introSeen';
+  const navType    = (performance.getEntriesByType('navigation')[0] || {}).type || 'navigate';
+  const isReload      = navType === 'reload';
+  const isBackForward = navType === 'back_forward';
+  const alreadySeen   = sessionStorage.getItem(INTRO_KEY);
+
+  // Skip when: back/forward button OR (internal link-click AND already seen this session)
+  const shouldSkip = isBackForward || (!isReload && alreadySeen);
+
+  // Helper: skip curtain, show hero instantly
+  function skipIntro() {
+    gsap.set('#curtain', { display: 'none' });
+    gsap.set(['.hero__eyebrow', '.hero__lead', '.hero__buttons'], { opacity: 1, y: 0 });
+    gsap.set('.hero__title-line-inner', { y: '0%' });
+    gsap.set('.hero__photo-wrap', { opacity: 1, scale: 1 });
+  }
+
   const mm = gsap.matchMedia();
 
-  // Full animation for users who have no preference
+  // Reduced motion: always skip
+  mm.add('(prefers-reduced-motion: reduce)', () => {
+    skipIntro();
+  });
+
+  // Full animation — only if not seen yet this session
   mm.add('(prefers-reduced-motion: no-preference)', () => {
+    if (shouldSkip) { skipIntro(); return; }
+
     // Initial states
     gsap.set(['.hero__eyebrow', '.hero__lead', '.hero__buttons'], { opacity: 0, y: 32 });
     gsap.set('.hero__title-line-inner', { y: '112%' });
@@ -1533,13 +1805,11 @@ gsap.registerPlugin(ScrollTrigger);
       .to('.hero__lead', { opacity: 1, y: 0, duration: 0.65 }, '-=0.45')
     // 8 — Buttons
       .to('.hero__buttons', { opacity: 1, y: 0, duration: 0.55 }, '-=0.45')
-    // 9 — Remove curtain from layout
-      .set('#curtain', { display: 'none' });
-  });
-
-  // Reduced motion: instantly hide curtain, show everything
-  mm.add('(prefers-reduced-motion: reduce)', () => {
-    gsap.set('#curtain', { display: 'none' });
+    // 9 — Remove curtain from layout, mark intro as seen
+      .call(() => {
+        gsap.set('#curtain', { display: 'none' });
+        sessionStorage.setItem(INTRO_KEY, '1');
+      });
   });
 })();
 

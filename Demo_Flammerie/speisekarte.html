@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Vollständige Speisekarte der Flammerie zum Ochsen – 12 herzhafte und 3 süße Flammkuchen-Sorten sowie unser All-you-can-eat-Angebot. Frisch aus dem Holzofen in Kocherstetten.">
+<meta property="og:title" content="Speisekarte – Flammerie zum Ochsen">
+<meta property="og:description" content="15 Flammkuchen-Sorten frisch aus dem Holzofen. Herzhafte Klassiker, vegetarische Varianten und süße Dessert-Flammkuchen.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:url" content="https://flammerie-zum-ochsen.de/speisekarte">
+<meta property="og:image" content="https://flammerie-zum-ochsen.de/bilder/Elsaesser-Flammkuchen.jpg">
+<meta name="theme-color" content="#1A0F08">
+<title>Speisekarte — Flammerie zum Ochsen</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Inter+Tight:wght@300;400;500;600&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  --cream:        #F4E8D3;
+  --cream-light:  #FAF3E4;
+  --paper:        #EFE2C8;
+  --wood:         #3A2418;
+  --wood-deep:    #1F1209;
+  --ember:        #C2410C;
+  --ember-glow:   #EA580C;
+  --gold:         #B8862F;
+  --char:         #2A1810;
+  --ink:          #1A0F08;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans:  'Inter Tight', system-ui, sans-serif;
+  --hand:  'Caveat', cursive;
+
+  --radius: 6px;
+  --shadow-soft: 0 8px 40px rgba(26,15,8,0.18);
+  --shadow-deep: 0 16px 60px rgba(26,15,8,0.3);
+  --transition: 250ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ============================================================
+   RESET & BASE
+============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--wood-deep);
+  color: var(--cream);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+img { display:block; max-width:100%; height:auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; border: none; cursor: pointer; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--wood-deep); }
+::-webkit-scrollbar-thumb { background: var(--ember); border-radius: 2px; }
+
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.1; }
+h1 { font-size: clamp(2.6rem, 6vw, 5.8rem); }
+h2 { font-size: clamp(2rem, 4vw, 3.6rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 1.8rem); }
+em { font-style: italic; color: var(--ember); }
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.75em 1.8em;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  transition: var(--transition);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn--primary {
+  background: var(--wood);
+  color: var(--cream);
+}
+.btn--primary:hover {
+  background: var(--ember);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194,65,12,0.35);
+}
+.btn--ghost-light {
+  background: transparent;
+  color: var(--cream);
+  border: 1.5px solid rgba(244,232,211,0.35);
+}
+.btn--ghost-light:hover {
+  background: rgba(244,232,211,0.1);
+  border-color: var(--cream);
+  transform: translateY(-2px);
+}
+.btn--ember {
+  background: var(--ember);
+  color: var(--cream-light);
+}
+.btn--ember:hover {
+  background: var(--ember-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194,65,12,0.4);
+}
+.btn--cream {
+  background: var(--cream);
+  color: var(--ink);
+}
+.btn--cream:hover {
+  background: var(--cream-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(244,232,211,0.2);
+}
+.btn svg { width: 1em; height: 1em; flex-shrink: 0; }
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+.eyebrow {
+  font-family: var(--hand);
+  font-size: 1.15rem;
+  color: var(--ember);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1.5px;
+  background: var(--ember);
+  flex-shrink: 0;
+}
+.eyebrow--light {
+  color: rgba(244,232,211,0.65);
+}
+.eyebrow--light::before {
+  background: rgba(244,232,211,0.4);
+}
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--ember), var(--gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4%;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, padding 0.35s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(31,18,9,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(244,232,211,0.08);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.nav__brand { display: flex; align-items: center; }
+.nav__brand-logo { height: 52px; width: auto; display: block; filter: brightness(0) invert(1); }
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  list-style: none;
+}
+.nav__links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(244,232,211,0.8);
+  letter-spacing: 0.04em;
+  position: relative;
+  transition: color var(--transition);
+}
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--ember);
+  transition: width var(--transition);
+}
+.nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--cream); }
+.nav__links a:hover::after, .nav__links a[aria-current="page"]::after { width: 100%; }
+.nav__cta { flex-shrink: 0; }
+
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  padding: 4px;
+  cursor: pointer;
+}
+.nav__burger span {
+  display: block;
+  width: 24px; height: 1.5px;
+  background: var(--cream);
+  transition: var(--transition);
+}
+.nav__drawer {
+  position: fixed;
+  top: 0; right: -100%;
+  width: min(320px, 85vw);
+  height: 100%;
+  background: var(--wood-deep);
+  z-index: 999;
+  padding: 5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -10px 0 40px rgba(26,15,8,0.5);
+}
+.nav__drawer.open { right: 0; }
+.nav__drawer a {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--cream);
+  border-bottom: 1px solid rgba(244,232,211,0.1);
+  padding-bottom: 0.8rem;
+}
+.nav__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,15,8,0.6);
+  z-index: 998;
+}
+.nav__overlay.open { display: block; }
+
+@media (max-width: 1023px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+}
+
+/* ============================================================
+   PAGE HERO
+============================================================ */
+.page-hero {
+  padding: 10rem 4% 6rem;
+  background: var(--wood-deep);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(194,65,12,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.page-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--wood-deep));
+  pointer-events: none;
+}
+.page-hero__eyebrow {
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+.page-hero__title {
+  color: var(--cream);
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+.page-hero__sub {
+  font-size: 1.1rem;
+  color: rgba(244,232,211,0.6);
+  max-width: 520px;
+  margin: 0 auto 0.8rem;
+  line-height: 1.7;
+}
+.page-hero__note {
+  font-family: var(--hand);
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+/* ============================================================
+   CATEGORY HEADER
+============================================================ */
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.cat-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(244,232,211,0.1);
+}
+.cat-header__title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--cream);
+  white-space: nowrap;
+}
+.cat-header__count {
+  font-family: var(--hand);
+  font-size: 1rem;
+  color: rgba(244,232,211,0.35);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   MENU SECTIONS
+============================================================ */
+.menu-section {
+  padding: 5rem 4%;
+  position: relative;
+}
+.menu-section__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.menu-section--savory {
+  background: var(--wood-deep);
+}
+.menu-section--sweet {
+  background: rgba(31,18,9,0.6);
+  border-top: 1px solid rgba(244,232,211,0.06);
+}
+
+/* ============================================================
+   DISH CARDS
+============================================================ */
+.dishes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+.dishes-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.dish {
+  background: rgba(244,232,211,0.04);
+  border: 1px solid rgba(244,232,211,0.08);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease,
+              background 0.25s ease;
+  will-change: transform;
+}
+.dish:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 24px 60px rgba(194,65,12,0.18);
+  border-color: var(--ember) !important;
+  background: rgba(194,65,12,0.08);
+}
+.dish__number {
+  font-family: var(--hand);
+  font-size: 1rem;
+  color: var(--ember);
+  margin-bottom: 0.5rem;
+}
+.dish__name {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+.dish__ingredients {
+  font-style: italic;
+  font-size: 0.88rem;
+  color: rgba(244,232,211,0.45);
+  line-height: 1.55;
+  flex: 1;
+  margin-bottom: 1.2rem;
+}
+.dish__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid rgba(244,232,211,0.08);
+  padding-top: 0.9rem;
+}
+.dish__price {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  color: var(--gold);
+}
+.dish__tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  border: 1px solid rgba(194,65,12,0.4);
+  border-radius: 999px;
+  padding: 0.18em 0.65em;
+}
+.dish__tag--veg {
+  color: #6aaa6a;
+  border-color: rgba(106,170,106,0.4);
+}
+.dish__tag--sweet {
+  color: var(--gold);
+  border-color: rgba(184,134,47,0.4);
+}
+
+/* ============================================================
+   ALL YOU CAN EAT SECTION
+============================================================ */
+.ayce {
+  padding: 6rem 4%;
+  background: var(--wood);
+  position: relative;
+  overflow: hidden;
+}
+.ayce::before {
+  content: '';
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 450px; height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(194,65,12,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ayce__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.ayce__eyebrow { margin-bottom: 1.2rem; }
+.ayce__title {
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+}
+.ayce__desc {
+  font-size: 1.05rem;
+  color: rgba(244,232,211,0.65);
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+}
+.ayce__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+.ayce__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.ayce__feature-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(194,65,12,0.15);
+  border: 1px solid rgba(194,65,12,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ember);
+}
+.ayce__feature-icon svg { width: 16px; height: 16px; }
+.ayce__feature-text {
+  font-size: 1rem;
+  color: rgba(244,232,211,0.8);
+  line-height: 1.5;
+  padding-top: 0.4rem;
+}
+.ayce__feature-text strong {
+  color: var(--cream);
+  font-weight: 600;
+  display: block;
+  font-size: 0.95rem;
+}
+
+/* Pricing card */
+.ayce__price-card {
+  background: rgba(244,232,211,0.04);
+  border: 1px solid rgba(244,232,211,0.1);
+  border-radius: 12px;
+  padding: 3rem 2.5rem;
+  position: relative;
+}
+.ayce__price-card::before {
+  content: 'Angebot';
+  position: absolute;
+  top: -0.75rem;
+  left: 2rem;
+  background: var(--ember);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.2em 0.9em;
+  border-radius: 999px;
+}
+.ayce__price-label {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244,232,211,0.45);
+  margin-bottom: 0.6rem;
+}
+.ayce__price-main {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.ayce__price-main span {
+  font-size: 0.4em;
+  vertical-align: top;
+  padding-top: 0.5em;
+  color: var(--gold);
+}
+.ayce__price-unit {
+  font-size: 0.9rem;
+  color: rgba(244,232,211,0.5);
+  margin-bottom: 2rem;
+}
+.ayce__price-divider {
+  height: 1px;
+  background: rgba(244,232,211,0.1);
+  margin: 1.5rem 0;
+}
+.ayce__price-kids-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244,232,211,0.4);
+  margin-bottom: 0.4rem;
+}
+.ayce__price-kids {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(244,232,211,0.7);
+  margin-bottom: 0.2rem;
+}
+.ayce__price-kids-note {
+  font-size: 0.82rem;
+  color: rgba(244,232,211,0.35);
+  margin-bottom: 2rem;
+}
+.ayce__note {
+  font-size: 0.82rem;
+  color: rgba(244,232,211,0.35);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   CTA BAND
+============================================================ */
+.cta-band {
+  padding: 5rem 4%;
+  background: var(--ember);
+  color: var(--cream);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: -120px;
+  width: 350px; height: 350px;
+  border-radius: 50%;
+  background: rgba(244,232,211,0.07);
+  pointer-events: none;
+}
+.cta-band::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(244,232,211,0.05);
+  pointer-events: none;
+}
+.cta-band__inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.cta-band__title { color: var(--cream); margin-bottom: 1rem; }
+.cta-band__sub {
+  font-size: 1.1rem;
+  color: rgba(244,232,211,0.82);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer {
+  background: var(--wood-deep);
+  color: var(--cream);
+  padding: 5rem 4% 2rem;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(244,232,211,0.1);
+}
+.footer__brand-name {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--cream);
+  margin-bottom: 0.6rem;
+}
+.footer__brand-tag {
+  font-size: 0.9rem;
+  color: rgba(244,232,211,0.5);
+  line-height: 1.6;
+  max-width: 260px;
+}
+.footer__col-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244,232,211,0.5);
+  margin-bottom: 1.2rem;
+}
+.footer__nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.footer__nav a {
+  font-size: 0.95rem;
+  color: rgba(244,232,211,0.75);
+  transition: color var(--transition);
+}
+.footer__nav a:hover { color: var(--cream); }
+.footer__bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer__copy { font-size: 0.85rem; color: rgba(244,232,211,0.4); }
+.footer__legal { display: flex; gap: 1.5rem; }
+.footer__legal a {
+  font-size: 0.85rem;
+  color: rgba(244,232,211,0.4);
+  transition: color var(--transition);
+}
+.footer__legal a:hover { color: rgba(244,232,211,0.8); }
+
+/* ============================================================
+   SCROLL ANIMATIONS
+============================================================ */
+.anim-up  { opacity: 0; transform: translateY(40px); }
+.anim-fade { opacity: 0; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 1200px) {
+  .dishes-grid { grid-template-columns: repeat(3, 1fr); }
+  .dishes-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 1023px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+  .ayce__inner { grid-template-columns: 1fr; gap: 3rem; }
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+@media (max-width: 767px) {
+  .dishes-grid { grid-template-columns: repeat(2, 1fr); }
+  .dishes-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 479px) {
+  .dishes-grid { grid-template-columns: 1fr; }
+  .dishes-grid--3 { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+}
+
+/* Focus states */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .anim-up, .anim-fade { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress bar -->
+<div id="progress-bar" aria-hidden="true"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<header class="nav" id="nav" role="banner">
+  <a href="index.html" class="nav__brand" aria-label="Flammerie zum Ochsen – Startseite">
+    <img src="bilder/Logo.png" alt="Flammerie zum Ochsen" class="nav__brand-logo">
+  </a>
+
+  <nav role="navigation" aria-label="Hauptnavigation">
+    <ul class="nav__links">
+      <li><a href="index.html#tradition">Tradition</a></li>
+      <li><a href="speisekarte.html" aria-current="page">Speisekarte</a></li>
+      <li><a href="index.html#story">Unsere Geschichte</a></li>
+      <li><a href="index.html#contact">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html#contact" class="btn btn--ember nav__cta">Tisch reservieren</a>
+
+  <button class="nav__burger" aria-label="Menü öffnen" id="burgerBtn" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="nav__overlay" id="navOverlay"></div>
+<nav class="nav__drawer" id="navDrawer" aria-label="Mobile Navigation">
+  <a href="index.html#tradition">Tradition</a>
+  <a href="speisekarte.html">Speisekarte</a>
+  <a href="index.html#story">Unsere Geschichte</a>
+  <a href="index.html#contact">Kontakt</a>
+  <a href="index.html#contact" class="btn btn--ember" style="margin-top:1rem;justify-content:center;">Tisch reservieren</a>
+</nav>
+
+<main>
+
+<!-- ============================================================
+     PAGE HERO
+============================================================ -->
+<section class="page-hero" aria-label="Speisekarte Übersicht">
+  <p class="eyebrow page-hero__eyebrow anim-up">Frisch aus dem Holzofen</p>
+  <h1 class="page-hero__title anim-up">
+    Unsere<br><em>Speisekarte.</em>
+  </h1>
+  <p class="page-hero__sub anim-fade">
+    15 Flammkuchen-Sorten – handgemacht auf hauchdünnem Teig mit regionalen Zutaten. Herzhafte Klassiker, vegetarische Varianten und süße Desserts.
+  </p>
+  <p class="page-hero__note anim-fade">Warme Küche bis 21 Uhr · à la carte &amp; All you can eat</p>
+</section>
+
+<!-- ============================================================
+     HERZHAFTE FLAMMKUCHEN
+============================================================ -->
+<section class="menu-section menu-section--savory" aria-labelledby="savory-title">
+  <div class="menu-section__inner">
+
+    <div class="cat-header anim-up">
+      <h2 class="cat-header__title" id="savory-title">Herzhafte Flammkuchen</h2>
+      <span class="cat-header__count">12 Sorten</span>
+    </div>
+
+    <div class="dishes-grid" role="list">
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 01</div>
+        <h3 class="dish__name">Elsässer original</h3>
+        <p class="dish__ingredients">Zwiebeln · Speck</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 9,80</span>
+          <span class="dish__tag">Klassiker</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 02</div>
+        <h3 class="dish__name">Elsässer überbacken</h3>
+        <p class="dish__ingredients">Zwiebeln · Speck · Emmentaler</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 10,80</span>
+          <span class="dish__tag">Klassiker</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 03</div>
+        <h3 class="dish__name">Gemüsegarten</h3>
+        <p class="dish__ingredients">Kartoffeln · Zucchini · Tomaten · Feta</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 12,80</span>
+          <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 04</div>
+        <h3 class="dish__name">Caprese</h3>
+        <p class="dish__ingredients">Tomaten · Mozzarella · Pesto</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 12,80</span>
+          <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 05</div>
+        <h3 class="dish__name">Kebapstyle</h3>
+        <p class="dish__ingredients">Dönerfleisch · Zwiebeln · Salat · Gurken · Knoblauchsauce</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Beliebt</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 06</div>
+        <h3 class="dish__name">Burgerstyle</h3>
+        <p class="dish__ingredients">Hackfleisch · Gewürzgurken · Röstzwiebeln · Tomaten · Emmentaler · Burgersauce</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Beliebt</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 07</div>
+        <h3 class="dish__name">Französisch</h3>
+        <p class="dish__ingredients">Gorgonzola · Birne · Walnüsse · Honig</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Süss-Pikant</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 08</div>
+        <h3 class="dish__name">Mexikanisch</h3>
+        <p class="dish__ingredients">Hackfleisch · Mais · Kidneybohnen · Nachos · Emmentaler · Salsasauce</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Scharf</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 09</div>
+        <h3 class="dish__name">Nordwind</h3>
+        <p class="dish__ingredients">Lachs · Kartoffeln · Spinat</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Saison</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 10</div>
+        <h3 class="dish__name">Schwäbisch</h3>
+        <p class="dish__ingredients">Maultaschen · Emmentaler · Röstzwiebeln · Bratensauce</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Regional</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 11</div>
+        <h3 class="dish__name">Hawaii</h3>
+        <p class="dish__ingredients">Tomatensauce · Schinken · Ananas · Mozzarella</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 12,80</span>
+          <span class="dish__tag">Klassiker</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 12</div>
+        <h3 class="dish__name">Italienisch</h3>
+        <p class="dish__ingredients">Tomatensauce · Schinken · Champignons · Mozzarella</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 12,80</span>
+          <span class="dish__tag">Klassiker</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SÜSSE FLAMMKUCHEN
+============================================================ -->
+<section class="menu-section menu-section--sweet" aria-labelledby="sweet-title">
+  <div class="menu-section__inner">
+
+    <div class="cat-header anim-up">
+      <h2 class="cat-header__title" id="sweet-title">Süße Flammkuchen</h2>
+      <span class="cat-header__count">3 Sorten</span>
+    </div>
+
+    <div class="dishes-grid dishes-grid--3" role="list">
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 13</div>
+        <h3 class="dish__name">Bratapfel</h3>
+        <p class="dish__ingredients">Apfel · Zimt &amp; Zucker</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 9,80</span>
+          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 14</div>
+        <h3 class="dish__name">Schoko-Banane</h3>
+        <p class="dish__ingredients">Banane · Nutella</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 10,80</span>
+          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up" role="listitem">
+        <div class="dish__number">№ 15</div>
+        <h3 class="dish__name">Himbeertraum</h3>
+        <p class="dish__ingredients">Himbeere · weiße Schokolade</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 10,80</span>
+          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ALL YOU CAN EAT
+============================================================ -->
+<section class="ayce" aria-labelledby="ayce-title">
+  <div class="ayce__inner">
+
+    <div class="ayce__text">
+      <p class="eyebrow ayce__eyebrow anim-up">Unser Angebot</p>
+      <h2 class="ayce__title anim-up" id="ayce-title">
+        All you can<br><em>eat.</em>
+      </h2>
+      <p class="ayce__desc anim-up">
+        Natürlich kann auch à la carte bestellt werden. Aber wer richtig satt werden möchte, genießt unser All-you-can-eat-Angebot – solange der Ofen läuft.
+      </p>
+
+      <ul class="ayce__features anim-up" role="list">
+        <li class="ayce__feature">
+          <div class="ayce__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12l3 3 5-5"/></svg>
+          </div>
+          <div class="ayce__feature-text">
+            <strong>Ofenfrisch &amp; abwechslungsreich</strong>
+            Wir servieren die Flammkuchen nacheinander direkt an den Tisch, damit sie immer frisch und knusprig sind.
+          </div>
+        </li>
+        <li class="ayce__feature">
+          <div class="ayce__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="ayce__feature-text">
+            <strong>Gemeinsam genießen</strong>
+            Alle teilen sich die Flammkuchen in geselliger Runde und probieren sich durch verschiedene Sorten.
+          </div>
+        </li>
+        <li class="ayce__feature">
+          <div class="ayce__feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="ayce__feature-text">
+            <strong>So viel wie das Herz begehrt</strong>
+            Es darf gegessen werden, bis kein Platz mehr ist!
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="ayce__price-card anim-fade">
+      <p class="ayce__price-label">Preis pro Person</p>
+      <div class="ayce__price-main">
+        <span>€</span>21,90
+      </div>
+      <p class="ayce__price-unit">inkl. aller Flammkuchen-Sorten</p>
+
+      <div class="ayce__price-divider"></div>
+
+      <p class="ayce__price-kids-label">Kinder 6 – 12 Jahre</p>
+      <div class="ayce__price-kids">€ 12,90</div>
+      <p class="ayce__price-kids-note">Kinder bis 5 Jahre essen kostenlos</p>
+
+      <a href="index.html#contact" class="btn btn--ember" style="width:100%;justify-content:center;margin-bottom:1rem;">
+        Tisch reservieren
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+
+      <p class="ayce__note">Warme Küche bis 21 Uhr. Reservierung empfohlen.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA BAND
+============================================================ -->
+<section class="cta-band" aria-label="Reservierung">
+  <div class="cta-band__inner">
+    <h2 class="cta-band__title anim-up">Hunger bekommen?</h2>
+    <p class="cta-band__sub anim-fade">Sichert euch euren Tisch – wir freuen uns auf euch. Donnerstags ab 17:30 und sonntags ab 11:30 Uhr.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="index.html#contact" class="btn btn--cream anim-up">
+        Tisch reservieren
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+      <a href="index.html" class="btn btn--ghost-light anim-up">Zur Startseite</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer__grid">
+    <div>
+      <div class="footer__brand-name">Flammerie zum Ochsen</div>
+      <p class="footer__brand-tag">Hauchdünne Flammkuchen aus regionalen Zutaten. Traditionell gebacken in einem historischen Gasthaus in Kocherstetten seit 1892.</p>
+    </div>
+    <div>
+      <p class="footer__col-title">Navigation</p>
+      <ul class="footer__nav">
+        <li><a href="index.html">Startseite</a></li>
+        <li><a href="index.html#tradition">Tradition</a></li>
+        <li><a href="speisekarte.html">Speisekarte</a></li>
+        <li><a href="index.html#story">Unsere Geschichte</a></li>
+        <li><a href="index.html#contact">Kontakt</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer__col-title">Öffnungszeiten</p>
+      <ul class="footer__nav">
+        <li><span style="color:rgba(244,232,211,0.75)">Do: 17:30 – 22:30 Uhr</span></li>
+        <li><span style="color:rgba(244,232,211,0.75)">So: 11:30 – 14:00 Uhr</span></li>
+        <li><span style="color:rgba(244,232,211,0.75)">So: 17:30 – 22:30 Uhr</span></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer__col-title">Kontakt</p>
+      <ul class="footer__nav">
+        <li><a href="tel:+491752054900">+49 175 2054900</a></li>
+        <li><a href="mailto:info@flammerie-zum-ochsen.de">info@flammerie-zum-ochsen.de</a></li>
+        <li><a href="https://www.instagram.com/flammerie_zum_ochsen/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p class="footer__copy">© 2024 Flammerie zum Ochsen · Kocherstetten</p>
+    <nav class="footer__legal" aria-label="Rechtliche Links">
+      <a href="#">Impressum</a>
+      <a href="#">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- GSAP (am Ende des body = kein render-blocking) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+============================================================ */
+gsap.to('#progress-bar', {
+  scaleX: 1, ease: 'none',
+  scrollTrigger: { start: 'top top', end: 'max', scrub: 0 }
+});
+
+/* ============================================================
+   NAV HIDE/SHOW & SCROLLED STATE
+============================================================ */
+(function initNav() {
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  ScrollTrigger.create({
+    start: 'top -80',
+    onUpdate(self) {
+      const y = self.scroll();
+      nav.classList.toggle('scrolled', y > 60);
+      if (y > lastY + 5) nav.style.transform = 'translateY(-100%)';
+      else nav.style.transform = '';
+      lastY = y;
+    }
+  });
+  nav.style.transition = 'transform 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, padding 0.35s ease';
+
+  // Burger
+  const btn = document.getElementById('burgerBtn');
+  const drawer = document.getElementById('navDrawer');
+  const overlay = document.getElementById('navOverlay');
+  function toggleMenu(open) {
+    drawer.classList.toggle('open', open);
+    overlay.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  btn.addEventListener('click', () => toggleMenu(!drawer.classList.contains('open')));
+  overlay.addEventListener('click', () => toggleMenu(false));
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+})();
+
+/* ============================================================
+   PAGE ENTRANCE
+============================================================ */
+(function initEntrance() {
+  const mm = gsap.matchMedia();
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.set(['.page-hero__eyebrow', '.page-hero__title', '.page-hero__sub', '.page-hero__note'], { opacity: 0, y: 40 });
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('.page-hero__eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.1)
+      .to('.page-hero__title',   { opacity: 1, y: 0, duration: 0.9 }, 0.3)
+      .to('.page-hero__sub',     { opacity: 1, y: 0, duration: 0.7 }, 0.55)
+      .to('.page-hero__note',    { opacity: 1, y: 0, duration: 0.6 }, 0.7);
+  });
+})();
+
+/* ============================================================
+   SCROLL REVEAL
+============================================================ */
+(function initScrollReveal() {
+  const mm = gsap.matchMedia();
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.utils.toArray('.anim-up').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      });
+    });
+    gsap.utils.toArray('.anim-fade').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   DISH CARD 3D HOVER TILT
+============================================================ */
+(function initCardTilt() {
+  const mm = gsap.matchMedia();
+  mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+    document.querySelectorAll('.dish').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
+        const y = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
+        gsap.to(card, { rotateX: -y * 7, rotateY: x * 7, transformPerspective: 700, duration: 0.25, ease: 'power2.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.55, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
