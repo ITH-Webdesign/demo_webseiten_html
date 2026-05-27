@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Flammerie zum Ochsen – hauchdünne Flammkuchen aus regionalen Zutaten in einem historischen Gasthaus in Künzelsau. Tradition seit 1892, Inhaber Julian Klose.">
+<meta property="og:title" content="Flammerie zum Ochsen – Künzelsau">
+<meta property="og:description" content="Hauchdünne Flammkuchen aus regionalen Zutaten. Tradition seit 1892.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<title>Flammerie zum Ochsen — Flammkuchen in Künzelsau</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Inter+Tight:wght@300;400;500;600&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  --cream:        #F4E8D3;
+  --cream-light:  #FAF3E4;
+  --paper:        #EFE2C8;
+  --wood:         #3A2418;
+  --wood-deep:    #1F1209;
+  --ember:        #C2410C;
+  --ember-glow:   #EA580C;
+  --gold:         #B8862F;
+  --char:         #2A1810;
+  --ink:          #1A0F08;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans:  'Inter Tight', system-ui, sans-serif;
+  --hand:  'Caveat', cursive;
+
+  --radius: 6px;
+  --shadow-soft: 0 8px 40px rgba(26,15,8,0.18);
+  --shadow-deep: 0 16px 60px rgba(26,15,8,0.3);
+  --transition: 250ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ============================================================
+   RESET & BASE
+============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+img { display:block; max-width:100%; height:auto; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; border: none; cursor: pointer; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--ember); border-radius: 2px; }
+
+/* Paper grain overlay – injected via JS canvas (cross-browser safe) */
+
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.1; }
+h1 { font-size: clamp(2.6rem, 6vw, 5.8rem); }
+h2 { font-size: clamp(2rem, 4vw, 3.6rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 1.8rem); }
+em { font-style: italic; color: var(--ember); }
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.75em 1.8em;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.btn--primary {
+  background: var(--wood);
+  color: var(--cream);
+}
+.btn--primary:hover {
+  background: var(--ember);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194,65,12,0.35);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--wood);
+  border: 1.5px solid var(--wood);
+}
+.btn--ghost:hover {
+  background: var(--wood);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+.btn--ember {
+  background: var(--ember);
+  color: var(--cream-light);
+}
+.btn--ember:hover {
+  background: var(--ember-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194,65,12,0.4);
+}
+.btn--dark {
+  background: var(--wood-deep);
+  color: var(--cream);
+}
+.btn--dark:hover {
+  background: var(--wood);
+  transform: translateY(-2px);
+}
+
+/* SVG icon inside buttons */
+.btn svg { width: 1em; height: 1em; flex-shrink: 0; }
+
+/* ============================================================
+   EYEBROW / LABELS
+============================================================ */
+.eyebrow {
+  font-family: var(--hand);
+  font-size: 1.15rem;
+  color: var(--ember);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1.5px;
+  background: var(--ember);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4%;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, padding 0.35s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(244,232,211,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(58,36,24,0.12);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+}
+.nav__brand-logo {
+  height: 52px;
+  width: auto;
+  display: block;
+}
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  list-style: none;
+}
+.nav__links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--wood);
+  letter-spacing: 0.04em;
+  position: relative;
+  transition: color var(--transition);
+}
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--ember);
+  transition: width var(--transition);
+}
+.nav__links a:hover { color: var(--ember); }
+.nav__links a:hover::after { width: 100%; }
+.nav__cta { flex-shrink: 0; }
+
+/* Burger */
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  padding: 4px;
+  cursor: pointer;
+}
+.nav__burger span {
+  display: block;
+  width: 24px; height: 1.5px;
+  background: var(--ink);
+  transition: var(--transition);
+}
+
+/* Mobile nav drawer */
+.nav__drawer {
+  position: fixed;
+  top: 0; right: -100%;
+  width: min(320px, 85vw);
+  height: 100%;
+  background: var(--cream-light);
+  z-index: 999;
+  padding: 5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -10px 0 40px rgba(26,15,8,0.2);
+}
+.nav__drawer.open { right: 0; }
+.nav__drawer a {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--ink);
+  border-bottom: 1px solid rgba(58,36,24,0.12);
+  padding-bottom: 0.8rem;
+}
+.nav__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,15,8,0.4);
+  z-index: 998;
+}
+.nav__overlay.open { display: block; }
+
+@media (max-width: 1023px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 8rem 4% 4rem;
+  gap: 4rem;
+}
+.hero__content { max-width: 580px; }
+.hero__eyebrow { margin-bottom: 1.5rem; }
+.hero__title {
+  margin-bottom: 1.6rem;
+  color: var(--ink);
+}
+.hero__lead {
+  max-width: 460px;
+  font-size: 1.1rem;
+  color: var(--wood);
+  margin-bottom: 2.4rem;
+  line-height: 1.7;
+}
+.hero__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.hero__photo-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--shadow-deep);
+}
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* SVG placeholder (dough/images) */
+.img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  color: var(--wood);
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   TRADITION SECTION
+============================================================ */
+.tradition {
+  padding: 7rem 4%;
+  background: var(--cream-light);
+}
+.tradition__grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.tradition__img-wrap {
+  position: relative;
+}
+.tradition__img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-deep);
+  display: block;
+}
+.tradition__badge {
+  position: absolute;
+  top: -1.2rem;
+  right: -1.2rem;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: var(--ember);
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-12deg);
+  box-shadow: 0 6px 20px rgba(194,65,12,0.4);
+  line-height: 1.15;
+  text-align: center;
+  padding: 0.5rem;
+}
+.tradition__badge-since {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+.tradition__badge-year {
+  font-family: var(--serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.tradition__badge-gen {
+  font-family: var(--hand);
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+.tradition__eyebrow { margin-bottom: 1.2rem; }
+.tradition__title { margin-bottom: 1.8rem; color: var(--ink); }
+.tradition__lede {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--wood);
+  line-height: 1.6;
+  margin-bottom: 1.4rem;
+}
+.tradition__body {
+  font-size: 1.05rem;
+  color: var(--char);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+.tradition__signature {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(58,36,24,0.15);
+}
+.tradition__sig-name {
+  font-family: var(--hand);
+  font-size: 1.8rem;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.tradition__sig-title {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+
+/* ============================================================
+   MENU SECTION
+============================================================ */
+.menu {
+  padding: 7rem 4%;
+  background: var(--wood-deep);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.menu::before,
+.menu::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.menu::before {
+  top: -200px; left: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(194,65,12,0.12) 0%, transparent 60%);
+}
+.menu::after {
+  bottom: -200px; right: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(184,134,47,0.1) 0%, transparent 60%);
+}
+.menu__inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+.menu__header-left .eyebrow { margin-bottom: 1rem; }
+.menu__header-left .eyebrow { color: var(--ember); }
+.menu__header-left .eyebrow::before { background: var(--ember); }
+.menu__title { color: var(--cream); }
+.menu__intro {
+  max-width: 380px;
+  font-size: 1rem;
+  color: rgba(244,232,211,0.65);
+  line-height: 1.7;
+  align-self: flex-end;
+}
+.menu__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.dish {
+  background: rgba(244,232,211,0.04);
+  border: 1px solid rgba(244,232,211,0.08);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.dish:hover {
+  background: rgba(194,65,12,0.08);
+  border-color: rgba(194,65,12,0.3);
+  transform: translateY(-4px);
+}
+.dish__number {
+  font-family: var(--hand);
+  font-size: 1.05rem;
+  color: var(--ember);
+  margin-bottom: 0.6rem;
+}
+.dish__name {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+.dish__ingredients {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(244,232,211,0.5);
+  line-height: 1.5;
+  flex: 1;
+  margin-bottom: 1.4rem;
+}
+.dish__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid rgba(244,232,211,0.08);
+  padding-top: 1rem;
+}
+.dish__price {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  color: var(--gold);
+}
+.dish__tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  border: 1px solid rgba(194,65,12,0.4);
+  border-radius: 999px;
+  padding: 0.2em 0.7em;
+}
+.menu__cta { text-align: center; }
+
+/* ============================================================
+   STORY SECTION
+============================================================ */
+.story {
+  padding: 7rem 4%;
+  background: var(--cream);
+}
+.story__grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.story__eyebrow { margin-bottom: 1.2rem; }
+.story__title { margin-bottom: 1.6rem; color: var(--ink); }
+.story__body {
+  font-size: 1.05rem;
+  color: var(--char);
+  line-height: 1.75;
+  margin-bottom: 1.2rem;
+}
+.story__quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.45rem;
+  color: var(--ink);
+  line-height: 1.5;
+  border-left: 2px solid var(--ember);
+  padding-left: 2rem;
+  margin: 1.8rem 0;
+}
+.story__img-wrap {
+  position: relative;
+}
+.story__img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-deep);
+  display: block;
+}
+.story__img-caption {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  font-family: var(--hand);
+  font-size: 1.1rem;
+  color: var(--cream);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.story__img-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(to bottom, transparent 50%, rgba(31,18,9,0.7) 100%);
+  pointer-events: none;
+}
+
+/* ============================================================
+   CTA BAND
+============================================================ */
+.cta-band {
+  padding: 5rem 4%;
+  background: var(--ember);
+  color: var(--cream);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: -120px;
+  width: 350px; height: 350px;
+  border-radius: 50%;
+  background: rgba(244,232,211,0.07);
+  pointer-events: none;
+}
+.cta-band::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(244,232,211,0.05);
+  pointer-events: none;
+}
+.cta-band__inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+.cta-band__title {
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.cta-band__sub {
+  font-size: 1.1rem;
+  color: rgba(244,232,211,0.82);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   CONTACT SECTION
+============================================================ */
+.contact {
+  padding: 7rem 4%;
+  background: var(--cream-light);
+}
+.contact__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.contact__eyebrow { margin-bottom: 1.2rem; }
+.contact__title { margin-bottom: 2.5rem; color: var(--ink); }
+.contact__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 3rem;
+}
+.contact__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.contact__icon {
+  width: 40px; height: 40px;
+  background: var(--paper);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ember);
+}
+.contact__icon svg { width: 18px; height: 18px; }
+.contact__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ember);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.contact__value {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.contact__value a:hover { color: var(--ember); }
+
+.hours-card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 2px 16px rgba(26,15,8,0.08);
+}
+.hours-card__title {
+  font-family: var(--hand);
+  font-size: 1.5rem;
+  color: var(--ember);
+  margin-bottom: 1.4rem;
+}
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  font-size: 0.95rem;
+  color: var(--char);
+  border-bottom: 1px dashed rgba(58,36,24,0.18);
+}
+.hours-row:last-child { border-bottom: none; }
+.hours-row__day { color: var(--wood); }
+.hours-row__time { font-weight: 600; color: var(--ink); }
+.hours-row--closed .hours-row__time { color: rgba(58,36,24,0.4); font-weight: 400; font-style: italic; }
+.hours-card__note {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(58,36,24,0.15);
+  font-size: 0.82rem;
+  color: var(--char);
+  font-style: italic;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+.map-wrap {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  min-height: 500px;
+}
+.map-wrap iframe {
+  width: 100%;
+  min-height: 500px;
+  border: none;
+  display: block;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer {
+  background: var(--wood-deep);
+  color: var(--cream);
+  padding: 5rem 4% 2rem;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(244,232,211,0.1);
+}
+.footer__brand-name {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--cream);
+  margin-bottom: 0.6rem;
+}
+.footer__brand-tag {
+  font-size: 0.9rem;
+  color: rgba(244,232,211,0.5);
+  line-height: 1.6;
+  max-width: 260px;
+}
+.footer__col-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244,232,211,0.5);
+  margin-bottom: 1.2rem;
+}
+.footer__nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.footer__nav a {
+  font-size: 0.95rem;
+  color: rgba(244,232,211,0.75);
+  transition: color var(--transition);
+}
+.footer__nav a:hover { color: var(--cream); }
+.footer__bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer__copy {
+  font-size: 0.85rem;
+  color: rgba(244,232,211,0.4);
+}
+.footer__legal {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer__legal a {
+  font-size: 0.85rem;
+  color: rgba(244,232,211,0.4);
+  transition: color var(--transition);
+}
+.footer__legal a:hover { color: rgba(244,232,211,0.8); }
+
+/* ============================================================
+   SCROLL ANIMATIONS (initial states)
+============================================================ */
+.anim-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.anim-fade { opacity: 0; }
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+============================================================ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--ember), var(--gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ============================================================
+   PAGE CURTAIN INTRO
+============================================================ */
+#curtain {
+  position: fixed; inset: 0;
+  background: var(--ink);
+  z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+#curtain__brand {
+  display: flex; flex-direction: column; align-items: center; gap: 1.1rem;
+  text-align: center;
+  opacity: 0;
+}
+#curtain__logo {
+  height: clamp(80px, 14vw, 130px);
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+  margin-bottom: 0.5rem;
+}
+#curtain__name {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 300;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+  display: block;
+}
+#curtain__divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  display: block;
+  opacity: 0.6;
+}
+#curtain__sub {
+  font-family: var(--sans);
+  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  display: block;
+}
+
+/* ============================================================
+   HERO TITLE LINE REVEAL
+============================================================ */
+.hero__title-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.07em;
+}
+.hero__title-line-inner {
+  display: block;
+}
+
+/* ============================================================
+   DISH CARD HOVER
+============================================================ */
+.dish {
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  will-change: transform;
+}
+.dish:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 24px 60px rgba(194,65,12,0.18);
+  border-color: var(--ember) !important;
+}
+
+/* ============================================================
+   BUTTON GLOW ON HOVER
+============================================================ */
+@keyframes btnGlow {
+  0%,100% { box-shadow: 0 4px 20px rgba(194,65,12,0.0); }
+  50%      { box-shadow: 0 4px 32px rgba(194,65,12,0.5); }
+}
+.btn--primary:hover {
+  animation: btnGlow 1.4s ease infinite;
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 1023px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 7rem;
+    text-align: center;
+  }
+  .hero__content { max-width: 100%; margin: 0 auto; }
+  .hero__lead { margin-inline: auto; }
+  .hero__eyebrow { justify-content: center; }
+  .hero__buttons { justify-content: center; }
+  .hero__photo-wrap { max-width: 480px; margin: 0 auto; }
+  .tradition__grid { grid-template-columns: 1fr; gap: 3rem; }
+  .tradition__img-wrap { max-width: 400px; margin: 0 auto; }
+  .story__grid { grid-template-columns: 1fr; gap: 3rem; }
+  .story__img-wrap { max-width: 380px; order: -1; margin: 0 auto; }
+  .contact__inner { grid-template-columns: 1fr; gap: 3rem; }
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .menu__grid { grid-template-columns: repeat(2, 1fr); }
+  .menu__header { flex-direction: column; gap: 1.5rem; }
+}
+
+@media (max-width: 639px) {
+  .menu__grid { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr; }
+  .footer__bottom { flex-direction: column; text-align: center; }
+  .tradition__badge { width: 100px; height: 100px; top: -0.8rem; right: -0.8rem; }
+  .tradition__badge-year { font-size: 1.6rem; }
+  .hero { padding-top: 6rem; }
+  h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+  h2 { font-size: clamp(1.8rem, 6vw, 2.4rem); }
+}
+
+/* Focus states */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .anim-up, .anim-fade {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .hero__buttons { opacity: 1 !important; }
+  .hero__photo-wrap, .hero__eyebrow, .hero__title, .hero__lead { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Page curtain intro -->
+<div id="curtain" aria-hidden="true">
+  <div id="curtain__brand">
+    <img id="curtain__logo" src="bilder/Logo.png" alt="Flammerie zum Ochsen" aria-hidden="true">
+    <span id="curtain__name">Flammerie zum Ochsen</span>
+    <span id="curtain__divider"></span>
+    <span id="curtain__sub">Kocherstetten &middot; seit 1892</span>
+  </div>
+</div>
+
+<!-- Scroll progress bar -->
+<div id="progress-bar" aria-hidden="true"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<header class="nav" id="nav" role="banner">
+  <a href="#" class="nav__brand" aria-label="Flammerie zum Ochsen – Startseite">
+    <img src="bilder/Logo.png" alt="Flammerie zum Ochsen" class="nav__brand-logo">
+  </a>
+
+  <nav role="navigation" aria-label="Hauptnavigation">
+    <ul class="nav__links">
+      <li><a href="#tradition">Tradition</a></li>
+      <li><a href="#menu">Speisekarte</a></li>
+      <li><a href="#story">Unsere Geschichte</a></li>
+      <li><a href="#contact">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <a href="#contact" class="btn btn--primary nav__cta">Tisch reservieren</a>
+
+  <button class="nav__burger" aria-label="Menü öffnen" id="burgerBtn" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="nav__overlay" id="navOverlay"></div>
+<nav class="nav__drawer" id="navDrawer" aria-label="Mobile Navigation">
+  <a href="#tradition" class="nav__drawer-link">Tradition</a>
+  <a href="#menu" class="nav__drawer-link">Speisekarte</a>
+  <a href="#story" class="nav__drawer-link">Unsere Geschichte</a>
+  <a href="#contact" class="nav__drawer-link">Kontakt</a>
+  <a href="#contact" class="btn btn--primary" style="margin-top:1rem;justify-content:center;">Tisch reservieren</a>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<main>
+<section class="hero" id="hero" aria-label="Willkommen">
+
+  <!-- Left: Content -->
+  <div class="hero__content">
+    <p class="eyebrow hero__eyebrow">Künzelsau · seit 1892</p>
+    <h1 class="hero__title">
+      <span class="hero__title-line"><span class="hero__title-line-inner">Knusprig.</span></span>
+      <span class="hero__title-line"><span class="hero__title-line-inner">Heimisch.</span></span>
+      <span class="hero__title-line"><span class="hero__title-line-inner"><em>Handgemacht.</em></span></span>
+    </h1>
+    <p class="hero__lead">
+      In einem Haus, das schon unsere Urgroßeltern führten, servieren wir heute, was die Region zu bieten hat – auf hauchdünnem Teig, frisch aus dem Holzofen.
+    </p>
+    <div class="hero__buttons">
+      <a href="#menu" class="btn btn--primary">
+        Speisekarte ansehen
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+      <a href="#contact" class="btn btn--ghost">Tisch reservieren</a>
+    </div>
+  </div>
+
+  <!-- Right: Hero Photo -->
+  <div class="hero__photo-wrap">
+    <img
+      src="bilder/Elsaesser-Flammkuchen.jpg"
+      alt="Klassischer Flammkuchen mit Speck und Zwiebeln, frisch aus dem Holzofen"
+      class="hero__photo"
+    >
+  </div>
+
+</section>
+
+<!-- ============================================================
+     TRADITION
+============================================================ -->
+<section class="tradition" id="tradition" aria-labelledby="tradition-title">
+  <div class="tradition__grid">
+
+    <div class="tradition__img-wrap anim-fade">
+      <img
+        class="tradition__img"
+        src="bilder/Gastst%C3%A4tte%20von%20weiter.webp"
+        alt="Gasthaus Flammerie zum Ochsen in Kocherstetten"
+      >
+      <div class="tradition__badge" aria-hidden="true">
+        <span class="tradition__badge-since">seit</span>
+        <span class="tradition__badge-year">1892</span>
+        <span class="tradition__badge-gen">generationen</span>
+      </div>
+    </div>
+
+    <div class="tradition__text">
+      <p class="eyebrow tradition__eyebrow anim-up">Unsere Wurzeln</p>
+      <h2 class="tradition__title anim-up" id="tradition-title">
+        Ein Haus voller<br><em>Geschichte.</em>
+      </h2>
+      <p class="tradition__lede anim-up">
+        Bis in die 60er-Jahre war es ein beliebtes Gasthaus – ein Ort, an dem sich die Menschen aus der Region getroffen, gemeinsam gegessen, gelacht und gefeiert haben.
+      </p>
+      <p class="tradition__body anim-up">
+        Heute servieren wir statt Braten und Knödeln leckere Flammkuchen. Dabei setzen wir auf regionale Zutaten und Qualität, die man schmeckt.
+      </p>
+      <p class="tradition__body anim-up">
+        Dieselbe Gemütlichkeit. Dieselben Holzdielen. Ein neues Lieblingsgericht.
+      </p>
+      <div class="tradition__signature anim-up">
+        <div class="tradition__sig-name">Julian Klose</div>
+        <div class="tradition__sig-title">Inhaber</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SPEISEKARTE
+============================================================ -->
+<section class="menu" id="menu" aria-labelledby="menu-title">
+  <div class="menu__inner">
+    <div class="menu__header">
+      <div class="menu__header-left">
+        <p class="eyebrow anim-up">Unsere Spezialitäten</p>
+        <h2 class="menu__title anim-up" id="menu-title">
+          Sechzehn Varianten.<br>Ein <em>Holzofen.</em>
+        </h2>
+      </div>
+      <p class="menu__intro anim-fade">
+        Jeder Flammkuchen wird auf hauchdünnem Teig frisch für Sie zubereitet – mit Zutaten aus der Region und viel Leidenschaft.
+      </p>
+    </div>
+
+    <div class="menu__grid">
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 01</div>
+        <h3 class="dish__name">Traditionnelle</h3>
+        <p class="dish__ingredients">Crème fraîche · Hohenloher Speck · Zwiebelringe</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 12,50</span>
+          <span class="dish__tag">Klassiker</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 02</div>
+        <h3 class="dish__name">Forestier</h3>
+        <p class="dish__ingredients">Waldpilze · Thymian · gerösteter Knoblauch · Bergkäse</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 14,80</span>
+          <span class="dish__tag">Saison</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 03</div>
+        <h3 class="dish__name">Ziege &amp; Honig</h3>
+        <p class="dish__ingredients">Ziegenkäse · Walnüsse · Waldhonig · Rosmarin</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 14,20</span>
+          <span class="dish__tag">Beliebt</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 04</div>
+        <h3 class="dish__name">Birne &amp; Gorgonzola</h3>
+        <p class="dish__ingredients">Reife Birne · Gorgonzola · Rucola · Pinienkerne</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 14,50</span>
+          <span class="dish__tag">Süss-Pikant</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 05</div>
+        <h3 class="dish__name">Végétarienne</h3>
+        <p class="dish__ingredients">Saisongemüse · Kräuter-Crème · Schafskäse · Olivenöl</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 13,80</span>
+          <span class="dish__tag">Vegetarisch</span>
+        </div>
+      </article>
+
+      <article class="dish anim-up">
+        <div class="dish__number">№ 06</div>
+        <h3 class="dish__name">Apfel &amp; Zimt</h3>
+        <p class="dish__ingredients">Bratapfel · Zimt-Crème · Calvados · Vanilleeis</p>
+        <div class="dish__footer">
+          <span class="dish__price">€ 11,90</span>
+          <span class="dish__tag">Dessert</span>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="menu__cta anim-fade">
+      <a href="#contact" class="btn btn--ember">
+        Vollständige Speisekarte
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STORY
+============================================================ -->
+<section class="story" id="story" aria-labelledby="story-title">
+  <div class="story__grid">
+
+    <div class="story__text">
+      <p class="eyebrow story__eyebrow anim-up">Der Inhaber</p>
+      <h2 class="story__title anim-up" id="story-title">
+        Vom Kindheitstraum zum<br><em>eigenen Haus.</em>
+      </h2>
+      <p class="story__body anim-up">
+        Schon als Kind habe ich davon geträumt, das alte Gasthaus eines Tages wiederzueröffnen und ihm neues Leben einzuhauchen.
+      </p>
+      <blockquote class="story__quote anim-fade">
+        „Jetzt, viele Jahre später, geht dieser Traum in Erfüllung."
+      </blockquote>
+      <p class="story__body anim-up">
+        Mit der Flammerie möchte ich an das anknüpfen, was meine Urgroßeltern damals begonnen haben: einen Ort zu schaffen, an dem man sich trifft, lacht, genießt – und sich einfach wohlfühlt.
+      </p>
+    </div>
+
+    <div class="story__img-wrap anim-fade">
+      <img
+        class="story__img"
+        src="bilder/JulianKlose.jpg"
+        alt="Julian Klose, Inhaber der Flammerie zum Ochsen"
+        style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"
+      >
+      <div class="story__img-overlay" aria-hidden="true"></div>
+      <span class="story__img-caption">Julian, Inhaber</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA BAND
+============================================================ -->
+<section class="cta-band" id="reservierung" aria-labelledby="cta-title">
+  <div class="cta-band__inner">
+    <h2 class="cta-band__title anim-up" id="cta-title">
+      Lust auf <em style="color:var(--cream-light);">einen Abend</em> bei uns?
+    </h2>
+    <p class="cta-band__sub anim-up">
+      Reservieren Sie Ihren Tisch – direkt, unkompliziert, telefonisch oder per Mail.
+    </p>
+    <a href="tel:+4917520549000" class="btn btn--dark anim-fade">
+      <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="width:1.1em;height:1.1em;"><path d="M2 3a1 1 0 011-1h3.293a1 1 0 01.894.553l1.5 3A1 1 0 0110 7h-.5c0 1.5.5 3 2 4.5s3 2 4.5 2v-.5a1 1 0 01.447-.894l3-1.5A1 1 0 0120.5 11H21a1 1 0 011 1V15a1 1 0 01-1 1C10 16 4 10 4 2a1 1 0 011-1h2z" opacity=".8"/></svg>
+      +49 175 2054900
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     KONTAKT
+============================================================ -->
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact__inner">
+
+    <div>
+      <p class="eyebrow contact__eyebrow anim-up">Besuchen Sie uns</p>
+      <h2 class="contact__title anim-up" id="contact-title">
+        So <em>findet</em> ihr uns.
+      </h2>
+
+      <ul class="contact__list">
+        <li class="contact__item anim-up">
+          <div class="contact__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-6.75-7-12a7 7 0 1114 0c0 5.25-7 12-7 12z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact__label">Adresse</span>
+            <span class="contact__value">Haller Straße 45, 74653 Künzelsau</span>
+          </div>
+        </li>
+        <li class="contact__item anim-up">
+          <div class="contact__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 012.09 4.18 2 2 0 014.07 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11l-1.27 1.27a16 16 0 006.76 6.76l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact__label">Telefon</span>
+            <span class="contact__value"><a href="tel:+4917520549000">+49 175 2054900</a></span>
+          </div>
+        </li>
+        <li class="contact__item anim-up">
+          <div class="contact__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div>
+            <span class="contact__label">E-Mail</span>
+            <span class="contact__value"><a href="mailto:info@flammerie-zum-ochsen.de">info@flammerie-zum-ochsen.de</a></span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="hours-card anim-fade">
+        <h3 class="hours-card__title">Öffnungszeiten</h3>
+        <div class="hours-row">
+          <span class="hours-row__day">Donnerstag</span>
+          <span class="hours-row__time">17:30 – 22:30 Uhr</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-row__day">Sonntag</span>
+          <span class="hours-row__time">11:30 – 14:00 &amp; 17:30 – 22:30 Uhr</span>
+        </div>
+        <div class="hours-row hours-row--closed">
+          <span class="hours-row__day">Mo – Mi &amp; Fr – Sa</span>
+          <span class="hours-row__time">Ruhetag</span>
+        </div>
+        <p class="hours-card__note">Für Gruppen ab 20 Personen öffnen wir gerne auch außerhalb der regulären Zeiten.</p>
+      </div>
+    </div>
+
+    <div class="map-wrap anim-fade">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2643.870028731951!2d9.68392831578594!3d49.28175897933059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47981b4f6e1e3e7f%3A0x6e0b7e3e6a6f4f0!2sHaller%20Str.%2045%2C%2074653%20K%C3%BCnzelsau!5e0!3m2!1sde!2sde!4v1698240000000!5m2!1sde!2sde"
+        title="Standort Flammerie zum Ochsen, Haller Straße 45, Künzelsau"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer__grid">
+    <div>
+      <div class="footer__brand-name">Flammerie zum Ochsen</div>
+      <p class="footer__brand-tag">Hauchdünne Flammkuchen aus regionalen Zutaten – seit 1892 in Kocherstetten.</p>
+    </div>
+    <div>
+      <div class="footer__col-title">Menü</div>
+      <ul class="footer__nav">
+        <li><a href="#tradition">Tradition</a></li>
+        <li><a href="#menu">Speisekarte</a></li>
+        <li><a href="#story">Unsere Geschichte</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer__col-title">Service</div>
+      <ul class="footer__nav">
+        <li><a href="#contact">Reservierung</a></li>
+        <li><a href="#contact">Gutscheine</a></li>
+        <li><a href="#contact">Catering</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer__col-title">Folgen</div>
+      <ul class="footer__nav">
+        <li><a href="https://www.instagram.com/flammerie_zum_ochsen/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">© 2026 Flammerie zum Ochsen · Künzelsau</span>
+    <div class="footer__legal">
+      <a href="#">Impressum</a>
+      <a href="#">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   GSAP + ScrollTrigger Registration
+============================================================ */
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============================================================
+   GRAIN OVERLAY (canvas-based, cross-browser)
+============================================================ */
+(function initGrain() {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(size, size);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const v = Math.floor(Math.random() * 255);
+    img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v;
+    img.data[i+3] = 28; /* alpha ~11% */
+  }
+  ctx.putImageData(img, 0, 0);
+  const grain = document.createElement('div');
+  grain.setAttribute('aria-hidden', 'true');
+  grain.style.cssText = [
+    'position:fixed', 'inset:0', 'pointer-events:none', 'z-index:10',
+    'mix-blend-mode:overlay', 'opacity:0.55',
+    'background:url(' + canvas.toDataURL() + ')',
+    'background-size:256px 256px'
+  ].join(';');
+  document.body.appendChild(grain);
+})();
+
+/* ============================================================
+   NAV: Scroll behavior + hide/show
+============================================================ */
+(function initNav() {
+  const nav      = document.getElementById('nav');
+  const burger   = document.getElementById('burgerBtn');
+  const drawer   = document.getElementById('navDrawer');
+  const overlay  = document.getElementById('navOverlay');
+  let lastY = 0;
+  let ticking = false;
+
+  function onScroll() {
+    const y = window.scrollY;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        // Scrolled class
+        nav.classList.toggle('scrolled', y > 50);
+        // Hide/show on direction
+        if (y > 120) {
+          nav.style.transform = y > lastY ? 'translateY(-110%)' : 'translateY(0)';
+        } else {
+          nav.style.transform = 'translateY(0)';
+        }
+        lastY = y;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Nav transition
+  nav.style.transition = 'background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease, padding 0.35s ease, transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+
+  // Burger toggle
+  function openDrawer() {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  burger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  overlay.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+})();
+
+/* ============================================================
+   SCROLL REVEAL ANIMATIONS
+============================================================ */
+(function initScrollReveal() {
+  const mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.utils.toArray('.anim-up').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    gsap.utils.toArray('.anim-fade').forEach(el => {
+      gsap.to(el, {
+        opacity: 1,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+============================================================ */
+(function initProgressBar() {
+  gsap.to('#progress-bar', {
+    scaleX: 1, ease: 'none',
+    scrollTrigger: { start: 'top top', end: 'max', scrub: 0 }
+  });
+})();
+
+/* ============================================================
+   HERO ENTRANCE — CINEMATIC CURTAIN REVEAL
+============================================================ */
+(function initHeroEntrance() {
+  const mm = gsap.matchMedia();
+
+  // Full animation for users who have no preference
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    // Initial states
+    gsap.set(['.hero__eyebrow', '.hero__lead', '.hero__buttons'], { opacity: 0, y: 32 });
+    gsap.set('.hero__title-line-inner', { y: '112%' });
+    gsap.set('.hero__photo-wrap', { opacity: 0, scale: 0.94, transformOrigin: 'right center' });
+
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    // 1 — Brand fades in inside curtain
+    tl.to('#curtain__brand', { opacity: 1, duration: 0.75, ease: 'power2.out' }, 0.25)
+    // 2 — Brand moment pause
+      .to({}, { duration: 0.75 })
+    // 3 — Curtain wipes upward
+      .to('#curtain', { yPercent: -100, duration: 1.05, ease: 'expo.inOut' })
+    // 4 — Hero photo scales in as curtain lifts
+      .to('.hero__photo-wrap', { opacity: 1, scale: 1, duration: 1.15, ease: 'power2.out' }, '-=0.6')
+    // 5 — Eyebrow fades in
+      .to('.hero__eyebrow', { opacity: 1, y: 0, duration: 0.55 }, '-=0.8')
+    // 6 — Title lines slide up one by one
+      .to('.hero__title-line-inner', { y: '0%', duration: 0.9, stagger: 0.13, ease: 'power3.out' }, '-=0.5')
+    // 7 — Lead text
+      .to('.hero__lead', { opacity: 1, y: 0, duration: 0.65 }, '-=0.45')
+    // 8 — Buttons
+      .to('.hero__buttons', { opacity: 1, y: 0, duration: 0.55 }, '-=0.45')
+    // 9 — Remove curtain from layout
+      .set('#curtain', { display: 'none' });
+  });
+
+  // Reduced motion: instantly hide curtain, show everything
+  mm.add('(prefers-reduced-motion: reduce)', () => {
+    gsap.set('#curtain', { display: 'none' });
+  });
+})();
+
+/* ============================================================
+   IMAGE CLIP-PATH REVEAL (Tradition & Story)
+============================================================ */
+(function initImageReveals() {
+  const mm = gsap.matchMedia();
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    ['.tradition__img-wrap', '.story__img-wrap'].forEach(sel => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      gsap.set(el, { opacity: 1, clipPath: 'inset(0 100% 0 0 round 12px)' });
+      gsap.to(el, {
+        clipPath: 'inset(0 0% 0 0 round 12px)',
+        duration: 1.3,
+        ease: 'power3.inOut',
+        scrollTrigger: { trigger: el, start: 'top 78%', toggleActions: 'play none none none' }
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   HERO PHOTO PARALLAX ON SCROLL
+============================================================ */
+(function initParallax() {
+  const mm = gsap.matchMedia();
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    ScrollTrigger.create({
+      trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5,
+      onUpdate(self) {
+        gsap.set('.hero__photo-wrap', { y: self.progress * 70 });
+      }
+    });
+  });
+})();
+
+/* ============================================================
+   DISH CARD 3D HOVER TILT
+============================================================ */
+(function initCardTilt() {
+  const mm = gsap.matchMedia();
+  mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+    document.querySelectorAll('.dish').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
+        const y = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
+        gsap.to(card, { rotateX: -y * 7, rotateY: x * 7, transformPerspective: 700, duration: 0.25, ease: 'power2.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.55, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
