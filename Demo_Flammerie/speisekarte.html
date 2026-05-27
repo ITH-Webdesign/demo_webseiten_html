@@ -382,20 +382,85 @@ em { font-style: italic; color: var(--ember); }
   background: rgba(244,232,211,0.04);
   border: 1px solid rgba(244,232,211,0.08);
   border-radius: var(--radius);
-  padding: 1.8rem;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
-              box-shadow 0.35s ease,
-              border-color 0.35s ease,
-              background 0.25s ease;
-  will-change: transform;
+  min-height: 220px;
+  position: relative;
+  perspective: 1000px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  cursor: pointer;
 }
 .dish:hover {
-  transform: translateY(-6px) scale(1.015);
-  box-shadow: 0 24px 60px rgba(194,65,12,0.18);
-  border-color: var(--ember) !important;
-  background: rgba(194,65,12,0.08);
+  border-color: rgba(194,65,12,0.5);
+  box-shadow: 0 20px 60px rgba(194,65,12,0.2);
+}
+.dish__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius);
+}
+.dish:hover .dish__inner,
+.dish__inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.dish__front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.8rem;
+  border-radius: var(--radius);
+}
+.dish__back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.dish__back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dish__back-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26,15,8,0.96) 0%,
+    rgba(26,15,8,0.55) 50%,
+    rgba(26,15,8,0.12) 100%
+  );
+}
+.dish__back-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.4rem 1.8rem;
+}
+.dish__back-number {
+  font-family: var(--hand);
+  color: var(--ember);
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+.dish__back-name {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.dish__back-price {
+  font-family: var(--serif);
+  color: var(--gold);
+  font-size: 1.1rem;
 }
 .dish__number {
   font-family: var(--hand);
@@ -829,122 +894,278 @@ a:focus-visible, button:focus-visible {
     <div class="dishes-grid" role="list">
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 01</div>
-        <h3 class="dish__name">Elsässer original</h3>
-        <p class="dish__ingredients">Zwiebeln · Speck</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 9,80</span>
-          <span class="dish__tag">Klassiker</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 01</div>
+            <h3 class="dish__name">Elsässer original</h3>
+            <p class="dish__ingredients">Zwiebeln · Speck</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 9,80</span>
+              <span class="dish__tag">Klassiker</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Elsässer original" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 01</div>
+              <div class="dish__back-name">Elsässer original</div>
+              <div class="dish__back-price">€ 9,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 02</div>
-        <h3 class="dish__name">Elsässer überbacken</h3>
-        <p class="dish__ingredients">Zwiebeln · Speck · Emmentaler</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 10,80</span>
-          <span class="dish__tag">Klassiker</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 02</div>
+            <h3 class="dish__name">Elsässer überbacken</h3>
+            <p class="dish__ingredients">Zwiebeln · Speck · Emmentaler</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 10,80</span>
+              <span class="dish__tag">Klassiker</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Elsässer überbacken" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 02</div>
+              <div class="dish__back-name">Elsässer überbacken</div>
+              <div class="dish__back-price">€ 10,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 03</div>
-        <h3 class="dish__name">Gemüsegarten</h3>
-        <p class="dish__ingredients">Kartoffeln · Zucchini · Tomaten · Feta</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 12,80</span>
-          <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 03</div>
+            <h3 class="dish__name">Gemüsegarten</h3>
+            <p class="dish__ingredients">Kartoffeln · Zucchini · Tomaten · Feta</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 12,80</span>
+              <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Gemüsegarten" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 03</div>
+              <div class="dish__back-name">Gemüsegarten</div>
+              <div class="dish__back-price">€ 12,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 04</div>
-        <h3 class="dish__name">Caprese</h3>
-        <p class="dish__ingredients">Tomaten · Mozzarella · Pesto</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 12,80</span>
-          <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 04</div>
+            <h3 class="dish__name">Caprese</h3>
+            <p class="dish__ingredients">Tomaten · Mozzarella · Pesto</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 12,80</span>
+              <span class="dish__tag dish__tag--veg">Vegetarisch</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Caprese" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 04</div>
+              <div class="dish__back-name">Caprese</div>
+              <div class="dish__back-price">€ 12,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 05</div>
-        <h3 class="dish__name">Kebapstyle</h3>
-        <p class="dish__ingredients">Dönerfleisch · Zwiebeln · Salat · Gurken · Knoblauchsauce</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Beliebt</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 05</div>
+            <h3 class="dish__name">Kebapstyle</h3>
+            <p class="dish__ingredients">Dönerfleisch · Zwiebeln · Salat · Gurken · Knoblauchsauce</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Beliebt</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Kebapstyle" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 05</div>
+              <div class="dish__back-name">Kebapstyle</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 06</div>
-        <h3 class="dish__name">Burgerstyle</h3>
-        <p class="dish__ingredients">Hackfleisch · Gewürzgurken · Röstzwiebeln · Tomaten · Emmentaler · Burgersauce</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Beliebt</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 06</div>
+            <h3 class="dish__name">Burgerstyle</h3>
+            <p class="dish__ingredients">Hackfleisch · Gewürzgurken · Röstzwiebeln · Tomaten · Emmentaler · Burgersauce</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Beliebt</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Burgerstyle" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 06</div>
+              <div class="dish__back-name">Burgerstyle</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 07</div>
-        <h3 class="dish__name">Französisch</h3>
-        <p class="dish__ingredients">Gorgonzola · Birne · Walnüsse · Honig</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Süss-Pikant</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 07</div>
+            <h3 class="dish__name">Französisch</h3>
+            <p class="dish__ingredients">Gorgonzola · Birne · Walnüsse · Honig</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Süss-Pikant</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Französisch" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 07</div>
+              <div class="dish__back-name">Französisch</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 08</div>
-        <h3 class="dish__name">Mexikanisch</h3>
-        <p class="dish__ingredients">Hackfleisch · Mais · Kidneybohnen · Nachos · Emmentaler · Salsasauce</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Scharf</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 08</div>
+            <h3 class="dish__name">Mexikanisch</h3>
+            <p class="dish__ingredients">Hackfleisch · Mais · Kidneybohnen · Nachos · Emmentaler · Salsasauce</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Scharf</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Mexikanisch" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 08</div>
+              <div class="dish__back-name">Mexikanisch</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 09</div>
-        <h3 class="dish__name">Nordwind</h3>
-        <p class="dish__ingredients">Lachs · Kartoffeln · Spinat</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Saison</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 09</div>
+            <h3 class="dish__name">Nordwind</h3>
+            <p class="dish__ingredients">Lachs · Kartoffeln · Spinat</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Saison</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Nordwind" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 09</div>
+              <div class="dish__back-name">Nordwind</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 10</div>
-        <h3 class="dish__name">Schwäbisch</h3>
-        <p class="dish__ingredients">Maultaschen · Emmentaler · Röstzwiebeln · Bratensauce</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 13,80</span>
-          <span class="dish__tag">Regional</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 10</div>
+            <h3 class="dish__name">Schwäbisch</h3>
+            <p class="dish__ingredients">Maultaschen · Emmentaler · Röstzwiebeln · Bratensauce</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 13,80</span>
+              <span class="dish__tag">Regional</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Schwäbisch" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 10</div>
+              <div class="dish__back-name">Schwäbisch</div>
+              <div class="dish__back-price">€ 13,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 11</div>
-        <h3 class="dish__name">Hawaii</h3>
-        <p class="dish__ingredients">Tomatensauce · Schinken · Ananas · Mozzarella</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 12,80</span>
-          <span class="dish__tag">Klassiker</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 11</div>
+            <h3 class="dish__name">Hawaii</h3>
+            <p class="dish__ingredients">Tomatensauce · Schinken · Ananas · Mozzarella</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 12,80</span>
+              <span class="dish__tag">Klassiker</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Hawaii" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 11</div>
+              <div class="dish__back-name">Hawaii</div>
+              <div class="dish__back-price">€ 12,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 12</div>
-        <h3 class="dish__name">Italienisch</h3>
-        <p class="dish__ingredients">Tomatensauce · Schinken · Champignons · Mozzarella</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 12,80</span>
-          <span class="dish__tag">Klassiker</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 12</div>
+            <h3 class="dish__name">Italienisch</h3>
+            <p class="dish__ingredients">Tomatensauce · Schinken · Champignons · Mozzarella</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 12,80</span>
+              <span class="dish__tag">Klassiker</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Italienisch" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 12</div>
+              <div class="dish__back-name">Italienisch</div>
+              <div class="dish__back-price">€ 12,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
@@ -966,32 +1187,71 @@ a:focus-visible, button:focus-visible {
     <div class="dishes-grid dishes-grid--3" role="list">
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 13</div>
-        <h3 class="dish__name">Bratapfel</h3>
-        <p class="dish__ingredients">Apfel · Zimt &amp; Zucker</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 9,80</span>
-          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 13</div>
+            <h3 class="dish__name">Bratapfel</h3>
+            <p class="dish__ingredients">Apfel · Zimt &amp; Zucker</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 9,80</span>
+              <span class="dish__tag dish__tag--sweet">Dessert</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Bratapfel" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 13</div>
+              <div class="dish__back-name">Bratapfel</div>
+              <div class="dish__back-price">€ 9,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 14</div>
-        <h3 class="dish__name">Schoko-Banane</h3>
-        <p class="dish__ingredients">Banane · Nutella</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 10,80</span>
-          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 14</div>
+            <h3 class="dish__name">Schoko-Banane</h3>
+            <p class="dish__ingredients">Banane · Nutella</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 10,80</span>
+              <span class="dish__tag dish__tag--sweet">Dessert</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Schoko-Banane" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 14</div>
+              <div class="dish__back-name">Schoko-Banane</div>
+              <div class="dish__back-price">€ 10,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
       <article class="dish anim-up" role="listitem">
-        <div class="dish__number">№ 15</div>
-        <h3 class="dish__name">Himbeertraum</h3>
-        <p class="dish__ingredients">Himbeere · weiße Schokolade</p>
-        <div class="dish__footer">
-          <span class="dish__price">€ 10,80</span>
-          <span class="dish__tag dish__tag--sweet">Dessert</span>
+        <div class="dish__inner">
+          <div class="dish__front">
+            <div class="dish__number">№ 15</div>
+            <h3 class="dish__name">Himbeertraum</h3>
+            <p class="dish__ingredients">Himbeere · weiße Schokolade</p>
+            <div class="dish__footer">
+              <span class="dish__price">€ 10,80</span>
+              <span class="dish__tag dish__tag--sweet">Dessert</span>
+            </div>
+          </div>
+          <div class="dish__back">
+            <img src="bilder/Elsaesser-Flammkuchen.jpg" alt="Himbeertraum" class="dish__back-img" loading="lazy">
+            <div class="dish__back-overlay"></div>
+            <div class="dish__back-content">
+              <div class="dish__back-number">№ 15</div>
+              <div class="dish__back-name">Himbeertraum</div>
+              <div class="dish__back-price">€ 10,80</div>
+            </div>
+          </div>
         </div>
       </article>
 
@@ -1222,17 +1482,11 @@ gsap.to('#progress-bar', {
    DISH CARD 3D HOVER TILT
 ============================================================ */
 (function initCardTilt() {
-  const mm = gsap.matchMedia();
-  mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+  // Touch devices: tap to flip (CSS :hover handles desktop)
+  gsap.matchMedia().add('(hover: none)', () => {
     document.querySelectorAll('.dish').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
-        const y = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
-        gsap.to(card, { rotateX: -y * 7, rotateY: x * 7, transformPerspective: 700, duration: 0.25, ease: 'power2.out' });
-      });
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.55, ease: 'elastic.out(1, 0.5)' });
+      card.addEventListener('click', () => {
+        card.querySelector('.dish__inner')?.classList.toggle('is-flipped');
       });
     });
   });
