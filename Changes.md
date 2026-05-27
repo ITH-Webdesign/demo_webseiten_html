@@ -2,6 +2,21 @@
 
 ---
 
+## 27.05.2026 (Update 2) — Autor: Yannick
+
+### Demo_Flammerie — `index.html` + `speisekarte.html` (Änderungen)
+
+**3D Card-Flip-Animation für Speisenkarten**
+- Alle `.dish`-Karten in `index.html` (6 Gerichte) und `speisekarte.html` (15 Gerichte) auf eine 3D-Flip-Interaktion umgebaut
+- Desktop: Karte dreht sich beim Hover automatisch um (CSS `:hover`, kein JavaScript erforderlich)
+- Touch/Mobile: Antippen der Karte flippt sie hin und her (JS `.is-flipped`-Toggle)
+- Rückseite zeigt das Gericht-Bild im vollen Kartenformat mit Gradient-Overlay sowie Name, Nummer und Preis
+- Vorherige GSAP-Tilt-Animation (`initCardTilt`) entfernt und durch Touch-kompatible Flip-Logik ersetzt
+- Flip-Dauer: 0,7 s mit `cubic-bezier(0.4, 0, 0.2, 1)` für natürliche Rotation
+- HTML-Struktur pro Karte: `.dish > .dish__inner > .dish__front` + `.dish__back`
+
+---
+
 ## 27.05.2026 — Autor: Yannick
 
 ### Demo_Flammerie — `speisekarte.html` (neu)
