@@ -20,7 +20,7 @@
   --sh:0 4px 20px rgba(0,0,0,.14);--sh-lg:0 10px 40px rgba(0,0,0,.22);
   --r:4px;--r-lg:10px;--ease:.3s ease;
 }
-html{scroll-behavior:smooth;font-size:16px}
+html{scroll-behavior:smooth;font-size:16px;overflow-x:hidden}
 body{font-family:'Open Sans',sans-serif;color:var(--g700);background:var(--white);overflow-x:hidden;line-height:1.6}
 img{max-width:100%;height:auto;display:block}
 a{text-decoration:none;color:inherit}
@@ -204,30 +204,78 @@ footer{background:var(--dark);color:rgba(255,255,255,.65);padding:3.5rem 0 2rem}
   .about-grid{gap:2.5rem}
 }
 @media(max-width:768px){
+  /* Nav */
   .nav-links{display:none}
   .nav-toggle{display:flex}
-  .about-grid{grid-template-columns:1fr}
+  /* Hero */
+  .hero-btns{flex-direction:column;align-items:stretch;gap:.75rem}
+  .hero-btns .btn{width:100%;justify-content:center}
+  /* About – switch to block so str-items fill full width without grid quirks */
+  .about-grid{display:block}
   .about-img-wrap{display:none}
+  .strengths{margin-top:1.8rem}
+  .str-item{width:100%;box-sizing:border-box}
+  /* Services */
   .sv-grid{grid-template-columns:1fr}
+  .sv-card{padding:1.5rem}
+  /* Projects */
   .pr-grid{grid-template-columns:1fr}
-  .pr-card{height:300px}
+  .pr-card{height:280px}
+  /* Stats */
   .st-grid{grid-template-columns:1fr 1fr;gap:0}
-  .st-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
+  .st-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.07);padding:1.6rem 1rem}
   .st-item:nth-child(2n-1){border-right:1px solid rgba(255,255,255,.07)}
+  /* Testimonials */
   .tm-grid{grid-template-columns:1fr}
+  .tm-card{padding:1.5rem}
+  /* Contact */
   .ct-grid{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
+  .ct-info{padding:1.8rem}
+  /* Footer */
   .ft-grid{grid-template-columns:1fr 1fr;gap:2rem}
   .ft-bot{flex-direction:column;text-align:center}
   .ft-bot-lnk{flex-wrap:wrap;justify-content:center}
-  .hero-btns{flex-direction:column}
-  .hero-btns .btn{width:fit-content}
+  /* Shared */
+  .section-hd{margin-bottom:2.5rem}
+  .section-sub{max-width:100%}
 }
 @media(max-width:480px){
+  /* Global */
+  .section{padding:3rem 0}
+  .container{padding:0 1.1rem}
+  /* Nav */
+  .nav-logo{font-size:1.1rem}
+  /* Hero */
+  .hero-title{font-size:2.2rem;letter-spacing:-.01em}
+  .hero-sub{font-size:.93rem}
+  .hero-badge{font-size:.68rem;padding:.3rem .8rem}
+  /* Section headings */
+  .section-title{font-size:1.75rem}
+  .section-hd{margin-bottom:2rem}
+  /* About */
+  .about-text p{font-size:.95rem}
+  .str-item{padding:.95rem}
+  .str-ic{width:40px;height:40px}
+  .str-ic svg{width:18px;height:18px}
+  /* Services */
+  .sv-card{padding:1.3rem}
+  .sv-ic{width:48px;height:48px}
+  /* Projects */
+  .pr-card{height:240px}
+  .pr-card h3{font-size:1.15rem}
+  /* Stats */
   .st-grid{grid-template-columns:1fr}
   .st-item:nth-child(2n-1){border-right:none}
-  .ft-grid{grid-template-columns:1fr}
-  .section{padding:3.5rem 0}
+  .st-item{border-bottom:1px solid rgba(255,255,255,.07)}
+  /* Testimonials */
+  .tm-card{padding:1.3rem}
+  /* Contact */
+  .ct-info{padding:1.4rem}
+  .ct-grid .btn{width:100%;justify-content:center}
+  /* Footer */
+  .ft-grid{grid-template-columns:1fr;gap:1.8rem}
+  .ft-bot-lnk{gap:.8rem 1.2rem}
 }
 </style>
 </head>
@@ -655,30 +703,30 @@ window.addEventListener('load', () => {
 
   // About
   gsap.from('#aboutImg', {
-    scrollTrigger:{trigger:'.about-grid', start:'top 82%'},
-    x:-55, opacity:0, duration:1, ease:'power3.out'
+    scrollTrigger:{trigger:'.about-grid', start:'top 88%', once:true},
+    y:30, duration:.9, ease:'power3.out'
   });
   gsap.from('#aboutTxt > *', {
-    scrollTrigger:{trigger:'#aboutTxt', start:'top 82%'},
-    y:38, opacity:0, duration:.8, stagger:.13, ease:'power3.out'
+    scrollTrigger:{trigger:'#aboutTxt', start:'top 88%', once:true},
+    y:30, duration:.75, stagger:.11, ease:'power3.out'
   });
   gsap.from('.str-item', {
-    scrollTrigger:{trigger:'.strengths', start:'top 87%'},
-    x:35, opacity:0, duration:.7, stagger:.14, ease:'power3.out'
+    scrollTrigger:{trigger:'.strengths', start:'top 90%', once:true},
+    y:20, duration:.6, stagger:.11, ease:'power3.out'
   });
 
   // Services stagger
   gsap.from('.sv-card', {
-    scrollTrigger:{trigger:'.sv-grid', start:'top 80%'},
-    y:70, opacity:0, duration:.75,
-    stagger:{amount:.65, grid:[2,3], from:'start'},
+    scrollTrigger:{trigger:'.sv-grid', start:'top 90%', once:true},
+    y:40, duration:.65,
+    stagger:{amount:.45, from:'start'},
     ease:'power3.out'
   });
 
   // Projects
   gsap.from('.pr-card', {
-    scrollTrigger:{trigger:'.pr-grid', start:'top 80%'},
-    y:55, opacity:0, duration:.8, stagger:.18, ease:'power3.out'
+    scrollTrigger:{trigger:'.pr-grid', start:'top 90%', once:true},
+    y:40, duration:.7, stagger:.15, ease:'power3.out'
   });
   document.querySelectorAll('.pr-img').forEach(img => {
     gsap.to(img, {
@@ -692,8 +740,8 @@ window.addEventListener('load', () => {
 
   // Stats
   gsap.from('.st-item', {
-    scrollTrigger:{trigger:'.st-grid', start:'top 82%'},
-    y:45, opacity:0, duration:.7, stagger:.14, ease:'power3.out'
+    scrollTrigger:{trigger:'.st-grid', start:'top 90%', once:true},
+    y:35, duration:.6, stagger:.12, ease:'power3.out'
   });
 
   // Counters
@@ -717,19 +765,22 @@ window.addEventListener('load', () => {
 
   // Testimonials
   gsap.from('.tm-card', {
-    scrollTrigger:{trigger:'.tm-grid', start:'top 80%'},
-    y:55, opacity:0, duration:.75, stagger:.18, ease:'power3.out'
+    scrollTrigger:{trigger:'.tm-grid', start:'top 90%', once:true},
+    y:40, duration:.65, stagger:.15, ease:'power3.out'
   });
 
   // Contact
   gsap.from('.ct-info', {
-    scrollTrigger:{trigger:'.ct-grid', start:'top 80%'},
-    x:-45, opacity:0, duration:.9, ease:'power3.out'
+    scrollTrigger:{trigger:'.ct-grid', start:'top 90%', once:true},
+    y:30, duration:.8, ease:'power3.out'
   });
   gsap.from('.ct-grid > div:last-child', {
-    scrollTrigger:{trigger:'.ct-grid', start:'top 80%'},
-    x:45, opacity:0, duration:.9, ease:'power3.out'
+    scrollTrigger:{trigger:'.ct-grid', start:'top 90%', once:true},
+    y:30, duration:.8, ease:'power3.out'
   });
+
+  // Fallback: refresh ScrollTrigger after render to fix mobile viewport issues
+  setTimeout(() => ScrollTrigger.refresh(), 400);
 });
 
 // Contact form validation

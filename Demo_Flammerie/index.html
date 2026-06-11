@@ -538,7 +538,11 @@ em { font-style: italic; color: var(--ember); }
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius);
 }
-.dish:hover .dish__inner,
+@media (hover: hover) {
+  .dish:hover .dish__inner {
+    transform: rotateY(180deg);
+  }
+}
 .dish__inner.is-flipped {
   transform: rotateY(180deg);
 }
@@ -1993,11 +1997,21 @@ gsap.registerPlugin(ScrollTrigger);
    DISH CARD 3D HOVER TILT
 ============================================================ */
 (function initCardTilt() {
-  // Touch devices: tap to flip (CSS :hover handles desktop)
+  // Touch devices: touchstart/touchend with movement guard prevents scroll from triggering flip
   gsap.matchMedia().add('(hover: none)', () => {
     document.querySelectorAll('.dish').forEach(card => {
-      card.addEventListener('click', () => {
-        card.querySelector('.dish__inner')?.classList.toggle('is-flipped');
+      let startX = 0, startY = 0;
+      card.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+      card.addEventListener('touchend', (e) => {
+        const dx = Math.abs(e.changedTouches[0].clientX - startX);
+        const dy = Math.abs(e.changedTouches[0].clientY - startY);
+        if (dx < 10 && dy < 10) {
+          e.preventDefault();
+          card.querySelector('.dish__inner')?.classList.toggle('is-flipped');
+        }
       });
     });
   });
