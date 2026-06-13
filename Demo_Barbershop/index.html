@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}</script>
 <style>
 :root{
   --gold:#D4AF37; --gold-lt:#F0D060; --gold-dk:#B8922A;
@@ -27,6 +26,12 @@ body{background:var(--bg);color:var(--chrome-lt);font-family:'Inter',sans-serif;
 #cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;top:0;left:0;}
 #cur-dot{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);top:0;left:0;}
 body.hov #cur-ring{width:54px;height:54px;background:rgba(212,175,55,.1);}
+/* Mobile/Touch-Ansicht: keinen Custom-Cursor anzeigen, Standardcursor wiederherstellen.
+   Greift bei Touch-Geräten UND bei schmalem Viewport (z. B. verkleinertes Browserfenster). */
+@media (hover:none),(pointer:coarse),(max-width:1024px){
+  html,body,a,button,.craft-card,.gal-item,.meister-card,.test-card,.nav-cta{cursor:auto!important;}
+  #cur-ring,#cur-dot{display:none!important;}
+}
 
 /* ── LOADER ── */
 #loader{position:fixed;inset:0;background:#000;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
@@ -42,14 +47,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 64px;display:f
 .nav-links{display:flex;gap:40px;list-style:none;}
 .nav-links a{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.15em;color:rgba(236,236,236,.65);text-decoration:none;transition:color .3s;}
 .nav-links a:hover{color:var(--gold);}
-.nav-icon{width:34px;height:34px;border:1px solid rgba(212,175,55,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);cursor:pointer;transition:border-color .3s,box-shadow .3s;}
-.nav-icon:hover{border-color:var(--gold);box-shadow:0 0 14px rgba(212,175,55,.28);}
+.nav-cta{font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:11px 26px;border:1.5px solid rgba(212,175,55,.55);transition:background .3s,color .3s,box-shadow .3s,transform .3s;white-space:nowrap;}
+.nav-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 22px rgba(212,175,55,.4);transform:translateY(-1px);}
 
 /* ── HERO ── */
-#hero{position:relative;width:100%;height:100vh;overflow:hidden;}
-#bg-canvas{position:absolute;inset:0;z-index:0;}
-#hero-canvas{position:absolute;inset:0;z-index:1;}
-#hero-overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;pointer-events:none;}
+#hero{position:relative;width:100%;height:100vh;height:100svh;overflow:hidden;}
+#hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
+#hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%;animation:heroZoom 22s ease-in-out infinite alternate;}
+@keyframes heroZoom{from{transform:scale(1.06);}to{transform:scale(1.18);}}
+#hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.62) 0%,rgba(0,0,0,.30) 38%,rgba(0,0,0,.55) 72%,#000 100%),radial-gradient(circle at 50% 42%,transparent 6%,rgba(0,0,0,.5) 100%);}
+#bg-canvas{position:absolute;inset:0;z-index:1;pointer-events:none;}
+#hero-overlay{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;pointer-events:none;}
 .hero-tag{font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:.45em;color:var(--gold);margin-bottom:22px;opacity:0;text-transform:uppercase;}
 #hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,13vw,200px);letter-spacing:.04em;line-height:.86;opacity:0;}
 .t-blade{color:var(--chrome-lt);}
@@ -62,7 +70,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 64px;display:f
 .btn-secondary{font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:.2em;padding:16px 42px;background:transparent;color:var(--gold);border:1.5px solid rgba(212,175,55,.6);cursor:pointer;text-transform:uppercase;transition:all .3s;text-decoration:none;display:inline-block;}
 .btn-secondary:hover{background:rgba(212,175,55,.08);border-color:var(--gold);box-shadow:0 0 28px rgba(212,175,55,.25);transform:translateY(-2px);}
 .hero-fade{position:absolute;bottom:0;left:0;right:0;height:260px;background:linear-gradient(to top,#000 0%,transparent 100%);z-index:2;}
-.scroll-cue{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;}
+.scroll-cue{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;}
 .scroll-cue span{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;color:rgba(212,175,55,.55);text-transform:uppercase;}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(212,175,55,.7),transparent);animation:sline 2.2s ease-in-out infinite;}
 @keyframes sline{0%,100%{opacity:0;transform:scaleY(.4) translateY(-10px);}55%{opacity:1;transform:scaleY(1) translateY(0);}}
@@ -213,20 +221,53 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
   #craft,#meister,#atmosphaere,#testimonials,#termin,footer{padding:80px 28px;}
   #zahlen{padding:80px 28px;}
   .craft-grid,.meister-grid,.test-grid{grid-template-columns:1fr;}
+  .meister-grid{max-width:440px;gap:28px;}
   .zahlen-grid{grid-template-columns:1fr 1fr;}
-  .termin-grid{grid-template-columns:1fr;}
+  .termin-grid{grid-template-columns:1fr;gap:56px;}
   .ft-grid{grid-template-columns:1fr 1fr;gap:40px;}
   .gal-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
   .gal-item:first-child{grid-row:auto;}
   .gal-item{height:240px;}
 }
 @media(max-width:600px){
-  .hero-btns{flex-direction:column;align-items:center;}
+  nav{padding:16px 18px;}
+  .nav-logo{font-size:19px;letter-spacing:.14em;}
+  .nav-cta{padding:9px 15px;font-size:10px;letter-spacing:.1em;}
+  #craft,#meister,#atmosphaere,#testimonials,#termin,footer{padding:64px 20px;}
+  #zahlen{padding:64px 20px;}
+  .eyebrow{font-size:11px;letter-spacing:.28em;}
+  .eyebrow::before,.eyebrow::after{flex-basis:24px;}
+  /* Hero */
+  .hero-tag{letter-spacing:.26em;font-size:11px;margin-bottom:16px;padding:0 8px;}
+  #hero-title{font-size:clamp(56px,18vw,96px);}
+  .hero-sub{letter-spacing:.2em;font-size:12px;margin-top:18px;}
+  .hero-btns{flex-direction:column;align-items:stretch;width:100%;max-width:300px;margin-top:40px;gap:14px;}
+  .btn-primary,.btn-secondary{padding:16px 28px;text-align:center;}
+  .hero-fade{height:180px;}
+  .scroll-cue{bottom:26px;}
+  /* Stats 2×2 mit sauberen Trennlinien */
   .zahlen-grid{grid-template-columns:1fr 1fr;}
+  .zahlen-item{padding:34px 16px;border-right:none;}
+  .zahlen-item:nth-child(odd){border-right:1px solid rgba(212,175,55,.2);}
+  .zahlen-item:nth-child(1),.zahlen-item:nth-child(2){border-bottom:1px solid rgba(212,175,55,.2);}
+  /* Galerie / Karten */
   .gal-grid{grid-template-columns:1fr;}
-  .ft-grid{grid-template-columns:1fr;}
+  .gal-item{height:220px;}
+  .craft-card{padding:48px 26px;}
+  .test-card{padding:36px 26px;}
+  .quote-bg{font-size:260px;top:-20px;}
+  /* Footer */
+  .ft-grid{grid-template-columns:1fr;gap:36px;text-align:center;}
+  .ft-rule{margin-left:auto;margin-right:auto;}
+  .ft-hr,.ft-sl{justify-content:center;}
+  .ft-social{align-items:center;}
   .frow{grid-template-columns:1fr;}
   .ft-bottom{flex-direction:column;gap:14px;text-align:center;}
+}
+@media(max-width:380px){
+  #hero-title{font-size:clamp(48px,16vw,72px);}
+  .hero-tag{font-size:10px;letter-spacing:.18em;}
+  #craft,#meister,#atmosphaere,#testimonials,#termin,footer{padding:56px 16px;}
 }
 </style>
 </head>
@@ -234,11 +275,11 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
 
 <!-- LOADER -->
 <div id="loader">
-  <svg id="loader-scissors" width="68" height="68" viewBox="0 0 100 100" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round">
-    <circle cx="28" cy="22" r="13"/><circle cx="72" cy="22" r="13"/>
-    <line x1="28" y1="35" x2="51" y2="74" stroke-width="5"/>
-    <line x1="72" y1="35" x2="49" y2="74" stroke-width="5"/>
-    <circle cx="50" cy="56" r="5" fill="#D4AF37" stroke="none"/>
+  <svg id="loader-scissors" width="68" height="68" viewBox="0 0 100 100" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="30" cy="78" r="11"/><circle cx="70" cy="78" r="11"/>
+    <line x1="38" y1="71" x2="82" y2="16" stroke-width="5"/>
+    <line x1="62" y1="71" x2="18" y2="16" stroke-width="5"/>
+    <circle cx="50" cy="56" r="4.5" fill="#D4AF37" stroke="none"/>
   </svg>
   <div id="lbar-wrap"><div id="lbar"></div></div>
   <div id="ltxt">BLADE &amp; GLORY</div>
@@ -261,15 +302,15 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
     <li><a href="#zahlen">Legacy</a></li>
     <li><a href="#termin">Termin</a></li>
   </ul>
-  <div class="nav-icon" title="Atmosphäre">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-  </div>
+  <a href="#termin" class="nav-cta">Termin Buchen</a>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
+  <div id="hero-bg">
+    <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=85&auto=format&fit=crop" alt="Premium Barbershop Interior" fetchpriority="high"/>
+  </div>
   <canvas id="bg-canvas"></canvas>
-  <canvas id="hero-canvas"></canvas>
   <div id="hero-overlay">
     <div class="hero-tag">Est. 1987 &nbsp;·&nbsp; Kurfürstendamm Berlin</div>
     <h1 id="hero-title">
@@ -301,10 +342,10 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
     <div class="craft-card">
       <div class="craft-icon">
         <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <circle cx="26" cy="20" r="14"/><circle cx="74" cy="20" r="14"/>
-          <line x1="26" y1="34" x2="51" y2="76" stroke-width="5"/>
-          <line x1="74" y1="34" x2="49" y2="76" stroke-width="5"/>
-          <circle cx="50" cy="57" r="5.5" fill="currentColor" stroke="none"/>
+          <circle cx="30" cy="78" r="12"/><circle cx="70" cy="78" r="12"/>
+          <line x1="38" y1="70" x2="83" y2="15" stroke-width="5"/>
+          <line x1="62" y1="70" x2="17" y2="15" stroke-width="5"/>
+          <circle cx="50" cy="55" r="5" fill="currentColor" stroke="none"/>
         </svg>
       </div>
       <div class="craft-ctitle">Der Schnitt</div>
@@ -370,7 +411,7 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
   <div class="meister-grid">
     <div class="meister-card" data-dir="left">
       <div class="meister-img-wrap">
-        <img class="meister-img" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Marco Vitale" loading="lazy"/>
+        <img class="meister-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&auto=format&fit=crop" alt="Marco Vitale" loading="lazy"/>
         <div class="meister-ov"><a href="#termin" class="btn-primary" style="font-size:12px;padding:13px 30px;">Termin Buchen</a></div>
       </div>
       <div class="meister-info">
@@ -421,7 +462,7 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
       <div class="gal-ov"><div class="gal-title">Vintage Flair</div></div>
     </div>
     <div class="gal-item">
-      <img class="gal-img" src="https://images.unsplash.com/photo-1512864084360-7c0c4d7e1e90?w=700&q=80" alt="Style" loading="lazy"/>
+      <img class="gal-img" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=700&q=80&auto=format&fit=crop" alt="Style" loading="lazy"/>
       <div class="gal-ov"><div class="gal-title">Precision Cut</div></div>
     </div>
     <div class="gal-item">
@@ -594,279 +635,15 @@ footer{background:var(--bg);border-top:1px solid rgba(212,175,55,.25);padding:80
   </div>
   <div class="ft-bottom">
     <span class="ft-copy">© 2024 Blade &amp; Glory Barbershop. All rights reserved.</span>
-    <svg width="34" height="17" viewBox="0 0 100 50" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round">
-      <circle cx="26" cy="14" r="10"/><circle cx="74" cy="14" r="10"/>
-      <line x1="26" y1="24" x2="50" y2="44" stroke-width="4.5"/>
-      <line x1="74" y1="24" x2="50" y2="44" stroke-width="4.5"/>
-      <circle cx="50" cy="34" r="4.5" fill="#D4AF37" stroke="none"/>
+    <svg width="34" height="17" viewBox="0 0 100 50" fill="none" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="38" r="8"/><circle cx="68" cy="38" r="8"/>
+      <line x1="38" y1="34" x2="80" y2="8" stroke-width="4.5"/>
+      <line x1="62" y1="34" x2="20" y2="8" stroke-width="4.5"/>
+      <circle cx="50" cy="27" r="3.5" fill="#D4AF37" stroke="none"/>
     </svg>
     <span class="ft-copy">Kurfürstendamm 42 &nbsp;·&nbsp; 10707 Berlin</span>
   </div>
 </footer>
-
-<!-- ═══════════════════════════════════════════════════
-     THREE.JS — Barber Pole Hero Scene
-     Iconic pole with scrolling stripe texture, gold caps,
-     floating particles & studio lighting
-     ═══════════════════════════════════════════════════ -->
-<script type="module">
-import * as THREE from 'three';
-
-const canvas = document.getElementById('hero-canvas');
-
-const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true, powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.1, 100);
-camera.position.set(0, 0.3, 9);
-
-// ── STUDIO LIGHTING ──
-const ambient = new THREE.AmbientLight(0x0c0806, 12);
-scene.add(ambient);
-
-const key = new THREE.SpotLight(0xFFE8B0, 180);
-key.position.set(5, 9, 8);
-key.angle = Math.PI / 9;
-key.penumbra = 0.45;
-key.decay = 2;
-key.castShadow = true;
-key.shadow.mapSize.set(1024, 1024);
-scene.add(key, key.target);
-
-const fill = new THREE.PointLight(0x334466, 50, 30);
-fill.position.set(-7, 1, 5);
-scene.add(fill);
-
-const goldGlow = new THREE.PointLight(0xD4AF37, 42, 18);
-goldGlow.position.set(0, -4, 3);
-scene.add(goldGlow);
-
-const rim = new THREE.DirectionalLight(0xFF5500, 2.2);
-rim.position.set(-2, -1, -5);
-scene.add(rim);
-
-// ── STRIPE TEXTURE (scrolls to animate the pole) ──
-function makeStripe() {
-  const tc = document.createElement('canvas');
-  tc.width = 512; tc.height = 1024;
-  const ctx = tc.getContext('2d');
-
-  ctx.fillStyle = '#090909';
-  ctx.fillRect(0, 0, 512, 1024);
-
-  const h = 1024, w = 512, period = 165;
-  for (let x = -h; x < w + h; x += period) {
-    const g1 = ctx.createLinearGradient(x, 0, x + 58, 0);
-    g1.addColorStop(0, '#B8922A');
-    g1.addColorStop(0.35, '#D4AF37');
-    g1.addColorStop(0.65, '#F0D060');
-    g1.addColorStop(1, '#C9A84C');
-    ctx.fillStyle = g1;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);    ctx.lineTo(x+58, 0);
-    ctx.lineTo(x+58+h, h); ctx.lineTo(x+h, h);
-    ctx.closePath(); ctx.fill();
-
-    const g2 = ctx.createLinearGradient(x+58, 0, x+112, 0);
-    g2.addColorStop(0, '#B8B8B8');
-    g2.addColorStop(0.4, '#F2F2F2');
-    g2.addColorStop(0.6, '#FFFFFF');
-    g2.addColorStop(1, '#C0C0C0');
-    ctx.fillStyle = g2;
-    ctx.beginPath();
-    ctx.moveTo(x+58, 0);   ctx.lineTo(x+112, 0);
-    ctx.lineTo(x+112+h, h); ctx.lineTo(x+58+h, h);
-    ctx.closePath(); ctx.fill();
-  }
-
-  // Cylindrical shading overlay (darkens edges, brightens center)
-  const shade = ctx.createLinearGradient(0, 0, w, 0);
-  shade.addColorStop(0,    'rgba(0,0,0,0.60)');
-  shade.addColorStop(0.22, 'rgba(0,0,0,0.12)');
-  shade.addColorStop(0.42, 'rgba(255,255,255,0.10)');
-  shade.addColorStop(0.50, 'rgba(255,255,255,0.20)');
-  shade.addColorStop(0.58, 'rgba(255,255,255,0.10)');
-  shade.addColorStop(0.78, 'rgba(0,0,0,0.12)');
-  shade.addColorStop(1,    'rgba(0,0,0,0.60)');
-  ctx.fillStyle = shade;
-  ctx.fillRect(0, 0, w, h);
-
-  const tex = new THREE.CanvasTexture(tc);
-  tex.wrapS = THREE.RepeatWrapping;
-  tex.wrapT = THREE.RepeatWrapping;
-  return tex;
-}
-const poleTex = makeStripe();
-
-// ── MATERIALS ──
-const MC = () => new THREE.MeshPhongMaterial({color:0xC8C8C8, specular:0xFFFFFF, shininess:320});
-const MG = () => new THREE.MeshPhongMaterial({color:0xD4AF37, specular:0xFFEE55, shininess:230});
-const MD = () => new THREE.MeshPhongMaterial({color:0x0d0d0d, specular:0x282828, shininess:70});
-const MP = new THREE.MeshPhongMaterial({map:poleTex, shininess:130, specular:new THREE.Color(0x555555)});
-
-// ── BARBER POLE GROUP ──
-const group = new THREE.Group();
-scene.add(group);
-
-// Main shaft with stripe texture
-const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.56, 0.56, 5.2, 72, 1, false), MP);
-shaft.castShadow = true;
-group.add(shaft);
-
-// Gold accent rings along shaft
-[-1.95, -0.65, 0.65, 1.95].forEach(y => {
-  const r = new THREE.Mesh(new THREE.TorusGeometry(0.595, 0.034, 10, 56), MG());
-  r.rotation.x = Math.PI/2; r.position.y = y;
-  r.castShadow = true;
-  group.add(r);
-});
-
-// Top cap
-const topCap = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.56, 0.18, 56), MC());
-topCap.position.y = 2.69; group.add(topCap);
-const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.046, 12, 56), MG());
-topRing.rotation.x = Math.PI/2; topRing.position.y = 2.78; group.add(topRing);
-const topPlate = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.78, 0.09, 56), MD());
-topPlate.position.y = 2.875; group.add(topPlate);
-
-// Neck piece
-const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.26, 0.28, 28), MC());
-neck.position.y = 3.08; group.add(neck);
-
-// Gold globe on top (polished, eye-catching)
-const globe = new THREE.Mesh(new THREE.SphereGeometry(0.38, 36, 28), MG());
-globe.position.y = 3.46; globe.castShadow = true; group.add(globe);
-const gRing = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.038, 10, 48), MC());
-gRing.rotation.x = Math.PI/2; gRing.position.y = 3.46; group.add(gRing);
-
-// Base
-const baseCap = new THREE.Mesh(new THREE.CylinderGeometry(0.56, 0.84, 0.18, 56), MC());
-baseCap.position.y = -2.69; group.add(baseCap);
-const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.80, 0.046, 12, 56), MG());
-baseRing.rotation.x = Math.PI/2; baseRing.position.y = -2.78; group.add(baseRing);
-const baseOuter = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.05, 0.28, 56), MD());
-baseOuter.position.y = -3.015; group.add(baseOuter);
-const baseFootRing = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.04, 10, 56), MG());
-baseFootRing.rotation.x = Math.PI/2; baseFootRing.position.y = -3.16; group.add(baseFootRing);
-const baseBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 0.84, 0.065, 56), MC());
-baseBottom.position.y = -3.195; group.add(baseBottom);
-
-// ── FLOATING GOLD PARTICLES ──
-const pCount = 200;
-const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(pCount * 3);
-const pData = [];
-for (let i = 0; i < pCount; i++) {
-  const a = Math.random() * Math.PI * 2;
-  const r = 0.9 + Math.random() * 4.5;
-  const y = (Math.random() - 0.5) * 9;
-  pPos[i*3] = Math.cos(a)*r; pPos[i*3+1] = y; pPos[i*3+2] = Math.sin(a)*r;
-  pData.push({ a, r, y, spd: 0.003 + Math.random()*0.007, vy: (Math.random()-0.5)*0.004 });
-}
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-const pts = new THREE.Points(pGeo,
-  new THREE.PointsMaterial({color:0xD4AF37, size:0.044, transparent:true, opacity:0.6, sizeAttenuation:true}));
-scene.add(pts);
-
-// ── ANIMATION STATE ──
-group.scale.setScalar(0);
-key.intensity = 0; fill.intensity = 0; goldGlow.intensity = 0; rim.intensity = 0;
-let revealDone = false;
-let mouseX = 0, mouseY = 0;
-let rotXVel = 0, rotXCur = 0;
-const T0 = Date.now()/1000;
-
-addEventListener('mousemove', e => {
-  mouseX = (e.clientX/innerWidth  - 0.5) * 2;
-  mouseY = (e.clientY/innerHeight - 0.5) * 2;
-});
-
-function eOut(t, p) { return 1 - Math.pow(1 - Math.min(Math.max(t,0),1), p||3); }
-function lerp(a, b, t) { return a + (b-a)*t; }
-
-function tick() {
-  requestAnimationFrame(tick);
-  const now = Date.now()/1000;
-  const el = now - T0;
-
-  if (el < 2.0) {
-    // ── REVEAL: rises up from below, scales in ──
-    const rt = el / 2.0;
-    const bounce = Math.sin(rt * Math.PI) * 0.055 * (1 - rt);
-    group.scale.setScalar(Math.min(eOut(rt, 4) + bounce, 1.02));
-    group.position.y = lerp(-2.0, 0, eOut(rt, 3));
-    group.rotation.y = lerp(-0.5, 0, eOut(rt, 3));
-
-    key.intensity      = eOut(Math.max(el-0.2,0)/1.6, 3) * 180;
-    fill.intensity     = eOut(Math.max(el-0.4,0)/1.5, 3) * 50;
-    goldGlow.intensity = eOut(Math.max(el-0.3,0)/1.6, 3) * 42;
-    rim.intensity      = eOut(Math.max(el-0.6,0)/1.3, 3) * 2.2;
-  } else {
-    if (!revealDone) { revealDone = true; group.scale.setScalar(1); }
-    const it = el - 2.0;
-
-    // Signature barber pole stripe scroll
-    poleTex.offset.y -= 0.0016;
-
-    // Slow continuous Y rotation
-    group.rotation.y += 0.0016;
-
-    // Gentle float
-    group.position.y = Math.sin(it * 0.45) * 0.1;
-
-    // Globe subtle pulse
-    globe.scale.setScalar(1.0 + Math.sin(it * 1.8) * 0.012);
-
-    // Mouse tilt spring
-    const tX = -mouseY * 0.15;
-    rotXVel += (tX - rotXCur) * 0.042; rotXVel *= 0.85; rotXCur += rotXVel;
-    group.rotation.x = rotXCur;
-
-    // Breathing lights
-    key.intensity      = 180 + Math.sin(it * 0.75) * 22;
-    goldGlow.intensity = 42  + Math.sin(it * 1.4 + 1) * 9;
-
-    // Orbit particles
-    const pa = pGeo.attributes.position.array;
-    pData.forEach((p, i) => {
-      p.a += p.spd; p.y += p.vy;
-      if (Math.abs(p.y) > 4.5) p.vy *= -1;
-      pa[i*3] = Math.cos(p.a)*p.r; pa[i*3+1] = p.y; pa[i*3+2] = Math.sin(p.a)*p.r;
-    });
-    pGeo.attributes.position.needsUpdate = true;
-  }
-
-  // Orbiting key light for moving specular highlights
-  key.position.x = Math.cos(el * 0.10) * 5 + 3;
-  key.position.z = Math.sin(el * 0.07) * 2 + 7;
-
-  renderer.render(scene, camera);
-}
-tick();
-
-const gw = setInterval(() => {
-  if (window.gsap && window.ScrollTrigger) {
-    clearInterval(gw);
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.create({
-      trigger: '#hero', start: 'top top', end: 'bottom top',
-      onUpdate(self) { camera.position.z = 9 + self.progress * 6; }
-    });
-  }
-}, 100);
-
-addEventListener('resize', () => {
-  camera.aspect = innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
-</script>
 
 <!-- ═══════════════════════════════════════ MAIN JS ═══════════════════════════════════════ -->
 <script>

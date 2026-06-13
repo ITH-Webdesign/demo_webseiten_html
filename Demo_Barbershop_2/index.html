@@ -14,6 +14,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;cursor:none}
+section[id]{scroll-margin-top:72px}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px}
@@ -21,30 +22,36 @@ body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;o
 ::-webkit-scrollbar-thumb{background:var(--gold)}
 
 /* CURSOR */
-#cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s}
-#cur2{position:fixed;width:34px;height:34px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+#cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10003;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+#cur2{position:fixed;width:34px;height:34px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:10002;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
 body.hov #cur{width:22px;height:22px}
 body.hov #cur2{width:52px;height:52px;border-color:var(--gold)}
+/* Mobile/Touch: keinen Custom-Cursor anzeigen, Standardcursor wiederherstellen */
+@media (hover:none),(pointer:coarse),(max-width:960px){
+  html,body,a,button,.craft-card,.mcard,.sico,.mitem{cursor:auto!important}
+  #cur,#cur2{display:none!important}
+}
 
 /* LOADER */
-#loader{position:fixed;inset:0;background:var(--black);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px}
-#loader-line{stroke:var(--gold);stroke-width:1;fill:none;stroke-dasharray:700;stroke-dashoffset:700;animation:drawL 1.2s ease forwards .3s}
+#loader{position:fixed;inset:0;background:var(--black);z-index:10004;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;overflow:hidden}
+#loader svg{width:min(680px,82vw);height:auto}
+#loader-line{stroke:var(--gold);stroke-width:1;fill:none;stroke-dasharray:700;stroke-dashoffset:700;animation:drawL .5s ease forwards .08s}
 @keyframes drawL{to{stroke-dashoffset:0}}
-.loader-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:8px;color:rgba(201,168,76,.4);opacity:0;animation:fadeInUp .6s ease forwards 1s}
+.loader-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:8px;color:rgba(201,168,76,.4);opacity:0;animation:fadeInUp .35s ease forwards .32s}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 60px;display:flex;align-items:center;justify-content:space-between}
 nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.75) 0%,transparent 100%);pointer-events:none;z-index:-1}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none;white-space:nowrap;flex-shrink:0}
 .nav-links{display:flex;gap:36px;list-style:none}
 .nav-links a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.6);text-decoration:none;text-transform:uppercase;transition:color .3s}
 .nav-links a:hover{color:var(--gold)}
-.nav-cta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--black);background:var(--gold);padding:10px 24px;text-decoration:none;text-transform:uppercase;transition:background .3s}
+.nav-cta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--black);background:var(--gold);padding:10px 24px;text-decoration:none;text-transform:uppercase;transition:background .3s;white-space:nowrap;flex-shrink:0}
 .nav-cta:hover{background:var(--gold2)}
 
 /* HERO */
-#hero{position:relative;width:100vw;height:100vh;overflow:hidden}
+#hero{position:relative;width:100%;height:100vh;height:100svh;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80') center/cover no-repeat}
 .hero-ov{position:absolute;inset:0;background:rgba(0,0,0,.87)}
 #hcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:2}
@@ -87,10 +94,10 @@ nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bo
 .craft-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.04) 0%,transparent 70%);pointer-events:none}
 .craft-card:hover{border-color:rgba(201,168,76,.7);box-shadow:0 0 50px rgba(201,168,76,.12)}
 .craft-svg{width:72px;height:72px;margin:0 auto 28px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block}
-.craft-card:hover .sc-top{transform:rotate(-28deg);transform-origin:38px 25px}
-.sc-top{transition:transform .4s ease}
-.craft-card:hover .rz-blade{transform:rotate(-40deg);transform-origin:48px 60px}
-.rz-blade{transition:transform .4s ease}
+.craft-card:hover .sc-top{transform:rotate(-22deg);transform-origin:38px 40px}
+.sc-top{transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.craft-card:hover .rz-blade{transform:rotate(-42deg);transform-origin:42px 50px}
+.rz-blade{transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 .craft-card:hover .cm-icon{animation:cwig .5s ease}
 @keyframes cwig{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
 .craft-ctitle{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:var(--gold);margin-bottom:14px}
@@ -131,7 +138,7 @@ nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bo
 #galerie{padding:130px 60px;background:var(--black)}
 .gal-hdr{text-align:center;margin-bottom:70px}
 .gal-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,10vw,140px);color:var(--white);letter-spacing:10px;display:block}
-.gul{display:block;margin:8px auto 0;overflow:visible}
+.gul{display:block;margin:8px auto 0;overflow:visible;max-width:100%}
 .gul path{stroke:var(--gold);stroke-width:1;fill:none;stroke-dasharray:300;stroke-dashoffset:300}
 .masonry{columns:3;column-gap:16px;max-width:1200px;margin:0 auto}
 .mitem{break-inside:avoid;margin-bottom:16px;overflow:hidden;position:relative;cursor:pointer;opacity:0}
@@ -139,7 +146,22 @@ nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bo
 .mitem:hover img{transform:scale(1.06);filter:brightness(1) saturate(1)}
 .mov2{position:absolute;inset:0;background:rgba(139,0,0,.72);opacity:0;transition:opacity .4s;display:flex;align-items:center;justify-content:center}
 .mitem:hover .mov2{opacity:1}
-.mov2-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:4px;color:var(--gold);text-align:center;text-transform:uppercase}
+.mov2-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:4px;color:var(--gold);text-align:center;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:12px}
+.mov2-title svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.5}
+
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;padding:40px}
+.lb.open{opacity:1;visibility:visible}
+.lb-stage{position:relative;display:flex;align-items:center;justify-content:center;max-width:90vw;max-height:84vh}
+.lb-img{max-width:88vw;max-height:80vh;object-fit:contain;border:1px solid rgba(201,168,76,.4);box-shadow:0 30px 90px rgba(0,0,0,.7);transform:scale(.94);opacity:0;transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .4s}
+.lb.open .lb-img{transform:scale(1);opacity:1}
+.lb-close{position:absolute;top:22px;right:28px;width:46px;height:46px;background:none;border:1px solid rgba(201,168,76,.4);color:var(--gold);font-size:26px;line-height:1;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s;z-index:2}
+.lb-close:hover{background:rgba(201,168,76,.12);border-color:var(--gold)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.35);border:1px solid rgba(201,168,76,.4);color:var(--gold);width:56px;height:56px;border-radius:50%;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s;z-index:2}
+.lb-nav:hover{background:rgba(201,168,76,.15);border-color:var(--gold)}
+.lb-prev{left:20px}.lb-next{right:20px}
+.lb-cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:var(--gold);text-transform:uppercase}
+.lb-count{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.4);margin-top:6px}
 
 /* CONTACT */
 #kontakt{padding:130px 0;background:#040404;position:relative}
@@ -171,6 +193,44 @@ nav::after{content:'';position:absolute;inset:0;background:linear-gradient(to bo
 .btn-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:16px 40px;border:none;cursor:pointer;transition:all .3s;width:100%;margin-top:8px}
 .btn-sub:hover{background:var(--gold2);box-shadow:0 10px 40px rgba(201,168,76,.3)}
 .fsubtitle{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;margin-bottom:28px;color:var(--white)}
+.fsubtitle small{display:block;font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.5px;color:rgba(255,255,255,.4);text-transform:none;margin-top:8px;font-weight:300}
+
+/* CONTACT — Anruf-Fokus */
+.kt-lead{font-family:'Inter',sans-serif;font-size:14px;line-height:1.8;color:rgba(255,255,255,.55);margin-bottom:30px;max-width:420px}
+.btn-call{display:flex;align-items:center;gap:16px;background:var(--gold);color:var(--black);text-decoration:none;padding:20px 28px;margin-bottom:14px;transition:background .3s,transform .3s,box-shadow .3s}
+.btn-call:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 14px 44px rgba(201,168,76,.32)}
+.btn-call svg{width:30px;height:30px;fill:none;stroke:var(--black);stroke-width:1.8;flex-shrink:0}
+.btn-call .bc-txt{display:flex;flex-direction:column;line-height:1.2}
+.btn-call .bc-sm{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;opacity:.7}
+.btn-call .bc-num{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px}
+.kt-meta{display:flex;flex-wrap:wrap;gap:10px 36px;margin-bottom:40px}
+.kt-meta a,.kt-meta span{font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .3s}
+.kt-meta a:hover{color:var(--gold)}
+.kt-meta .km-lbl{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+
+/* Moderne Öffnungszeiten */
+.hours{border:1px solid rgba(201,168,76,.18);background:rgba(255,255,255,.015)}
+.hours-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(201,168,76,.14)}
+.hours-head .ilabel{margin:0}
+.hours-status{display:inline-flex;align-items:center;gap:7px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.hours-status::before{content:'';width:8px;height:8px;border-radius:50%;background:#888}
+.hours-status.open{color:#5cc46a}.hours-status.open::before{background:#5cc46a;box-shadow:0 0 8px #5cc46a;animation:pulseDot 1.8s ease-in-out infinite}
+.hours-status.closed{color:#c46a5c}.hours-status.closed::before{background:#c46a5c}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.35}}
+.hours-list{list-style:none;padding:8px 20px 12px}
+.hours-list li{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.04)}
+.hours-list li:last-child{border-bottom:none}
+.hours-list li span:last-child{color:rgba(255,255,255,.4)}
+.hours-list li.today{color:var(--gold)}
+.hours-list li.today span:last-child{color:var(--gold)}
+.hours-list li.today span:first-child{font-weight:500;position:relative;padding-left:16px}
+.hours-list li.today span:first-child::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+/* Google Map (rechte Spalte) */
+.kt-map{position:relative;min-height:480px;background:#0a0a0a;overflow:hidden}
+.kt-map-frame{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.35) contrast(1.05) brightness(.95)}
+.kt-map-link{position:absolute;left:18px;bottom:18px;z-index:2;font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--black);background:var(--gold);padding:11px 22px;text-decoration:none;text-transform:uppercase;transition:background .3s,box-shadow .3s;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.kt-map-link:hover{background:var(--gold2);box-shadow:0 8px 28px rgba(201,168,76,.35)}
 
 /* FOOTER */
 footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,168,76,.25)}
@@ -190,25 +250,64 @@ footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,1
 
 /* RESPONSIVE */
 @media(max-width:960px){
-  nav{padding:18px 28px}
+  nav{padding:16px 24px}
   .nav-links{display:none}
-  #craft,#masters,#galerie,#legacy{padding-left:28px;padding-right:28px}
-  .craft-cards,.masters-grid{grid-template-columns:1fr;gap:20px}
+  #craft,#masters,#galerie,#legacy{padding:88px 28px}
+  #kontakt{padding:88px 0}
+  .craft-cards{grid-template-columns:1fr;gap:20px;max-width:440px}
+  .craft-card{padding:44px 30px}
+  .masters-grid{grid-template-columns:1fr 1fr;gap:20px}
   .kt-inner{grid-template-columns:1fr}
-  .kt-info{padding:40px 28px;border-right:none;border-bottom:1px solid rgba(201,168,76,.18)}
-  .kt-form{padding:40px 28px}
+  .kt-info{padding:44px 28px;border-right:none;border-bottom:1px solid rgba(201,168,76,.18)}
+  .kt-form{padding:44px 28px}
+  .kt-title{font-size:48px}
   .masonry{columns:2}
-  .legacy-inner{flex-direction:column}
+  .legacy-inner{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .lstat{padding:28px 12px}
   .lstat+.lstat::before{display:none}
+  #legacy{background-attachment:scroll}
+  .kt-map{min-height:340px}
   .ft-top{flex-direction:column;gap:24px;text-align:center}
   .ft-nav{flex-wrap:wrap;justify-content:center}
-  .story-thumbs{flex-direction:column;align-items:center}
+  .story-thumbs{flex-wrap:wrap}
+  .sthumb{width:150px;height:96px}
+  .craft-title,.gal-title{letter-spacing:5px}
+  .masters-title{letter-spacing:4px}
 }
 @media(max-width:580px){
+  nav{padding:14px 18px}
+  .nav-logo{font-size:22px;letter-spacing:3px}
+  .nav-cta{padding:9px 16px;font-size:9px;letter-spacing:1.5px}
+  #craft,#masters,#galerie,#legacy{padding:64px 18px}
+  #kontakt{padding:64px 0}
+  .hero-title{letter-spacing:4px}
+  .hero-sub{letter-spacing:3px}
+  .sptxt{padding:0 24px}
+  .sp-intro{letter-spacing:3px;line-height:1.4}
+  .sp-quote{letter-spacing:2px}
+  .hero-btns{flex-direction:column;align-items:stretch;width:100%;max-width:300px}
+  .btn-g,.btn-o{text-align:center;padding:15px 28px}
   .masonry{columns:1}
-  .hero-btns{flex-direction:column;align-items:center}
+  .masters-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto}
   .frow{grid-template-columns:1fr}
+  .kt-info,.kt-form{padding:36px 20px}
+  .kt-title{font-size:42px}
+  .kt-lead{font-size:13px}
+  .btn-call{padding:18px 22px}
+  .btn-call .bc-num{font-size:22px}
+  .kt-map{min-height:300px}
+  .craft-title,.gal-title{font-size:clamp(40px,13vw,140px);letter-spacing:3px}
+  .masters-title{font-size:clamp(30px,9vw,116px);letter-spacing:2px}
+  .lnum{font-size:40px;letter-spacing:1px}
+  .llabel{font-size:9px;letter-spacing:3px}
   .ft-bot{flex-direction:column;gap:12px;text-align:center}
+}
+@media(max-width:380px){
+  .hero-title{letter-spacing:2px}
+  .legacy-inner{gap:6px}
+  .lnum{font-size:34px}
+  .craft-card{padding:38px 22px}
+  .masters-title{font-size:clamp(26px,8.5vw,116px)}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -305,28 +404,28 @@ footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,1
   <div class="craft-cards">
     <div class="craft-card">
       <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <!-- Klassische Barber-Schere -->
+        <circle cx="27" cy="57" r="7"/>
+        <circle cx="49" cy="57" r="7"/>
+        <path d="M32 52 L62 14"/>
         <g class="sc-top">
-          <circle cx="18" cy="18" r="7"/>
-          <line x1="24" y1="23" x2="62" y2="60"/>
+          <path d="M44 52 L14 14"/>
         </g>
-        <g>
-          <circle cx="18" cy="36" r="7"/>
-          <line x1="24" y1="31" x2="62" y2="18"/>
-        </g>
-        <line x1="18" y1="25" x2="18" y2="29" stroke-width=".5"/>
+        <circle cx="38" cy="40" r="2.3" fill="var(--gold)" stroke="none"/>
       </svg>
       <div class="craft-ctitle">Der Schnitt</div>
       <div class="craft-ctext">Jede Schere führen wir mit Jahrzehnten Erfahrung. Der perfekte Schnitt ist unsere Signatur — unvergesslich, präzise, zeitlos.</div>
     </div>
     <div class="craft-card">
       <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <!-- Klappbares Rasiermesser -->
         <g>
-          <rect x="8" y="52" width="28" height="8" rx="2"/>
-          <line x1="34" y1="56" x2="40" y2="52"/>
+          <rect x="9" y="47" width="33" height="7" rx="3.5"/>
+          <circle cx="14" cy="50.5" r="1.3" fill="var(--gold)" stroke="none"/>
         </g>
         <g class="rz-blade">
-          <path d="M40 52 L66 18 L70 22 L44 56 Z"/>
-          <line x1="42" y1="50" x2="68" y2="16" stroke-width=".6"/>
+          <path d="M40 50.5 L63 19 Q66 15 68.5 18 Q70 20 67 23 L46 53 Z"/>
+          <line x1="44" y1="48" x2="64" y2="21" stroke-width=".6"/>
         </g>
       </svg>
       <div class="craft-ctitle">Die Rasur</div>
@@ -334,17 +433,16 @@ footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,1
     </div>
     <div class="craft-card">
       <svg class="craft-svg" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+        <!-- Stylingkamm mit abwechselnden Zinken -->
         <g class="cm-icon">
-          <rect x="8" y="28" width="60" height="10" rx="2"/>
-          <line x1="14" y1="38" x2="14" y2="54"/>
-          <line x1="20" y1="38" x2="20" y2="50"/>
-          <line x1="26" y1="38" x2="26" y2="54"/>
-          <line x1="32" y1="38" x2="32" y2="50"/>
-          <line x1="38" y1="38" x2="38" y2="54"/>
-          <line x1="44" y1="38" x2="44" y2="50"/>
-          <line x1="50" y1="38" x2="50" y2="54"/>
-          <line x1="56" y1="38" x2="56" y2="50"/>
-          <line x1="62" y1="38" x2="62" y2="54"/>
+          <rect x="12" y="22" width="52" height="9" rx="3"/>
+          <line x1="18" y1="31" x2="18" y2="55"/>
+          <line x1="24.6" y1="31" x2="24.6" y2="47"/>
+          <line x1="31.2" y1="31" x2="31.2" y2="55"/>
+          <line x1="37.8" y1="31" x2="37.8" y2="47"/>
+          <line x1="44.4" y1="31" x2="44.4" y2="55"/>
+          <line x1="51" y1="31" x2="51" y2="47"/>
+          <line x1="57.6" y1="31" x2="57.6" y2="55"/>
         </g>
       </svg>
       <div class="craft-ctitle">Die Behandlung</div>
@@ -451,68 +549,38 @@ footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,1
 <section id="kontakt">
   <div class="kt-inner">
     <div class="kt-info">
-      <span class="slabel">Finde uns</span>
-      <h2 class="kt-title">DEIN<br>TERMIN</h2>
-      <div class="iblock">
-        <div class="ilabel">Adresse</div>
-        <div class="ival">Kurfürstendamm 187<br>10707 Berlin</div>
+      <span class="slabel">Direkt zum Termin</span>
+      <h2 class="kt-title">RUF<br>UNS AN</h2>
+      <p class="kt-lead">Der schnellste Weg zu deinem Schnitt: Ein kurzer Anruf genügt. Wir beraten dich persönlich und finden sofort den passenden Termin.</p>
+      <a href="tel:+493088776655" class="btn-call">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span class="bc-txt"><span class="bc-sm">Jetzt anrufen</span><span class="bc-num">030 88 77 66 55</span></span>
+      </a>
+      <div class="kt-meta">
+        <a href="mailto:hallo@blade-glory.de"><span class="km-lbl">E-Mail</span>hallo@blade-glory.de</a>
+        <span><span class="km-lbl">Adresse</span>Kurfürstendamm 187, 10707 Berlin</span>
       </div>
-      <div class="iblock">
-        <div class="ilabel">Telefon</div>
-        <div class="ival">+49 30 88 77 66 55</div>
-      </div>
-      <div class="iblock">
-        <div class="ilabel">E-Mail</div>
-        <div class="ival">hallo@blade-glory.de</div>
-      </div>
-      <div class="iblock">
-        <div class="ilabel">Öffnungszeiten</div>
-        <table class="otable">
-          <tr><td>Montag – Freitag</td><td>09:00 – 20:00</td></tr>
-          <tr><td>Samstag</td><td>09:00 – 18:00</td></tr>
-          <tr><td>Sonntag</td><td>Geschlossen</td></tr>
-        </table>
+      <div class="hours">
+        <div class="hours-head">
+          <span class="ilabel">Öffnungszeiten</span>
+          <span class="hours-status" id="hoursStatus">···</span>
+        </div>
+        <ul class="hours-list" id="hoursList">
+          <li data-day="1"><span>Montag</span><span>09:00 – 20:00</span></li>
+          <li data-day="2"><span>Dienstag</span><span>09:00 – 20:00</span></li>
+          <li data-day="3"><span>Mittwoch</span><span>09:00 – 20:00</span></li>
+          <li data-day="4"><span>Donnerstag</span><span>09:00 – 20:00</span></li>
+          <li data-day="5"><span>Freitag</span><span>09:00 – 20:00</span></li>
+          <li data-day="6"><span>Samstag</span><span>09:00 – 18:00</span></li>
+          <li data-day="0"><span>Sonntag</span><span>Geschlossen</span></li>
+        </ul>
       </div>
     </div>
-    <div class="kt-form">
-      <span class="slabel">Termin vereinbaren</span>
-      <div class="fsubtitle">JETZT BUCHEN</div>
-      <form class="cform" id="cForm" novalidate>
-        <div class="frow">
-          <div class="fg">
-            <label for="fname">Name</label>
-            <input type="text" id="fname" placeholder="Ihr Name">
-            <div class="ferr" id="fnameErr">Bitte geben Sie Ihren Namen ein.</div>
-          </div>
-          <div class="fg">
-            <label for="femail">E-Mail</label>
-            <input type="email" id="femail" placeholder="ihre@email.de">
-            <div class="ferr" id="femailErr">Bitte eine gültige E-Mail eingeben.</div>
-          </div>
-        </div>
-        <div class="frow">
-          <div class="fg">
-            <label for="fdate">Datum</label>
-            <input type="date" id="fdate">
-            <div class="ferr" id="fdateErr">Bitte wählen Sie ein Datum.</div>
-          </div>
-          <div class="fg">
-            <label for="fbarber">Barber</label>
-            <select id="fbarber">
-              <option value="">Barber wählen</option>
-              <option value="viktor">Viktor Aleksandrov</option>
-              <option value="marco">Marco Ferretti</option>
-              <option value="elias">Elias Brenner</option>
-            </select>
-            <div class="ferr" id="fbarberErr">Bitte wählen Sie einen Barber.</div>
-          </div>
-        </div>
-        <div class="fg">
-          <label for="fmsg">Nachricht</label>
-          <textarea id="fmsg" placeholder="Ihre Wünsche oder besondere Anlässe..."></textarea>
-        </div>
-        <button type="submit" class="btn-sub" id="fsubmit">Termin anfragen</button>
-      </form>
+    <div class="kt-map">
+      <iframe class="kt-map-frame" title="Standort Blade &amp; Glory — Kurfürstendamm 187, Berlin"
+        src="https://maps.google.com/maps?q=Kurf%C3%BCrstendamm%20187%2C%2010707%20Berlin&amp;z=15&amp;output=embed"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <a class="kt-map-link" href="https://www.google.com/maps/search/?api=1&query=Kurf%C3%BCrstendamm+187+10707+Berlin" target="_blank" rel="noopener">In Google Maps öffnen</a>
     </div>
   </div>
 </section>
@@ -539,6 +607,15 @@ footer{background:var(--black);padding:56px 60px;border-top:1px solid rgba(201,1
     <div class="ft-tag">The Art of the Modern Gentleman</div>
   </div>
 </footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lightbox" aria-hidden="true" role="dialog" aria-label="Galerie-Bild">
+  <button class="lb-close" id="lbClose" aria-label="Schließen">&times;</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Vorheriges Bild">&#8249;</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Nächstes Bild">&#8250;</button>
+  <div class="lb-stage"><img class="lb-img" id="lbImg" src="" alt=""></div>
+  <div class="lb-cap"><span id="lbCap"></span><div class="lb-count" id="lbCount"></div></div>
+</div>
 
 <script>
 (function(){
@@ -575,11 +652,11 @@ if(noMotion){
   startAfterLoad();
 } else {
   setTimeout(()=>{
-    gsap.to(loader,{opacity:0,duration:.55,ease:'power2.inOut',onComplete:()=>{
+    gsap.to(loader,{opacity:0,duration:.4,ease:'power2.inOut',onComplete:()=>{
       loader.style.display='none';
       startAfterLoad();
     }});
-  },1650);
+  },650);
 }
 
 function startAfterLoad(){
@@ -658,23 +735,23 @@ function initParticles(){
     const el = (ts - startT) / 1000;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if(el < 0.5){
+    if(el < 0.28){
       // Phase 1: Chaos — random drift with damping
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy;
-        p.vx *= .95; p.vy *= .95;
-        p.alpha = Math.min(p.alpha + .06, .8);
+        p.vx *= .94; p.vy *= .94;
+        p.alpha = Math.min(p.alpha + .1, .8);
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
         ctx.fill();
       });
 
-    } else if(el < 2.8){
+    } else if(el < 1.35){
       // Phase 2: Converge — spring physics for smooth, natural flow
-      const t = easeOut(Math.min((el - .5) / 2.3, 1));
-      const spring = 0.028 + t * 0.038;   // grows over time
-      const damp   = 0.72 - t * 0.08;     // damping decreases → snappier at end
+      const t = easeOut(Math.min((el - .28) / 1.07, 1));
+      const spring = 0.04 + t * 0.05;     // grows over time
+      const damp   = 0.70 - t * 0.08;     // damping decreases → snappier at end
       particles.forEach(p => {
         const dx = p.tx - p.x;
         const dy = p.ty - p.y;
@@ -682,21 +759,21 @@ function initParticles(){
         p.vy = p.vy * damp + dy * spring;
         p.x += p.vx;
         p.y += p.vy;
-        p.alpha = Math.min(p.alpha + .011, 1);
+        p.alpha = Math.min(p.alpha + .025, 1);
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
         ctx.fill();
       });
 
-    } else if(el < 3.8){
+    } else if(el < 1.95){
       // Phase 3: Settled — breathe + gold pulse + fade to HTML title
-      const age = el - 2.8;
+      const age = el - 1.35;
       // quick settle — snap remaining gap
-      particles.forEach(p => { p.x += (p.tx - p.x) * .1; p.y += (p.ty - p.y) * .1; });
+      particles.forEach(p => { p.x += (p.tx - p.x) * .14; p.y += (p.ty - p.y) * .14; });
 
-      const pulse = age < .5 ? 1 + Math.sin(age * Math.PI * 7) * .35 : 1;
-      const fade  = age > .9 ? Math.max(0, 1 - (age - .9) / .55) : 1;
+      const pulse = age < .3 ? 1 + Math.sin(age * Math.PI * 10) * .35 : 1;
+      const fade  = age > .45 ? Math.max(0, 1 - (age - .45) / .35) : 1;
       const r = Math.min(255, Math.floor(201 * pulse));
       const g = Math.min(255, Math.floor(168 * pulse));
 
@@ -707,9 +784,9 @@ function initParticles(){
         ctx.fill();
       });
 
-      if(!p3done && age > .35){
+      if(!p3done && age > .18){
         p3done = true;
-        gsap.to('#hTitle', {opacity: 1, duration: 1.0, ease: 'power2.out'});
+        gsap.to('#hTitle', {opacity: 1, duration: .6, ease: 'power2.out'});
       }
 
     } else {
@@ -718,9 +795,9 @@ function initParticles(){
         cancelAnimationFrame(raf);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         gsap.set('#hSub', {opacity: 1});
-        gsap.to('#hSub span', {opacity: 1, y: 0, duration: .55, stagger: .12, ease: 'power2.out', delay: .1});
-        gsap.to('#hBtns',  {opacity: 1, duration: .6, delay: .9});
-        gsap.to('#hScroll',{opacity: 1, duration: .6, delay: 1.25});
+        gsap.to('#hSub span', {opacity: 1, y: 0, duration: .4, stagger: .07, ease: 'power2.out', delay: .05});
+        gsap.to('#hBtns',  {opacity: 1, duration: .5, delay: .5});
+        gsap.to('#hScroll',{opacity: 1, duration: .5, delay: .75});
         return;
       }
     }
@@ -880,48 +957,72 @@ function initScrollAnimations(){
   });
 }
 
-// --- FORM VALIDATION ---
-const validators={
-  fname:v=>v.trim().length>=2,
-  femail:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-  fdate:v=>!!v,
-  fbarber:v=>!!v
-};
-function validate(id){
-  const el=document.getElementById(id);
-  const err=document.getElementById(id+'Err');
-  const ok=validators[id]?validators[id](el.value):true;
-  el.classList.toggle('err',!ok);
-  el.classList.toggle('ok',ok);
-  if(err){err.classList.toggle('show',!ok);}
-  return ok;
-}
-['fname','femail','fdate','fbarber'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.addEventListener('blur',()=>validate(id));
-  el.addEventListener('input',()=>{if(el.classList.contains('err')||el.classList.contains('ok')) validate(id);});
-});
-document.getElementById('cForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const all=['fname','femail','fdate','fbarber'].every(validate);
-  if(all){
-    const btn=document.getElementById('fsubmit');
-    btn.textContent='Anfrage gesendet ✓';
-    btn.style.background='#2a6a2a';
-    setTimeout(()=>{
-      btn.textContent='Termin anfragen';
-      btn.style.background='';
-      document.getElementById('cForm').reset();
-      ['fname','femail','fdate','fbarber'].forEach(id=>{
-        const el=document.getElementById(id);
-        el.classList.remove('ok','err');
-        const er=document.getElementById(id+'Err');
-        if(er) er.classList.remove('show');
-      });
-    },3200);
+// --- ÖFFNUNGSZEITEN: heutigen Tag + Live-Status ---
+(function openingHours(){
+  const list=document.getElementById('hoursList');
+  const status=document.getElementById('hoursStatus');
+  if(!list||!status) return;
+  // [open, close] in Stunden; null = geschlossen
+  const sched={1:[9,20],2:[9,20],3:[9,20],4:[9,20],5:[9,20],6:[9,18],0:null};
+  const now=new Date();
+  const day=now.getDay();
+  const h=now.getHours()+now.getMinutes()/60;
+  const todayLi=list.querySelector('li[data-day="'+day+'"]');
+  if(todayLi) todayLi.classList.add('today');
+  const t=sched[day];
+  const isOpen=t&&h>=t[0]&&h<t[1];
+  if(isOpen){
+    status.classList.add('open');
+    status.textContent='Jetzt geöffnet';
+  } else {
+    status.classList.add('closed');
+    // Nächsten Öffnungstag finden
+    let next=null;
+    for(let i=1;i<=7;i++){ const d=(day+i)%7; if(sched[d]){ next=d; break; } }
+    const names=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    status.textContent = (t&&h<t[0]) ? 'Öffnet '+t[0].toString().padStart(2,'0')+':00' : (next!==null?'Wieder '+names[next]:'Geschlossen');
   }
-});
+})();
+
+// --- GALLERY LIGHTBOX ---
+(function initLightbox(){
+  const items = Array.from(document.querySelectorAll('.mitem'));
+  if(!items.length) return;
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lbImg');
+  const lbCap=document.getElementById('lbCap');
+  const lbCount=document.getElementById('lbCount');
+  const expandIcon='<svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+  const slides=items.map(it=>{
+    const img=it.querySelector('img');
+    const titleEl=it.querySelector('.mov2-title');
+    const title=titleEl?titleEl.textContent.trim():(img.alt||'');
+    // Lupen-Icon über den Titel setzen (Hinweis auf Klickbarkeit)
+    if(titleEl) titleEl.innerHTML=expandIcon+'<span>'+title+'</span>';
+    return {src:(img.getAttribute('src')||'').replace(/w=\d+/,'w=1600'), title};
+  });
+  let idx=0;
+  function show(i){
+    idx=(i+slides.length)%slides.length;
+    const s=slides[idx];
+    lbImg.src=s.src; lbImg.alt=s.title;
+    lbCap.textContent=s.title;
+    lbCount.textContent=(idx+1)+' / '+slides.length;
+  }
+  function open(i){ show(i); lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  items.forEach((it,i)=>it.addEventListener('click',()=>open(i)));
+  document.getElementById('lbClose').addEventListener('click',close);
+  document.getElementById('lbPrev').addEventListener('click',e=>{e.stopPropagation();show(idx-1);});
+  document.getElementById('lbNext').addEventListener('click',e=>{e.stopPropagation();show(idx+1);});
+  lb.addEventListener('click',e=>{ if(e.target===lb||e.target.classList.contains('lb-stage')) close(); });
+  document.addEventListener('keydown',e=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowLeft') show(idx-1);
+    else if(e.key==='ArrowRight') show(idx+1);
+  });
+})();
 
 })();
 </script>
